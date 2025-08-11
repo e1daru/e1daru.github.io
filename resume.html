@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eldar Utiushev - Personal Portfolio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #13294B;
+        }
+        header {
+            background-color: #13294B;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header-content img {
+            border-radius: 50%;
+            max-width: 120px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background: #7BAFD4;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 5px 15px;
+            font-weight: bold;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        footer {
+            background: #13294B;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                text-align: left;
+                padding: 20px 40px;
+            }
+            .header-content {
+                flex-direction: row;
+                align-items: center;
+            }
+            .header-content img {
+                margin-right: 20px;
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <img src="Utiushev_Eldar_Photo.jpg" alt="Eldar Utiushev">
+            <div>
+                <h1>Eldar Utiushev</h1>
+                <p>Data Analyst | Business & Computer Science Student</p>
+            </div>
+        </div>
+    </header>
+    
+    <nav>
+        <a href="#about">About</a>
+        <a href="#education">Education</a>
+        <a href="#skills">Skills</a>
+        <a href="#awards">Awards</a>
+        <a href="#experience">Experience</a>
+        <a href="#leadership">Leadership</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="container">
+        <section id="about" class="section">
+            <h2>About Me</h2>
+            <p>Hi there! I’m Eldar Utiushev, a dual-degree student in Business Administration and Computer Science at UNC Chapel Hill. My journey has been defined by a love for problem-solving, whether through data analysis, consulting, or giving back to the community.</p>
+        </section>
+
+        <section id="education" class="section">
+            <h2>Education</h2>
+            <p><strong>University of North Carolina at Chapel Hill</strong> | Kenan-Flagler Business School – Chapel Hill, NC (May 2025)</p>
+            <ul>
+                <li>Double Major in Computer Science BA and Business Administration BSBA</li>
+                <li>GPA: 3.7 / 4.0</li>
+            </ul>
+        </section>
+
+        <section id="skills" class="section">
+            <h2>Skills</h2>
+            <p>Advanced Excel, SQL, Tableau, Python, Java, C, NumPy, Matplotlib, Pandas, Scikit-Learn, Android Studio, Think-Cell</p>
+        </section>
+
+        <section id="awards" class="section">
+            <h2>University-Wide Awards</h2>
+            <ul>
+                <li>Deloitte 2023 Undergraduate Case Competition Winner</li>
+                <li>P&G 2023 Marketing Case Competition Finalist</li>
+                <li>Undergraduate Consulting Club 2022 Case Competition Winner</li>
+            </ul>
+        </section>
+
+        <section id="experience" class="section">
+            <h2>Experience</h2>
+            <h3>Teacher Assistant</h3>
+            <p>Business Analytics (Fall 2024); Introduction to Scientific Programming (Spring 2023 – Spring 2024)</p>
+
+            <h3>EATS2SEATS, LLC (May 2024 – Aug 2024)</h3>
+            <ul>
+                <li>Managed a team of 85+ staff at the 2024 Golf US Open, driving top sales performance in concessions.</li>
+                <li>Analyzed POS data using Python & SQL to pay $500K+ to clients and $100K+ to staff.</li>
+                <li>Automated invoicing and payroll systems with Python, averting $80K+ in potential errors.</li>
+                <li>Built and trained a prediction model using Random Forest, reducing staff dropout rate by 10%.</li>
+            </ul>
+
+            <h3>STAR Consulting Program (Jan 2024 – May 2024)</h3>
+            <ul>
+                <li>Developed a $6M affordable housing plan projected to aid 9,000+ low-income residents.</li>
+                <li>Applied K-means clustering algorithm to identify three market segments.</li>
+                <li>Created a P&L projection for a factory acquisition, cutting production costs by 20%.</li>
+            </ul>
+
+            <h3>BUSI 488: Data Science in Business World (Dec 2023 – May 2024)</h3>
+            <ul>
+                <li>Co-developed an AI-driven classifier training RoBERTa on 21K+ TikTok comments delivering fast perception analysis.</li>
+                <li>Reduced market research costs by 95%, providing insights for $443/month compared to $15K-$50K traditionally.</li>
+                <li>Generated actionable insights in under 1 hour with 78% precision, surpassing traditional 6-7wk research timelines.</li>
+            </ul>
+
+            <h3>Research Assistant (Dec 2023 – May 2024)</h3>
+            <ul>
+                <li>Analyzed an E-Commerce global leader’s database (15M+ rows) using Pandas and SQL to identify 10+ purchase drivers.</li>
+                <li>Contributed to a research paper in a team with 3 PhDs analyzing user click behavior to improve the conversion rate.</li>
+                <li>Optimized run-time of the code by simplifying data structures and algorithms resulting in O(n2) run-time reduction.</li>
+            </ul>
+        </section>
+
+        <section id="leadership" class="section">
+            <h2>Leadership & Community Involvement</h2>
+            <h3>Entrepreneurship & Make-A-Wish Collaboration (Aug 2023 – Dec 2023)</h3>
+            <ul>
+                <li>Contributed to raise $120,000 for Make-A-Wish to help Graham, a kid from Make-A-Wish, visit Disney Land.</li>
+                <li>Personally raised $1,030 for Make-A-Wish within 4wks selling modified hair accessories at the UNC campus.</li>
+            </ul>
+
+            <h3>President of UNC Cybersecurity Club (May 2022 – May 2024)</h3>
+            <ul>
+                <li>Organized events with leading tech companies, such as Appian and Gusto, to offer opportunities in cybersecurity.</li>
+                <li>Implemented marketing strategies and events with the CS department attracting 40 new members in 1 day.</li>
+            </ul>
+
+            <h3>Co-Founder of UNC Breakdancing Club (Jan 2024 – Present)</h3>
+            <ul>
+                <li>Co-founded the first breakdancing club in UNC history; created a beginner-friendly course taught at Duke and UNC.</li>
+                <li>Implemented marketing strategies and events with the CS department attracting 40 new members in 1 day.</li>
+            </ul>
+
+            <h3>LightHouse Mentorship Program (Aug 2019 – Dec 2022)</h3>
+            <ul>
+                <li>Mentored a teenager from an orphanage for 3 years for the LightHouse non-profit organization in Kyrgyzstan.</li>
+                <li>Tutored him and contributed to an increase in his GPA from 2.54 to 3.57 in 2 years of high school before graduation.</li>
+                <li>Advised him on available social benefits, career opportunities, and academic planning before his orphanage graduation.</li>
+            </ul>
+        </section>
+
+        <section id="contact" class="section">
+            <h2>Contact</h2>
+            <p>Email: <a href="mailto:Eldar_Utiushev@kenan-flagler.unc.edu">Eldar_Utiushev@kenan-flagler.unc.edu</a></p>
+            <p>Phone: +1 (984) 322-8206</p>
+            <p>LinkedIn: <a href="https://linkedin.com/in/eldaru">linkedin.com/in/eldaru</a></p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Eldar Utiushev. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

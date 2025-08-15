@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eldar Utiushev - Personal Portfolio</title>
+    <style>
+        :root {
+      --carolina-blue: #4B9CD3;
+      --carolina-blue-dark: #2B6FA6;
+      --bg-soft: #f9f9f4;
+    }
+
+    /* Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: #222;
+      background: var(--bg-soft);
+      line-height: 1.5;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+    /* ===== Nav ===== */
+    nav.nav-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+    .nav-full-name a {
+      font-size: 1.75rem;
+      font-weight: bold;
+      text-decoration: none;
+      color: #222;
+    }
+    .nav-right-side-list {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+    .nav-right-side-list li a {
+      text-decoration: none;
+      color: #555;
+      font-size: 1.1rem;
+      transition: color .15s ease-in-out;
+    }
+    .nav-right-side-list li a[href^="mailto:"] {
+      color: var(--carolina-blue);
+      font-weight: 500;
+    }
+    .nav-right-side-list li a:hover { color: #111; }
+    .nav-right-side-list li a[href^="mailto:"]:hover {
+      color: var(--carolina-blue-dark);
+    }
+
+    /* Profile */
+    .profile {
+      display: flex;
+      gap: 3rem;
+      align-items: flex-start;
+      margin-top: 2rem;
+      width: 95%;
+    }
+    .profile .photo {
+      flex: 0 0 320px;
+      max-width: 100%;
+      margin-top: 5%;
+    }
+    .profile .photo img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      display: block;
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+    }
+    .profile .info {
+      flex: 1 1 auto;
+    }
+    .profile .eyebrow {
+      margin-bottom: 3.25rem;
+      font-size: 1.50rem;
+      color: #666;
+    }
+    .profile .name {
+      font-size: clamp(1.0rem, 2.5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .profile .summary {
+      font-size: 1.5rem;
+      max-width: auto;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    .profile .email a {
+      text-decoration: none;
+      color: var(--carolina-blue);
+      font-weight: 600;
+      border-bottom: 1px solid transparent;
+      transition: border-color .15s, color .15s;
+    }
+    .profile .email a:hover {
+      color: var(--carolina-blue-dark);
+      border-color: var(--carolina-blue-dark);
+    }
+    .profile .socials {
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+    }
+    .profile .socials a {
+      text-decoration: none;
+      color: #222;
+      font-size: 1.05rem;
+      transition: color .15s;
+    }
+    .profile .socials a:hover { color: var(--carolina-blue); }
+
+    /* Responsive */
+    @media (max-width: 820px) {
+      .profile { flex-direction: column; gap: 1.5rem; }
+      .profile .photo { width: 100%; max-width: 420px; }
+    }
+
+    /* Projects Section */
+    .projects {
+      margin-top: 4rem;
+    }
+
+    .projects h2 {
+      font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: #222;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .project-card img {
+      width: 100%;
+      aspect-ratio: 16/9; /* Keeps images proportional */
+      object-fit: cover;
+      border-radius: 6px;
+      background-color: #ddd;
+    }
+
+    .project-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0;
+      color: #222;
+    }
+
+    .project-card p {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.4;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="max-auto width-full">
+            <nav class="nav-line">
+                <p class="nav-full-name">
+                    <a href="/">Eldar Utiushev</a>
+                </p>
+                <div class="nav-right-side">
+                    <ul class="nav-right-side-list">
+                        <li>
+                            <a href="mailto:eldaru33@gmail.com">eldaru33@gmail.com</a>
+                        </li>
+                        <li>
+                            <a href="/about">About</a>
+                        </li>
+                        <li>
+                            <a href="/projects">Projects</a>
+                        </li>                        
+                    </ul>
+                </div>
+            </nav>
+            
+        </div>
+
+
+        <!-- Profile section -->
+        <section class="profile">
+            <div class="photo">
+            
+                <img src="Utiushev_Eldar_Photo.jpg" alt="Eldar Utiushev" />
+            </div>
+            <div class="info">
+                <div class="eyebrow">Business/Data Analyst &#x1F914</div>
+                <h1 class="name">
+                    Hi there! I’m Eldar, a dual-degree student in Business Administration and Computer Science at UNC Chapel Hill.
+                </h1>
+                <p class="summary">
+                    I build data-driven solutions, craft software products, and help organizations turn ideas into results. Along the way, I’ve led teams at national events, advised on multi-million-dollar projects, and co-founded initiatives that bring people together.
+                </p>
+        
+                <p class="email">
+                    <a href="mailto:eldaru33@gmail.com">eldaru33@gmail.com</a>
+                </p>
+        
+                <div class="socials">
+                    <a href="https://github.com/e1daru" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://www.linkedin.com/in/eldaru" target="_blank" rel="noopener">LinkedIn</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <div class="container projects">
+      <h2>Featured Projects</h2>
+      <div class="project-grid">
+        <!-- STAR Consulting -->
+        <div class="project-card">
+          <img src=".jpg" alt="STAR Consulting Program" />
+          <h3>STAR Consulting Program</h3>
+          <p>
+            Collaborated with MBA teammates to design a $6M affordable housing plan for 9K+ residents, using K-means segmentation and P&L modeling to cut costs by 17%.
+          </p>
+        </div>
+    
+        <!-- EATS2SEATS -->
+        <div class="project-card">
+          <img src="e2s.jpg" alt="EATS2SEATS" />
+          <h3>EATS2SEATS Data Analytics</h3>
+          <p>
+            Managed 85+ staff at the 2024 U.S. Open, automated payroll in Python, and built a Random Forest model reducing staff dropout by 11%.
+          </p>
+        </div>
+    
+        <!-- BUSI 488 -->
+        <div class="project-card">
+          <img src="busi488.jpg" alt="BUSI 488 Data Science Project" />
+          <h3>Luxury Brand Classifier</h3>
+          <p>
+            Developed a RoBERTa-based model on 21K TikTok comments, delivering 78%-precision brand insights and cutting research costs by 95%.
+          </p>
+        </div>
+    
+        <!-- Research Assistant -->
+        <div class="project-card">
+          <img src="ra.jpg" alt="Research Assistant Project" />
+          <h3>E-Commerce Analytics</h3>
+          <p>
+            Analyzed 15M+ purchase records to uncover 10+ buying drivers and optimized code runtime for large-scale data processing.
+          </p>
+        </div>
+    
+        <!-- Full-Stack -->
+        <div class="project-card">
+          <img src="fullstack.jpg" alt="Full-Stack Developer Project" />
+          <h3>Office Hours Portal</h3>
+          <p>
+            Built a FastAPI + Angular ranking system for 2K+ students, improving profile clicks by 25% and halving API latency.
+          </p>
+        </div>
+    
+        <!-- Consulting Competitions -->
+        <div class="project-card">
+          <img src="competitions.jpg" alt="Consulting Competitions" />
+          <h3>Case Competition Wins</h3>
+          <p>
+            Deloitte Winner, P&amp;G Finalist, UCC Winner—led teams delivering data-driven strategies under tight deadlines.
+          </p>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

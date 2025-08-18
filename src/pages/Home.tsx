@@ -23,7 +23,7 @@ export default function Home({ projects }: { projects: Project[] }) {
       </div>
 
       {/* Featured Projects */}
-      <section className="projects page-center mt-8">
+      <section className="projects page-center mt-8 ">
         <Projects projects={projects} />
       </section>
     </PageShell>

@@ -1,0 +1,260 @@
+:root {
+  --carolina-blue: #4b9cd3;
+  --carolina-blue-dark: #2b6fa6;
+  --bg-soft: #f9f9f4;
+}
+
+/* Base */
+/* * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+} */
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: #222;
+  background: var(--bg-soft);
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* ===== Nav ===== */
+nav.nav-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+.nav-full-name a {
+  font-size: 1.75rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #222;
+}
+.nav-right-side-list {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+.nav-right-side-list li a {
+  text-decoration: none;
+  color: #555;
+  font-size: 1.1rem;
+  transition: color 0.15s ease-in-out;
+}
+.nav-right-side-list li a[href^="mailto:"] {
+  color: var(--carolina-blue);
+  font-weight: 500;
+}
+.nav-right-side-list li a:hover {
+  color: #111;
+}
+.nav-right-side-list li a[href^="mailto:"]:hover {
+  color: var(--carolina-blue-dark);
+}
+
+/* Profile */
+.profile {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+  width: 100%;
+}
+.profile .photo {
+  flex: 0 0 320px;
+  max-width: 100%;
+  margin-top: 5%;
+}
+.profile .photo img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  display: block;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+.profile .info {
+  flex: 1 1 auto;
+  max-width: 62ch;
+}
+.profile .eyebrow {
+  margin-bottom: 3.25rem;
+  font-size: 1.5rem;
+  color: #666;
+}
+.profile .name {
+  font-size: clamp(1rem, 2.5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.profile .summary {
+  font-size: 1.5rem;
+  max-width: auto;
+  color: #333;
+  margin-bottom: 1rem;
+}
+.profile .email a {
+  text-decoration: none;
+  color: var(--carolina-blue);
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s, color 0.15s;
+}
+.profile .email a:hover {
+  color: var(--carolina-blue-dark);
+  border-color: var(--carolina-blue-dark);
+}
+.profile .socials {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+.profile .socials a {
+  text-decoration: none;
+  color: #222;
+  font-size: 1.05rem;
+  transition: color 0.15s;
+}
+.profile .socials a:hover {
+  color: var(--carolina-blue);
+}
+
+/* Responsive */
+@media (max-width: 820px) {
+  .profile {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .profile .photo {
+    width: 100%;
+    max-width: 420px;
+  }
+}
+
+/* Projects Section */
+.projects {
+  margin-top: 4rem;
+  padding-block: 1rem 2rem;
+}
+
+.projects h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #222;
+  text-align: center;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.project-card img {
+  width: 100%;
+  aspect-ratio: 16/9; /* Keeps images proportional */
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #ddd;
+}
+
+.project-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: #222;
+}
+
+.project-card p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* ========= Center the page ========= */
+/* If your Home/Intrepid markup already uses .container, this will center it */
+.container,
+.projects {
+  /* cap width + center */
+  max-width: 72rem; /* ≈ 1152px; tweak to taste (e.g., 64rem/80rem) */
+  width: min(100%, 72rem);
+  margin-inline: auto;
+  /* nice side padding */
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+/* Optional: a generic wrapper you can add to any top-level div to center a page */
+.page-center {
+  max-width: 72rem;
+  width: min(100%, 72rem);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+  padding-block: 2rem;
+}
+
+/* ========= Fix Home profile layout pushing to the side ========= */
+.profile {
+  width: 100%; /* was 95% */
+  margin-inline: auto;
+  gap: 2.5rem; /* more breathing room between photo/text */
+}
+
+/* improves text readability */
+.profile .eyebrow {
+  margin-bottom: 1.25rem;
+}
+.profile .name {
+  margin-bottom: 0.75rem;
+}
+.profile .summary {
+  margin-top: 0.75rem;
+  line-height: 1.7;
+}
+
+/* Keep big photo from crowding */
+.profile .photo img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ========= Roomier cards/sections (Intrepid page too) ========= */
+.project-grid {
+  gap: 2rem;
+} /* more space between cards */
+.project-card h3 {
+  margin-top: 0.75rem;
+}
+.project-card p {
+  margin-top: 0.25rem;
+  line-height: 1.65;
+}
+
+/* Global heading → paragraph spacing & paragraph size */
+h1 + p {
+  margin-top: 1.5rem;
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  line-height: 1.75;
+}
+
+/* Space between stacked sections */
+section + section {
+  margin-top: 3rem;
+}

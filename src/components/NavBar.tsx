@@ -1,6 +1,6 @@
 export default function NavBar() {
   return (
-    <nav className="nav-line page-center">
+    <nav className="nav-line page-center ">
       <p className="nav-full-name">
         <a href="/">Eldar Utiushev</a>
       </p>

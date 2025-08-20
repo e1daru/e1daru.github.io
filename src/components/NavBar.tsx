@@ -10,7 +10,7 @@ export default function NavBar() {
             <a href="mailto:eldaru33@gmail.com">eldaru33@gmail.com</a>
           </li>
           <li>
-            <a href="/about">About</a>
+            <a href="/profile">About</a>
           </li>
           <li>
             <a href="/projects">Projects</a>

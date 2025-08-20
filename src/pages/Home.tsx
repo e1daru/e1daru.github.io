@@ -8,7 +8,7 @@ export default function Home({ projects }: { projects: Project[] }) {
   return (
     <PageShell>
       {/* Top nav */}
-      <div className="mx-auto w-full mb-20 page-center">
+      <div id="profile" className="mx-auto w-full mb-20 page-center">
         <NavBar />
       </div>
 
@@ -23,7 +23,7 @@ export default function Home({ projects }: { projects: Project[] }) {
       </div>
 
       {/* Featured Projects */}
-      <section className="projects page-center mt-8 ">
+      <section id="projects" className="projects page-center mt-8 ">
         <Projects projects={projects} />
       </section>
     </PageShell>

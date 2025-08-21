@@ -3,6 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        // If we arrived via /?p=<encodedPath>, put it back in the address bar
+        var m = location.search.match(/[?&]p=([^&]+)/);
+        if (m) {
+          var dest = decodeURIComponent(m[1]);
+          history.replaceState(null, "", dest);
+        }
+      })();
+    </script>
     <title>Eldar Utiushev - Portfolio</title>
   </head>
   <body>

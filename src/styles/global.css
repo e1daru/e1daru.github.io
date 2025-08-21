@@ -26,6 +26,11 @@ body {
   padding: 2rem;
 }
 
+/* Tighter vertical padding for stacked sections */
+.page-center-tight {
+  padding-block: 0.5rem;
+} /* was 2rem */
+
 /* ===== Nav ===== */
 nav.nav-line {
   display: flex;

@@ -8,18 +8,21 @@ export default function Home({ projects }: { projects: Project[] }) {
   return (
     <PageShell>
       {/* Top nav */}
-      <div id="profile" className="mx-auto w-full mb-20 page-center">
+      <div
+        id="profile"
+        className="mx-auto w-full mb-6 page-center page-center-tight"
+      >
         <NavBar />
       </div>
 
       {/* Hero/Profile */}
-      <section className="page-center">
+      <section className="page-center page-center-tight">
         <Profile />
       </section>
 
       {/* Divider */}
-      <div className="page-center">
-        <hr className="mt-10 mb-8  border-slate-200" />
+      <div className="page-center page-center-tight">
+        <hr className="my-4 border-slate-200" />
       </div>
 
       {/* Featured Projects */}

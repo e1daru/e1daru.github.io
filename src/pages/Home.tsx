@@ -19,7 +19,7 @@ export default function Home({ projects }: { projects: Project[] }) {
 
       {/* Divider */}
       <div className="page-center">
-        <hr className="mt-10 mb-8 border-slate-200" />
+        <hr className="mt-10 mb-8  border-slate-200" />
       </div>
 
       {/* Featured Projects */}

@@ -630,7 +630,7 @@ export default function E2SPage() {
               <img
                 src="/e2s/confusion.png"
                 alt="Confusion Matrix"
-                className="rounded-xl border"
+                className="rounded-xl border "
               />
               <img
                 src="/e2s/roc.png"

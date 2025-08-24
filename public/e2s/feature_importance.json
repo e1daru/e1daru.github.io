@@ -1,0 +1,22 @@
+[
+  {
+    "name": "attendance_status_unanswered",
+    "value": 0.34
+  },
+  {
+    "name": "time_since_last_event",
+    "value": 0.22
+  },
+  {
+    "name": "employee_capacity",
+    "value": 0.21
+  },
+  {
+    "name": "warnings_points",
+    "value": 0.015
+  },
+  {
+    "name": "position_preference",
+    "value": 0.01
+  }
+]

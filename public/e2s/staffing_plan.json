@@ -1,0 +1,22 @@
+[
+  {
+    "week": "W1",
+    "demand": 82,
+    "scheduled": 80
+  },
+  {
+    "week": "W2",
+    "demand": 95,
+    "scheduled": 98
+  },
+  {
+    "week": "W3",
+    "demand": 120,
+    "scheduled": 118
+  },
+  {
+    "week": "W4",
+    "demand": 140,
+    "scheduled": 138
+  }
+]

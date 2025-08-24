@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
 import IntrepidBuildPage from "@/pages/IntrepidBuildPage";
+import E2SPage from "@/pages/E2SPage";
 import type { Project } from "@/types";
 
 // Simple placeholder page you can replace later
@@ -65,10 +66,7 @@ export default function App() {
 
       {/* Project detail pages */}
       <Route path="/projects/intrepid-build" element={<IntrepidBuildPage />} />
-      <Route
-        path="/projects/eats2seats"
-        element={<ComingSoon title="EATS2SEATS Data Analytics" />}
-      />
+      <Route path="/projects/eats2seats" element={<E2SPage />} />
       <Route
         path="/projects/luxury-brand-classifier"
         element={<ComingSoon title="Luxury Brand Classifier" />}

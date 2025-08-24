@@ -1,0 +1,29 @@
+[
+  {
+    "brand": "Gucci",
+    "Quality": 0.31,
+    "Reputation": 0.22,
+    "Service": 0.11,
+    "Social": 0.12,
+    "Ethics": 0.09,
+    "Sustainability": 0.15
+  },
+  {
+    "brand": "Chanel",
+    "Quality": 0.28,
+    "Reputation": 0.27,
+    "Service": 0.1,
+    "Social": 0.09,
+    "Ethics": 0.08,
+    "Sustainability": 0.18
+  },
+  {
+    "brand": "Dior",
+    "Quality": 0.3,
+    "Reputation": 0.24,
+    "Service": 0.12,
+    "Social": 0.1,
+    "Ethics": 0.08,
+    "Sustainability": 0.16
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "label": "Product Quality",
+    "precision": 0.82,
+    "recall": 0.77,
+    "f1": 0.79,
+    "support": 15230
+  },
+  {
+    "label": "Brand Reputation & Heritage",
+    "precision": 0.79,
+    "recall": 0.75,
+    "f1": 0.77,
+    "support": 11890
+  },
+  {
+    "label": "Customer Service",
+    "precision": 0.76,
+    "recall": 0.71,
+    "f1": 0.73,
+    "support": 5325
+  },
+  {
+    "label": "Social Impact",
+    "precision": 0.74,
+    "recall": 0.7,
+    "f1": 0.72,
+    "support": 4012
+  },
+  {
+    "label": "Ethical Practices",
+    "precision": 0.71,
+    "recall": 0.67,
+    "f1": 0.69,
+    "support": 2654
+  },
+  {
+    "label": "Sustainability",
+    "precision": 0.78,
+    "recall": 0.74,
+    "f1": 0.76,
+    "support": 4271
+  }
+]

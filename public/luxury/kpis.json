@@ -1,0 +1,9 @@
+[
+  { "kpi": "21,136", "label": "TikTok comments analyzed" },
+  { "kpi": "2,300+", "label": "Videos scraped (Apify)" },
+  { "kpi": "~$443/mo", "label": "Model + scraping run cost" },
+  {
+    "kpi": "≈97–99%",
+    "label": "Cost and time reduction vs $15–50k full-time human research"
+  }
+]

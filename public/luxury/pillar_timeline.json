@@ -1,0 +1,29 @@
+[
+  {
+    "month": "2025-03",
+    "Quality": 0.33,
+    "Reputation": 0.22,
+    "Service": 0.1,
+    "Social": 0.09,
+    "Ethics": 0.12,
+    "Sustainability": 0.14
+  },
+  {
+    "month": "2025-04",
+    "Quality": 0.31,
+    "Reputation": 0.23,
+    "Service": 0.11,
+    "Social": 0.1,
+    "Ethics": 0.11,
+    "Sustainability": 0.14
+  },
+  {
+    "month": "2025-05",
+    "Quality": 0.32,
+    "Reputation": 0.21,
+    "Service": 0.11,
+    "Social": 0.1,
+    "Ethics": 0.12,
+    "Sustainability": 0.14
+  }
+]

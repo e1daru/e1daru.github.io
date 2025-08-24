@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
 import IntrepidBuildPage from "@/pages/IntrepidBuildPage";
 import E2SPage from "@/pages/E2SPage";
+import LuxuryPage from "@/pages/LuxuryPage";
 import type { Project } from "@/types";
 
 // Simple placeholder page you can replace later
@@ -34,7 +35,7 @@ const projects: Project[] = [
     alt: "BUSI 488 Data Science Project",
     title: "Luxury Brand Classifier",
     desc: "Developed a RoBERTa-based model on 21K TikTok comments, delivering ~78% precision brand insights and cutting research costs by ~95%.",
-    path: "/projects/luxury-brand-classifier",
+    path: "/projects/luxury",
   },
   {
     img: "/ra.jpg",
@@ -67,10 +68,7 @@ export default function App() {
       {/* Project detail pages */}
       <Route path="/projects/intrepid-build" element={<IntrepidBuildPage />} />
       <Route path="/projects/eats2seats" element={<E2SPage />} />
-      <Route
-        path="/projects/luxury-brand-classifier"
-        element={<ComingSoon title="Luxury Brand Classifier" />}
-      />
+      <Route path="/projects/luxury" element={<LuxuryPage />} />
       <Route
         path="/projects/ecommerce-analytics"
         element={<ComingSoon title="E-Commerce Analytics" />}

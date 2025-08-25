@@ -1,0 +1,18 @@
+{
+  "meta": {
+    "method": "blended rate scenario",
+    "notes": "Uses channel_switching.json overall rates; +5pp switch rate scenario."
+  },
+  "inputs": {
+    "current_switch_rate": 0.182,
+    "cr_switchers": 0.107,
+    "cr_no_switch": 0.031,
+    "target_switch_rate": 0.23199999999999998
+  },
+  "outputs": {
+    "current_cr": 0.0448,
+    "target_cr": 0.0486,
+    "delta_percentage_points": 0.0038,
+    "delta_relative": 0.0848
+  }
+}

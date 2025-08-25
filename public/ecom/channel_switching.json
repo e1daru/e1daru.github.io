@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "generated_at": "2025-08-25T09:43:13Z",
+    "definitions": {
+      "switch_rate": "share of sessions with >=1 channel change",
+      "lift": "CR_switchers / CR_no_switch - 1"
+    },
+    "notes": "Placeholders; compute from sessionized clicks."
+  },
+  "overall": {
+    "switch_rate": 0.182,
+    "conversion_rate_switchers": 0.107,
+    "conversion_rate_no_switch": 0.031,
+    "lift": 2.452
+  },
+  "by_channel_pair": [
+    {
+      "from": "app",
+      "to": "wechat",
+      "session_share": 0.15,
+      "conversion_rate": 0.125
+    },
+    {
+      "from": "wechat",
+      "to": "app",
+      "session_share": 0.173,
+      "conversion_rate": 0.12
+    },
+    {
+      "from": "mobile",
+      "to": "app",
+      "session_share": 0.03,
+      "conversion_rate": 0.118
+    },
+    {
+      "from": "pc",
+      "to": "app",
+      "session_share": 0.107,
+      "conversion_rate": 0.128
+    },
+    {
+      "from": "app",
+      "to": "mobile",
+      "session_share": 0.042,
+      "conversion_rate": 0.149
+    },
+    {
+      "from": "mobile",
+      "to": "wechat",
+      "session_share": 0.149,
+      "conversion_rate": 0.092
+    }
+  ],
+  "by_segment": [
+    {
+      "segment": "PLUS",
+      "switch_rate": 0.222,
+      "conversion_rate_switchers": 0.127,
+      "conversion_rate_no_switch": 0.041
+    },
+    {
+      "segment": "Non-PLUS",
+      "switch_rate": 0.152,
+      "conversion_rate_switchers": 0.097,
+      "conversion_rate_no_switch": 0.026
+    },
+    {
+      "segment": "Tier1 Cities",
+      "switch_rate": 0.192,
+      "conversion_rate_switchers": 0.112,
+      "conversion_rate_no_switch": 0.031
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "notes": "Assumes each automated export saves manual data/plot prep time weekly."
+  },
+  "assumptions": {
+    "pipelines_automated": 4,
+    "hours_per_pipeline_weekly": 1.5,
+    "weekly_cadence": 1
+  },
+  "outputs": {
+    "time_saved_hours_per_week": 6.0
+  }
+}

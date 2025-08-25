@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "method": "proportional allocation",
+    "notes": "Estimated using baseline/observed ratio per promo type."
+  },
+  "overall": {
+    "total_promo_spend": 73114.73,
+    "waste_spend_est": 56735.54,
+    "waste_pct_est": 77.6
+  },
+  "by_promo": [
+    {
+      "promo_type": "direct_discount",
+      "promo_spend": 17291.91,
+      "orders_observed": 4511,
+      "orders_baseline": 2765,
+      "incremental_orders": 1746,
+      "cpi": 9.9,
+      "waste_spend_est": 10599.009343826203,
+      "waste_pct_est": 61.29461316781202
+    },
+    {
+      "promo_type": "quantity",
+      "promo_spend": 24750.92,
+      "orders_observed": 3350,
+      "orders_baseline": 2988,
+      "incremental_orders": 362,
+      "cpi": 68.37,
+      "waste_spend_est": 22076.342973134328,
+      "waste_pct_est": 89.19402985074626
+    },
+    {
+      "promo_type": "bundle",
+      "promo_spend": 16032.68,
+      "orders_observed": 5800,
+      "orders_baseline": 4165,
+      "incremental_orders": 1635,
+      "cpi": 9.81,
+      "waste_spend_est": 11513.122793103448,
+      "waste_pct_est": 71.81034482758619
+    },
+    {
+      "promo_type": "coupon",
+      "promo_spend": 15039.22,
+      "orders_observed": 1394,
+      "orders_baseline": 1163,
+      "incremental_orders": 231,
+      "cpi": 65.1,
+      "waste_spend_est": 12547.068048780488,
+      "waste_pct_est": 83.42898134863702
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "meta": {
+    "requires": [
+      "orders with user_ID across months",
+      "delivery timestamps",
+      "repeat flag"
+    ]
+  },
+  "formula": "repeat_lift = repeat_rate(latency <= X_days) / repeat_rate(latency > X_days) - 1",
+  "example_threshold_days": 3,
+  "status": "not_computed",
+  "next_steps": [
+    "Join delivery (ship_out -> arr_time) to order history by user_ID",
+    "Compute time-to-deliver in days per order",
+    "Build repeat labels over a 30/60/90 day window",
+    "Aggregate repeat_rate by delivery latency bands"
+  ]
+}

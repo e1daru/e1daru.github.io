@@ -3,6 +3,7 @@ import Home from "@/pages/Home";
 import IntrepidBuildPage from "@/pages/IntrepidBuildPage";
 import E2SPage from "@/pages/E2SPage";
 import LuxuryPage from "@/pages/LuxuryPage";
+import ECommerceAnalyticsPage from "@/pages/ECommerceAnalyticsPage";
 import type { Project } from "@/types";
 
 // Simple placeholder page you can replace later
@@ -71,7 +72,7 @@ export default function App() {
       <Route path="/projects/luxury" element={<LuxuryPage />} />
       <Route
         path="/projects/ecommerce-analytics"
-        element={<ComingSoon title="E-Commerce Analytics" />}
+        element={<ECommerceAnalyticsPage />}
       />
       <Route
         path="/projects/office-hours-portal"

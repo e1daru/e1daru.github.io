@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "generated_at": "2025-08-25T09:43:13Z",
+    "formulas": {
+      "incremental_orders": "orders_observed - orders_baseline",
+      "cpi": "promo_spend / max(incremental_orders, 1)"
+    },
+    "notes": "Placeholders; baseline should control for channel, seasonality, and user-level factors."
+  },
+  "by_promo": [
+    {
+      "promo_type": "direct_discount",
+      "promo_spend": 17291.91,
+      "orders_observed": 4511,
+      "orders_baseline": 2765,
+      "incremental_orders": 1746,
+      "cpi": 9.9
+    },
+    {
+      "promo_type": "quantity",
+      "promo_spend": 24750.92,
+      "orders_observed": 3350,
+      "orders_baseline": 2988,
+      "incremental_orders": 362,
+      "cpi": 68.37
+    },
+    {
+      "promo_type": "bundle",
+      "promo_spend": 16032.68,
+      "orders_observed": 5800,
+      "orders_baseline": 4165,
+      "incremental_orders": 1635,
+      "cpi": 9.81
+    },
+    {
+      "promo_type": "coupon",
+      "promo_spend": 15039.22,
+      "orders_observed": 1394,
+      "orders_baseline": 1163,
+      "incremental_orders": 231,
+      "cpi": 65.1
+    }
+  ],
+  "by_sku_examples": [
+    {
+      "sku_id": "SKU001",
+      "promo_type": "coupon",
+      "promo_spend": 1454.13,
+      "incremental_orders": 1,
+      "cpi": 1454.13,
+      "flag_negative_roi": false
+    },
+    {
+      "sku_id": "SKU002",
+      "promo_type": "bundle",
+      "promo_spend": 596.37,
+      "incremental_orders": 1,
+      "cpi": 596.37,
+      "flag_negative_roi": false
+    },
+    {
+      "sku_id": "SKU003",
+      "promo_type": "direct_discount",
+      "promo_spend": 1503.14,
+      "incremental_orders": 0,
+      "cpi": null,
+      "flag_negative_roi": true
+    }
+  ]
+}

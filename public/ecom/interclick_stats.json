@@ -1,0 +1,127 @@
+{
+  "meta": {
+    "generated_at": "2025-08-25T09:43:13Z",
+    "cohorts": [
+      "ordered",
+      "nonordered"
+    ],
+    "bin_unit": "seconds",
+    "notes": "Inter-click time between consecutive SKU views; placeholders."
+  },
+  "distributions": {
+    "ordered": {
+      "summary": {
+        "mean_seconds": 58,
+        "median_seconds": 37,
+        "p90_seconds": 180,
+        "n_users": 420
+      },
+      "histogram": [
+        {
+          "bin_start_sec": 0,
+          "bin_end_sec": 5,
+          "count": 31
+        },
+        {
+          "bin_start_sec": 5,
+          "bin_end_sec": 15,
+          "count": 66
+        },
+        {
+          "bin_start_sec": 15,
+          "bin_end_sec": 30,
+          "count": 54
+        },
+        {
+          "bin_start_sec": 30,
+          "bin_end_sec": 60,
+          "count": 24
+        },
+        {
+          "bin_start_sec": 60,
+          "bin_end_sec": 120,
+          "count": 40
+        },
+        {
+          "bin_start_sec": 120,
+          "bin_end_sec": 300,
+          "count": 77
+        }
+      ],
+      "by_position": [
+        {
+          "between": "1-2",
+          "median_seconds": 48,
+          "p90_seconds": 58
+        },
+        {
+          "between": "2-3",
+          "median_seconds": 24,
+          "p90_seconds": 84
+        },
+        {
+          "between": "3-4",
+          "median_seconds": 73,
+          "p90_seconds": 40
+        }
+      ]
+    },
+    "nonordered": {
+      "summary": {
+        "mean_seconds": 82,
+        "median_seconds": 54,
+        "p90_seconds": 240,
+        "n_users": 980
+      },
+      "histogram": [
+        {
+          "bin_start_sec": 0,
+          "bin_end_sec": 5,
+          "count": 15
+        },
+        {
+          "bin_start_sec": 5,
+          "bin_end_sec": 15,
+          "count": 68
+        },
+        {
+          "bin_start_sec": 15,
+          "bin_end_sec": 30,
+          "count": 113
+        },
+        {
+          "bin_start_sec": 30,
+          "bin_end_sec": 60,
+          "count": 56
+        },
+        {
+          "bin_start_sec": 60,
+          "bin_end_sec": 120,
+          "count": 61
+        },
+        {
+          "bin_start_sec": 120,
+          "bin_end_sec": 300,
+          "count": 77
+        }
+      ],
+      "by_position": [
+        {
+          "between": "1-2",
+          "median_seconds": 17,
+          "p90_seconds": 46
+        },
+        {
+          "between": "2-3",
+          "median_seconds": 38,
+          "p90_seconds": 63
+        },
+        {
+          "between": "3-4",
+          "median_seconds": 71,
+          "p90_seconds": 23
+        }
+      ]
+    }
+  }
+}

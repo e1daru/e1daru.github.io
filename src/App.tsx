@@ -76,7 +76,7 @@ export default function App() {
       />
       <Route
         path="/projects/office-hours-portal"
-        element={<ComingSoon title="Office Hours Portal" />}
+        element={<ComingSoon title="Office Hours Portal " />}
       />
       <Route
         path="/projects/competitions"

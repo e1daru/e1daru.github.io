@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import React from "react";
 import { motion } from "framer-motion";
 import PageShell from "@/components/PageShell";
@@ -167,26 +168,46 @@ const CardBody: React.FC<React.PropsWithChildren<{ className?: string }>> = ({
   className,
 }) => <div className={`px-6 pb-6 pt-3 ${className || ""}`}>{children}</div>;
 
-function useTabs(initial: string) {
-  const [tab, setTab] = React.useState(initial);
-  const TabButton = ({ value, children }: any) => (
-    <button
-      onClick={() => setTab(value)}
-      aria-pressed={tab === value}
-      className={`rounded-xl border px-4 py-2.5 text-sm md:text-[15px] transition ${
-        tab === value
-          ? "bg-slate-900 text-white border-slate-900"
-          : "bg-white text-slate-700 hover:bg-slate-50"
-      }`}
-    >
-      {children}
-    </button>
-  );
-  return { tab, setTab, TabButton };
-}
+const jumpTo = (id: string) => (e: React.MouseEvent) => {
+  e.preventDefault();
 
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  // account for sticky header height (TOC bar)
+  const header = document.querySelector(
+    'nav[aria-label="On this page"]'
+  ) as HTMLElement | null;
+  const headerH = header?.offsetHeight ?? 0;
+
+  const rect = el.getBoundingClientRect();
+  const scrollTop = window.scrollY;
+  let targetY = rect.top + scrollTop - (window.innerHeight - rect.height) / 2;
+
+  // nudge down so the sticky header doesn't overlap the center
+  targetY = Math.max(0, targetY - headerH / 2);
+
+  window.scrollTo({ top: targetY, behavior: "smooth" });
+
+  // keep route intact, just record section in the URL
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set("section", id);
+    window.history.replaceState(null, "", url.toString());
+  } catch {}
+};
+
+// ---------- Page ----------
 export default function IntrepidBuildPage() {
-  const { tab, TabButton } = useTabs("overview");
+  const TOC = [
+    { id: "overview", label: "Overview" },
+    { id: "research", label: "Research" },
+    { id: "analysis", label: "Analysis" },
+    { id: "recs", label: "Recommendations" },
+    { id: "impact", label: "Impact" },
+    { id: "skills", label: "Skills & Tools" },
+    { id: "slides", label: "Slides" },
+  ];
 
   return (
     <PageShell>
@@ -195,47 +216,57 @@ export default function IntrepidBuildPage() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="mb-10"
+        className="mb-6"
       >
         <div className="page-center">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <div className="text-center md:text-left">
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-                STAR Consulting Project — Intrepid Build
+                Analytics for the Missing Middle — Intrepid Build
               </h1>
               <p className="text-slate-700 mt-3 mx-auto md:mx-0 max-w-2xl md:max-w-3xl leading-relaxed">
-                Affordable housing strategy for Chatham County, NC. I led market
-                research design, data analysis, and financial modeling to
-                de-risk go-to-market and capital decisions for modular
-                steel-framed homes.
+                I analyzed survey, focus-group, and census data to build buyer
+                personas, demand forecasts, and P&L models. This work drove a
+                single-family strategy, a Habitat partnership, and a $6M
+                attainable-housing plan — while de-risking a $5.8M factory
+                acquisition.
               </p>
             </div>
             <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-end">
               <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium bg-slate-900 text-white">
-                Consulting
+                Strategic Consulting
               </span>
               <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium bg-slate-300 text-slate-700">
-                Data Analytics
+                P&L financial model
               </span>
               <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium border border-slate-500 text-slate-700">
-                Business Analysis
+                K-Means Marketing Analysis
               </span>
             </div>
           </div>
 
           <div className="mt-7 grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { kpi: "$6M", label: "5-yr revenue vision" },
-              { kpi: "20%", label: "Target unit margin (Habitat)" },
+              {
+                kpi: "$6M",
+                label: "Modular Hourses Factory CapEx for 5 years",
+              },
+              {
+                kpi: "17%",
+                label: "Cost reduction per unit for Single Family houses",
+              },
               { kpi: "70 units", label: "Factory breakeven (5 yrs)" },
-              { kpi: "87", label: "Survey responses analyzed" },
+              {
+                kpi: "3 Target Personas",
+                label: "Marketing segments based of Qualtrics surveys analyzed",
+              },
             ].map((x, i) => (
               <Card key={i}>
                 <CardBody>
                   <div className="text-2xl font-semibold text-center md:text-left">
                     {x.kpi}
                   </div>
-                  <div className="text-[13px] text-slate-600 mt-0.5 text-center md:text-left">
+                  <div className="text-[15px] text-slate-600 mt-0.5 text-center md:text-left">
                     {x.label}
                   </div>
                 </CardBody>
@@ -245,22 +276,37 @@ export default function IntrepidBuildPage() {
         </div>
       </motion.div>
 
-      {/* Tabs */}
-      <div className="page-center">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-3 justify-items-center md:justify-items-stretch">
-          <TabButton value="overview">Overview</TabButton>
-          <TabButton value="research">Research</TabButton>
-          <TabButton value="analysis">Analysis</TabButton>
-          <TabButton value="recs">Recs</TabButton>
-          <TabButton value="impact">Impact</TabButton>
-          <TabButton value="skills">Skills &amp; Tools</TabButton>
+      {/* On this page (sticky, horizontal scroll on mobile) */}
+      <nav
+        className="page-center sticky top-0 z-10 mb-4 px-0 py-0"
+        aria-label="On this page"
+      >
+        <div className="mx-auto max-w-full">
+          {/* The small centered frame */}
+          <div className="mx-auto w-fit max-w-full rounded-xl border border-slate-400 bg-white/80 backdrop-blur px-4 py-1">
+            <ul className="flex justify-center gap-2 whitespace-nowrap text-mm overflow-x-auto px-1">
+              {TOC.map((t) => (
+                <li key={t.id}>
+                  <a
+                    href="#"
+                    onClick={jumpTo(t.id)}
+                    className="inline-block rounded-lg px-3 py-1.5 text-slate-700 hover:bg-slate-50"
+                  >
+                    {t.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
+      </nav>
 
-      {/* CONTENT */}
-      {tab === "overview" && (
-        <div className="page-center mt-8 grid md:grid-cols-2 gap-8">
-          {/* ... content unchanged, just wrapped in page-center for centering ... */}
+      {/* ===== Overview ===== */}
+      <section id="overview" className="page-center mt-6">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+          Overview
+        </h2>
+        <div className="mt-6 grid md:grid-cols-2 gap-8">
           <Card>
             <CardHeader
               title="Challenge"
@@ -375,11 +421,14 @@ export default function IntrepidBuildPage() {
             </CardBody>
           </Card>
         </div>
-      )}
+      </section>
 
-      {tab === "research" && (
-        <div className="page-center mt-8 grid lg:grid-cols-3 gap-8">
-          {/* ... unchanged content wrapped in page-center ... */}
+      {/* ===== Research ===== */}
+      <section id="research" className="page-center mt-12">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+          Research
+        </h2>
+        <div className="mt-6 grid lg:grid-cols-3 gap-8">
           <Card className="lg:col-span-2">
             <CardHeader title="Study Design" />
             <CardBody className="space-y-5 text-[15px] leading-relaxed text-slate-800">
@@ -465,11 +514,14 @@ export default function IntrepidBuildPage() {
             </CardBody>
           </Card>
         </div>
-      )}
+      </section>
 
-      {tab === "analysis" && (
-        <div className="page-center mt-8 grid md:grid-cols-2 gap-8">
-          {/* ... unchanged content wrapped in page-center ... */}
+      {/* ===== Analysis ===== */}
+      <section id="analysis" className="page-center mt-12">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+          Analysis
+        </h2>
+        <div className="mt-6 grid md:grid-cols-2 gap-8">
           <Card>
             <CardHeader title="Segmentation & Personas" />
             <CardBody>
@@ -523,11 +575,14 @@ export default function IntrepidBuildPage() {
             </CardBody>
           </Card>
         </div>
-      )}
+      </section>
 
-      {tab === "recs" && (
-        <div className="page-center mt-8 grid md:grid-cols-2 gap-8">
-          {/* ... unchanged content wrapped in page-center ... */}
+      {/* ===== Recommendations ===== */}
+      <section id="recs" className="page-center mt-12">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+          Recommendations
+        </h2>
+        <div className="mt-6 grid md:grid-cols-2 gap-8">
           <Card>
             <CardHeader title="Go-to-Market" />
             <CardBody>
@@ -585,140 +640,144 @@ export default function IntrepidBuildPage() {
             </CardBody>
           </Card>
         </div>
-      )}
+      </section>
 
-      {tab === "impact" && (
-        <div className="page-center">
-          <div className="mt-8 grid md:grid-cols-3 gap-8">
-            <Card>
-              <CardHeader title="Business Outcomes" />
-              <CardBody>
-                <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
-                  <li>
-                    Shifted strategy from capex to validation via pilot builds.
-                  </li>
-                  <li>Persona-driven messaging adopted for outreach.</li>
-                  <li>Cost roadmap to $150k/unit with partner leverage.</li>
-                </ul>
-              </CardBody>
-            </Card>
+      {/* ===== Impact ===== */}
+      <section id="impact" className="page-center mt-12">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+          Impact
+        </h2>
+        <div className="mt-6 grid md:grid-cols-3 gap-8">
+          <Card>
+            <CardHeader title="Business Outcomes" />
+            <CardBody>
+              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+                <li>
+                  Shifted strategy from capex to validation via pilot builds.
+                </li>
+                <li>Persona-driven messaging adopted for outreach.</li>
+                <li>Cost roadmap to $150k/unit with partner leverage.</li>
+              </ul>
+            </CardBody>
+          </Card>
 
-            <Card>
-              <CardHeader title="Community Impact" />
-              <CardBody>
-                <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
-                  <li>
-                    Addresses “Missing Middle” (80–120% AMI) homeownership gap.
-                  </li>
-                  <li>
-                    Education plan to reduce stigma &amp; increase adoption.
-                  </li>
-                </ul>
-              </CardBody>
-            </Card>
+          <Card>
+            <CardHeader title="Community Impact" />
+            <CardBody>
+              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+                <li>
+                  Addresses “Missing Middle” (80–120% AMI) homeownership gap.
+                </li>
+                <li>
+                  Education plan to reduce stigma &amp; increase adoption.
+                </li>
+              </ul>
+            </CardBody>
+          </Card>
 
-            <Card>
-              <CardHeader title="Metrics to Watch" />
-              <CardBody>
-                <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
-                  <li>
-                    Lead → tour → application conversion; insurer approvals.
-                  </li>
-                  <li>
-                    Cost delta to $150k target; cycle time from order to
-                    handover.
-                  </li>
-                </ul>
-              </CardBody>
-            </Card>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 mt-8">
-            <Card>
-              <CardHeader title="Compare: Project vs US Preference" />
-              <CardBody>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={housingTypePrefUS}>
-                      <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                      <YAxis tick={{ fontSize: 12 }} />
-                      <Tooltip />
-                      <Bar dataKey="value">
-                        {housingTypePrefUS.map((_, i) => (
-                          <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="text-[13px] text-slate-600 mt-2">
-                  US baseline vs. local project survey → validates SFH-first.
-                </div>
-              </CardBody>
-            </Card>
-
-            <Card>
-              <CardHeader title="Callouts" />
-              <CardBody className="space-y-2.5 text-[15px] leading-relaxed">
-                <div className="p-3 rounded-xl bg-slate-100">
-                  Model home + myth-busting assets are catalytic for adoption.
-                </div>
-                <div className="p-3 rounded-xl bg-slate-100">
-                  Language shift to “attainable” improves sentiment and CTR.
-                </div>
-                <div className="p-3 rounded-xl bg-slate-100">
-                  Steel’s insurance advantage strengthens the value story.
-                </div>
-              </CardBody>
-            </Card>
-          </div>
+          <Card>
+            <CardHeader title="Metrics to Watch" />
+            <CardBody>
+              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+                <li>
+                  Lead → tour → application conversion; insurer approvals.
+                </li>
+                <li>
+                  Cost delta to $150k target; cycle time from order to handover.
+                </li>
+              </ul>
+            </CardBody>
+          </Card>
         </div>
-      )}
 
-      {tab === "skills" && (
-        <div className="page-center">
-          <div className="mt-8 grid md:grid-cols-3 gap-8">
-            {Object.entries(skills).map(([k, v]) => (
-              <Card key={k}>
-                <CardHeader title={k} />
-                <CardBody className="text-[15px] leading-relaxed text-slate-800">
-                  <ul className="list-disc pl-5 space-y-1.5">
-                    {v.map((item, i) => (
-                      <li key={i}>{item}</li>
-                    ))}
-                  </ul>
-                </CardBody>
-              </Card>
-            ))}
-          </div>
+        <div className="grid md:grid-cols-2 gap-8 mt-8">
+          <Card>
+            <CardHeader title="Compare: Project vs US Preference" />
+            <CardBody>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={housingTypePrefUS}>
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip />
+                    <Bar dataKey="value">
+                      {housingTypePrefUS.map((_, i) => (
+                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="text-[13px] text-slate-600 mt-2">
+                US baseline vs. local project survey → validates SFH-first.
+              </div>
+            </CardBody>
+          </Card>
 
-          <Card className="mt-8">
-            <CardHeader
-              title={
-                <span className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" /> Featured Deliverables
-                </span>
-              }
-            />
-            <CardBody className="grid md:grid-cols-2 gap-5 text-[15px] leading-relaxed text-slate-800">
-              {deliverables.map((d, i) => (
-                <div key={i} className="p-4 rounded-xl border">
-                  <div className="font-medium">{d.title}</div>
-                  <div className="text-slate-600">{d.desc}</div>
-                </div>
-              ))}
-              <div className="md:col-span-2">
-                <div className="p-4 rounded-xl bg-slate-100 text-[13px]">
-                  Tip: Link these cards to your public files (survey PDF, focus
-                  group deck, strategy deck, P&amp;L workbook) when deployed.
-                </div>
+          <Card>
+            <CardHeader title="Callouts" />
+            <CardBody className="space-y-2.5 text-[15px] leading-relaxed">
+              <div className="p-3 rounded-xl bg-slate-100">
+                Model home + myth-busting assets are catalytic for adoption.
+              </div>
+              <div className="p-3 rounded-xl bg-slate-100">
+                Language shift to “attainable” improves sentiment and CTR.
+              </div>
+              <div className="p-3 rounded-xl bg-slate-100">
+                Steel’s insurance advantage strengthens the value story.
               </div>
             </CardBody>
           </Card>
         </div>
-      )}
-      {/* Presentation Slides */}
-      <section className="page-center mt-12" id="slides">
+      </section>
+
+      {/* ===== Skills & Deliverables ===== */}
+      <section id="skills" className="page-center mt-12">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+          Skills &amp; Tools
+        </h2>
+        <div className="mt-6 grid md:grid-cols-3 gap-8">
+          {Object.entries(skills).map(([k, v]) => (
+            <Card key={k}>
+              <CardHeader title={k} />
+              <CardBody className="text-[15px] leading-relaxed text-slate-800">
+                <ul className="list-disc pl-5 space-y-1.5">
+                  {v.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              </CardBody>
+            </Card>
+          ))}
+        </div>
+
+        <Card className="mt-8">
+          <CardHeader
+            title={
+              <span className="flex items-center gap-2">
+                <FileText className="h-5 w-5" /> Featured Deliverables
+              </span>
+            }
+          />
+          <CardBody className="grid md:grid-cols-2 gap-5 text-[15px] leading-relaxed text-slate-800">
+            {deliverables.map((d, i) => (
+              <div key={i} className="p-4 rounded-xl border">
+                <div className="font-medium">{d.title}</div>
+                <div className="text-slate-600">{d.desc}</div>
+              </div>
+            ))}
+            <div className="md:col-span-2">
+              <div className="p-4 rounded-xl bg-slate-100 text-[13px]">
+                Tip: Link these cards to your public files (survey PDF, focus
+                group deck, strategy deck, P&amp;L workbook) when deployed.
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+      </section>
+
+      {/* ===== Slides ===== */}
+      <section id="slides" className="page-center mt-12">
         <div className="mb-3 flex items-center justify-between gap-3">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
             Presentation Slides
@@ -732,11 +791,9 @@ export default function IntrepidBuildPage() {
             >
               Open in new tab
             </a>
-            {/* no download attribute → no auto-download */}
           </div>
         </div>
 
-        {/* Inline PDF viewer (no auto-download) */}
         <div className="rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
           <iframe
             title="Intrepid Build — Final Slides"
@@ -748,6 +805,7 @@ export default function IntrepidBuildPage() {
           If your browser blocks embedded PDFs, use “Open in new tab.”
         </p>
       </section>
+
       {/* CTA */}
       <div className="page-center mt-12 flex flex-wrap items-center justify-between gap-3">
         <div className="text-[15px] text-slate-700 leading-relaxed">
@@ -755,17 +813,19 @@ export default function IntrepidBuildPage() {
           snippets (pandas cleaning, weighting functions) on request.
         </div>
         <div className="flex gap-2">
-          <a
-            href="#contact"
+          <Link
+            to="/"
             className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-medium bg-slate-900 text-white hover:bg-slate-800"
           >
-            Get in touch
-          </a>
+            See My Other Projects :)
+          </Link>
+
           <a
-            href="#projects"
+            href="#"
+            onClick={jumpTo("overview")}
             className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-medium border border-slate-300 text-slate-800 hover:bg-slate-50"
           >
-            See more projects
+            Back to top
           </a>
         </div>
       </div>

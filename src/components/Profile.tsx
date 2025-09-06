@@ -6,11 +6,12 @@ export default function Profile() {
       </div>
 
       <div className="info">
-        <div className="eyebrow">Business/Data Analyst &#x1F914;</div>
+        {/* <div className="eyebrow">/Data Analyst &#x1F914;</div> */}
 
+        <h1 className="name">Hi there!</h1>
         <h1 className="name">
-          Hi there! I’m Eldar, a dual-degree student in Business Administration
-          and Computer Science at UNC Chapel Hill.
+          I’m Eldar — a Data Analyst/Scientist with a dual degree in Business
+          Administration and Computer Science at UNC Chapel Hill.
         </h1>
 
         <p className="summary">

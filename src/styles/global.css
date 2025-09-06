@@ -1,4 +1,15 @@
 :root {
+  /* Content width flexes between ~896px and 1280px, prefers 92vw */
+  --content-max: clamp(56rem, 92vw, 80rem);
+
+  /* Side padding flexes between 8px and 24px, prefers 3vw */
+  --page-pad-x: clamp(0.5rem, 3vw, 1.5rem);
+
+  /* Top/bottom padding flexes a bit with viewport */
+  --page-pad-top: clamp(0.5rem, 2.5vw, 1.25rem);
+  --page-pad-bottom: clamp(0.75rem, 2.5vw, 1.5rem);
+
+  /* Base colors */
   --carolina-blue: #4b9cd3;
   --carolina-blue-dark: #2b6fa6;
   --bg-soft: #f9f9f4;
@@ -28,8 +39,12 @@ body {
 
 /* Tighter vertical padding for stacked sections */
 .page-center-tight {
-  padding-block: 0.5rem;
-} /* was 2rem */
+  max-width: 72rem;
+  width: min(100%, 72rem);
+  margin-inline: auto;
+  padding-inline: clamp(0.5rem, 2vw, 1rem); /* narrower sides */
+  padding-block: 1rem; /* less top/bottom */
+}
 
 /* =====  Nav  ===== */
 nav.nav-line {
@@ -75,20 +90,19 @@ nav.nav-line {
   width: 100%;
 }
 .profile .photo {
-  flex: 0 0 320px;
+  flex: 0 0 470px;
   max-width: 100%;
-  margin-top: 5%;
 }
 .profile .photo img {
   width: 100%;
   height: auto;
-  border-radius: 6px;
+  border-radius: 8px;
   display: block;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 .profile .info {
   flex: 1 1 auto;
-  max-width: 62ch;
+  max-width: 80ch;
 }
 .profile .eyebrow {
   margin-bottom: 3.25rem;
@@ -96,7 +110,7 @@ nav.nav-line {
   color: #666;
 }
 .profile .name {
-  font-size: clamp(1rem, 2.5vw, 3rem);
+  font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
@@ -118,11 +132,13 @@ nav.nav-line {
 .profile .email a:hover {
   color: var(--carolina-blue-dark);
   border-color: var(--carolina-blue-dark);
+  font-weight: 600;
 }
 .profile .socials {
   margin-top: 1rem;
   display: flex;
   gap: 1rem;
+  font-weight: 600;
 }
 .profile .socials a {
   text-decoration: none;
@@ -135,6 +151,7 @@ nav.nav-line {
 }
 html {
   scroll-behavior: smooth;
+  font-size: clamp(15px, 0.9vw + 10px, 18px);
 }
 
 /* Responsive */
@@ -165,8 +182,8 @@ html {
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .project-card {
@@ -210,11 +227,12 @@ html {
 
 /* Optional: a generic wrapper you can add to any top-level div to center a page */
 .page-center {
-  max-width: 72rem;
-  width: min(100%, 72rem);
+  max-width: var(--content-max);
+  width: min(100%, var(--content-max));
   margin-inline: auto;
-  padding-inline: clamp(1rem, 4vw, 2rem);
-  padding-block: 2rem;
+  padding-inline: var(--page-pad-x);
+  padding-block-start: var(--page-pad-top);
+  padding-block-end: var(--page-pad-bottom);
 }
 
 /* ========= Fix Home profile layout pushing to the side ========= */

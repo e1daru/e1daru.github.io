@@ -10,23 +10,23 @@ export default function Home({ projects }: { projects: Project[] }) {
       {/* Top nav */}
       <div
         id="profile"
-        className="mx-auto w-full mb-6 page-center page-center-tight"
+        className="mx-auto w-full page-center page-center-tight"
       >
         <NavBar />
       </div>
 
       {/* Hero/Profile */}
-      <section className="page-center page-center-tight">
+      <section className="page-center">
         <Profile />
       </section>
 
       {/* Divider */}
-      <div className="page-center page-center-tight">
-        <hr className="my-4 border-slate-200" />
+      <div className="page-center">
+        <hr className="border-slate-400" />
       </div>
 
       {/* Featured Projects */}
-      <section id="projects" className="projects page-center mt-8 ">
+      <section id="projects" className="projects page-center">
         <Projects projects={projects} />
       </section>
     </PageShell>

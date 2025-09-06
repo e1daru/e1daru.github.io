@@ -21,6 +21,7 @@ import {
   PieChart,
   Pie,
   Cell,
+  Legend,
 } from "recharts";
 
 // ---------- Types ----------
@@ -197,6 +198,40 @@ const jumpTo = (id: string) => (e: React.MouseEvent) => {
   } catch {}
 };
 
+const renderPieLabel = ({
+  cx,
+  cy,
+  midAngle,
+  outerRadius,
+  percent,
+  name,
+}: any) => {
+  const RAD = Math.PI / 180;
+  const r = outerRadius + 22; // place label outside the arc
+  const x = cx + r * Math.cos(-midAngle * RAD);
+  const y = cy + r * Math.sin(-midAngle * RAD);
+  const pct = Math.round(percent * 100);
+
+  // Big, bold text with a white halo (stroke) for contrast on any background
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor={x >= cx ? "start" : "end"}
+      dominantBaseline="central"
+      fontSize={16} // ← bigger
+      fontWeight={700} // ← bolder
+      fill="#0f172a" // ← slate-900 (high contrast)
+      stroke="#ffffff" // ← white halo
+      strokeWidth={4} // ← halo thickness
+      paintOrder="stroke" // render stroke under fill
+      strokeLinejoin="round"
+    >
+      {name} — {pct}%
+    </text>
+  );
+};
+
 // ---------- Page ----------
 export default function IntrepidBuildPage() {
   const TOC = [
@@ -266,7 +301,7 @@ export default function IntrepidBuildPage() {
                   <div className="text-2xl font-semibold text-center md:text-left">
                     {x.kpi}
                   </div>
-                  <div className="text-[15px] text-slate-600 mt-0.5 text-center md:text-left">
+                  <div className="text-[17px] text-slate-600 mt-0.5 text-center md:text-left">
                     {x.label}
                   </div>
                 </CardBody>
@@ -313,7 +348,7 @@ export default function IntrepidBuildPage() {
               icon={<Target className="h-5 w-5" />}
             />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
                 <li>
                   Housing gap of affordable units; 78% of sales above $400k.
                 </li>
@@ -331,7 +366,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Role" icon={<Sparkles className="h-5 w-5" />} />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
                 <li>
                   Designed Qualtrics survey (42 Qs) &amp; focus group; built
                   data pipeline.
@@ -349,7 +384,7 @@ export default function IntrepidBuildPage() {
 
           <Card>
             <CardHeader title="Personas" icon={<Users className="h-5 w-5" />} />
-            <CardBody className="grid gap-3 text-[15px] leading-relaxed text-slate-800">
+            <CardBody className="grid gap-3 text-[17px] leading-relaxed text-slate-800">
               {personaCards.map((p) => (
                 <div key={p.title} className="p-4 rounded-xl border bg-white">
                   <div className="font-medium text-slate-900 mb-1.5">
@@ -371,24 +406,36 @@ export default function IntrepidBuildPage() {
               icon={<BarChartIcon className="h-5 w-5" />}
             />
             <CardBody>
-              <div className="h-64">
+              <div className="h-80">
+                {" "}
+                {/* taller so labels have space */}
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       dataKey="value"
                       data={familiarityData}
-                      innerRadius={45}
-                      outerRadius={80}
-                      paddingAngle={3}
+                      innerRadius={50}
+                      outerRadius={110} // ← larger pie = more label clearance
+                      paddingAngle={2}
+                      minAngle={8} // ← avoid tiny unreadable slices
+                      labelLine // ← show leader lines
+                      label={renderPieLabel}
+                      isAnimationActive={false}
                     >
                       {familiarityData.map((_, i) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
                     </Pie>
                     <Tooltip />
+                    <Legend
+                      verticalAlign="bottom"
+                      iconType="circle"
+                      wrapperStyle={{ fontSize: 14, lineHeight: "20px" }} // ← bigger legend
+                    />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
+
               <div className="text-[13px] text-slate-600 mt-2">
                 Steel-framed home familiarity in survey respondents.
               </div>
@@ -431,7 +478,7 @@ export default function IntrepidBuildPage() {
         <div className="mt-6 grid lg:grid-cols-3 gap-8">
           <Card className="lg:col-span-2">
             <CardHeader title="Study Design" />
-            <CardBody className="space-y-5 text-[15px] leading-relaxed text-slate-800">
+            <CardBody className="space-y-5 text-[17px] leading-relaxed text-slate-800">
               <div className="grid md:grid-cols-2 gap-5">
                 <div className="p-4 rounded-xl border">
                   <div className="font-medium">Survey Architecture</div>
@@ -493,7 +540,7 @@ export default function IntrepidBuildPage() {
 
           <Card>
             <CardHeader title="Message Testing (A/B)" />
-            <CardBody className="space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+            <CardBody className="space-y-2.5 text-[17px] leading-relaxed text-slate-800">
               <ul className="list-disc pl-5 space-y-1.5">
                 <li>Compared descriptors: “affordable” vs “attainable.”</li>
                 <li>
@@ -525,7 +572,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Segmentation & Personas" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
                 <li>
                   Cross-tabs by AMI bands (80–120%), WTP, and housing type.
                 </li>
@@ -541,7 +588,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Competitive Benchmarks" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
                 <li>
                   Local NC modular builders: variety of plans, strong education
                   content.
@@ -561,7 +608,7 @@ export default function IntrepidBuildPage() {
 
           <Card className="md:col-span-2">
             <CardHeader title="Financial Modeling Highlights" />
-            <CardBody className="grid md:grid-cols-3 gap-5 text-[15px] leading-relaxed text-slate-800">
+            <CardBody className="grid md:grid-cols-3 gap-5 text-[17px] leading-relaxed text-slate-800">
               {[
                 { k: "Unit Econ (SFH)", v: "Target $150k build → ~20% margin" },
                 { k: "Capex Breakeven", v: "~70 units / 5 yrs (factory)" },
@@ -586,7 +633,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Go-to-Market" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
                 <li>
                   Launch with SFH: 1,520 sq ft, 2–3 BR; flexible design SKUs.
                 </li>
@@ -603,7 +650,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Partnerships & Channel" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
                 <li>
                   Partner with Habitat for Humanity to lower cost &amp; expand
                   reach.
@@ -622,7 +669,7 @@ export default function IntrepidBuildPage() {
 
           <Card className="md:col-span-2">
             <CardHeader title="Execution Plan (This Year)" />
-            <CardBody className="grid md:grid-cols-4 gap-5 text-[15px] leading-relaxed">
+            <CardBody className="grid md:grid-cols-4 gap-5 text-[17px] leading-relaxed">
               {[
                 "Finalize SFH blueprint",
                 "Complete BOM & cost validation",
@@ -651,7 +698,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Business Outcomes" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
                 <li>
                   Shifted strategy from capex to validation via pilot builds.
                 </li>
@@ -664,7 +711,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Community Impact" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
                 <li>
                   Addresses “Missing Middle” (80–120% AMI) homeownership gap.
                 </li>
@@ -678,7 +725,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Metrics to Watch" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
                 <li>
                   Lead → tour → application conversion; insurer approvals.
                 </li>
@@ -716,7 +763,7 @@ export default function IntrepidBuildPage() {
 
           <Card>
             <CardHeader title="Callouts" />
-            <CardBody className="space-y-2.5 text-[15px] leading-relaxed">
+            <CardBody className="space-y-2.5 text-[17px] leading-relaxed">
               <div className="p-3 rounded-xl bg-slate-100">
                 Model home + myth-busting assets are catalytic for adoption.
               </div>
@@ -740,7 +787,7 @@ export default function IntrepidBuildPage() {
           {Object.entries(skills).map(([k, v]) => (
             <Card key={k}>
               <CardHeader title={k} />
-              <CardBody className="text-[15px] leading-relaxed text-slate-800">
+              <CardBody className="text-[17px] leading-relaxed text-slate-800">
                 <ul className="list-disc pl-5 space-y-1.5">
                   {v.map((item, i) => (
                     <li key={i}>{item}</li>
@@ -759,7 +806,7 @@ export default function IntrepidBuildPage() {
               </span>
             }
           />
-          <CardBody className="grid md:grid-cols-2 gap-5 text-[15px] leading-relaxed text-slate-800">
+          <CardBody className="grid md:grid-cols-2 gap-5 text-[17px] leading-relaxed text-slate-800">
             {deliverables.map((d, i) => (
               <div key={i} className="p-4 rounded-xl border">
                 <div className="font-medium">{d.title}</div>
@@ -808,7 +855,7 @@ export default function IntrepidBuildPage() {
 
       {/* CTA */}
       <div className="page-center mt-12 flex flex-wrap items-center justify-between gap-3">
-        <div className="text-[15px] text-slate-700 leading-relaxed">
+        <div className="text-[17px] text-slate-700 leading-relaxed">
           Want more details? I can share anonymized data tables and code
           snippets (pandas cleaning, weighting functions) on request.
         </div>

@@ -259,41 +259,215 @@ export default function IntrepidBuildPage() {
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
                 Analytics for the Missing Middle — Intrepid Build
               </h1>
-              <p className="text-slate-700 mt-3 mx-auto md:mx-0 max-w-2xl md:max-w-3xl leading-relaxed">
-                I analyzed survey, focus-group, and census data to build buyer
-                personas, demand forecasts, and P&L models. This work drove a
-                single-family strategy, a Habitat partnership, and a $6M
-                attainable-housing plan — while de-risking a $5.8M factory
-                acquisition.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-end">
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium bg-slate-900 text-white">
-                Strategic Consulting
-              </span>
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium bg-slate-300 text-slate-700">
-                P&L financial model
-              </span>
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium border border-slate-500 text-slate-700">
-                K-Means Marketing Analysis
-              </span>
             </div>
           </div>
+        </div>
+      </motion.div>
 
+      {/* ===== Project Story (inserted here, right after hero/KPIs) ===== */}
+      <section id="story" className="page-center mt-6">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+          Project Story
+        </h2>
+
+        <div className="mt-6 space-y-6">
+          {/* Hook — what this project achieved in one line */}
+          <p className="text-slate-800 text-[26px] leading-relaxed">
+            Turned messy housing data into decisive marketing analysis for
+            Intrepid Build* construction company — informing affordable-home
+            prototype design and cutting costs by 17% — as part of a plan to
+            deliver attainable housing (~$6M revenue target) in Chatham County,
+            NC.
+          </p>
+
+          {/* Plain-English bridge for readers with 0 context */}
+          <p className="text-slate-700 text-[18px] leading-relaxed">
+            * <span className="font-medium">Intrepid Build</span> is a small
+            construction company exploring{" "}
+            <span className="font-medium">
+              steel-framed single-family homes (SFH)
+            </span>{" "}
+            for middle-income buyers. The county has a shortage of reasonably
+            priced homes, so we used data to decide <em>what to build</em>,{" "}
+            <em>for whom</em>, <em>at what price</em>, and{" "}
+            <em>how to go to market</em> without taking on risky up-front
+            factory costs.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Context */}
+            <Card>
+              <CardHeader
+                title="Context — the problem we faced"
+                icon={<Target className="h-5 w-5" />}
+              />
+              <CardBody className="pt-4 text-[20px] leading-relaxed text-slate-800">
+                <p>
+                  Local home prices outpaced incomes. Many essential workers
+                  (teachers, nurses, plant employees) could not afford to buy.
+                  The client considered steel-framed homes because they build
+                  faster, are durable, and can be cost-efficient.
+                </p>
+                <ul className="list-disc pl-5 mt-3 space-y-2.5">
+                  <li>
+                    <span className="font-medium">Goal:</span> design a product
+                    and go-to-market that middle-income buyers can actually
+                    afford.
+                  </li>
+                  <li>
+                    <span className="font-medium">Constraint:</span> avoid a
+                    premature, high-risk factory purchase (big up-front cost).
+                  </li>
+                </ul>
+              </CardBody>
+            </Card>
+
+            {/* My Role */}
+            <Card>
+              <CardHeader
+                title="My Role — what I owned"
+                icon={<Sparkles className="h-5 w-5" />}
+              />
+              <CardBody className="pt-4 text-[20px] leading-relaxed text-slate-800">
+                <ul className="list-disc pl-5 mt-3 space-y-3">
+                  <li>
+                    <span className="font-medium">
+                      Group customers by data.
+                    </span>{" "}
+                    I cleaned and standardized the Qualtrics data in Python and
+                    prepared features (one-hot encoding, scaling). I used
+                    <span className="font-medium"> k-means clustering</span> to
+                    find natural groups and chose the right number with elbow
+                    and silhouette checks.
+                  </li>
+                  <li>
+                    <span className="font-medium">
+                      Show what each group can afford.
+                    </span>{" "}
+                    For each cluster, I mapped income to a monthly budget (~30%
+                    of income using AMI). I set price bands and
+                    willingness-to-pay ranges, then tied them to unit economics
+                    so prices also work for the business.
+                  </li>
+                  <li>
+                    <span className="font-medium">
+                      Tie it to the 4Ps (marketing mix).
+                    </span>
+                    <span className="font-medium"> Product:</span> SFH size, key
+                    features, and options.
+                    <span className="font-medium"> Price:</span> persona-based
+                    targets and practical corridors.
+                    <span className="font-medium"> Place:</span> partner-led
+                    channels (Habitat, lenders).
+                    <span className="font-medium"> Promotion:</span> A/B tests
+                    of “attainable” vs “affordable.”
+                  </li>
+                </ul>
+              </CardBody>
+            </Card>
+
+            {/* Key Decisions */}
+            <Card>
+              <CardHeader
+                title="Key Decisions — what the data said"
+                icon={<Users className="h-5 w-5" />}
+              />
+              <CardBody className="pt-4 text-[20px] leading-relaxed text-slate-800">
+                <ul className="list-disc pl-5 space-y-3">
+                  <li>
+                    <span className="font-medium">
+                      Prioritize Single-Family Homes
+                    </span>{" "}
+                    (1,500–2,000 sq ft; 2–3 BR).
+                    <div className="text-slate-600 text-[16px] mt-2">
+                      Why: survey preference and budget fit were strongest for
+                      SFH.
+                    </div>
+                  </li>
+                  <li>
+                    <span className="font-medium">Partner-led rollout</span>{" "}
+                    (e.g., Habitat for Humanity) instead of buying a factory
+                    now.
+                    <div className="text-slate-600 text-[16px] mt-2">
+                      Why: partners speed permitting/financing and reduce
+                      up-front capital risk.
+                    </div>
+                  </li>
+                  <li>
+                    <span className="font-medium">
+                      Refine the prototype &amp; cost targets
+                    </span>{" "}
+                    to hit affordability.
+                    <div className="text-slate-600 text-[16px] mt-2">
+                      How: value-engineering, bill-of-materials clarity, and
+                      better vendor assumptions.
+                    </div>
+                  </li>
+                </ul>
+              </CardBody>
+            </Card>
+          </div>
+
+          {/* Impact */}
+          <Card>
+            <CardHeader
+              title="Impact — what changed because of this work"
+              icon={<CheckCircle className="h-5 w-5" />}
+            />
+            <CardBody>
+              <ul className="list-disc pl-5 space-y-3 text-[20px] leading-relaxed text-slate-800">
+                <li>
+                  <span className="font-medium">
+                    ~17% prototype cost reduction
+                  </span>{" "}
+                  → clearer path to sustainable margins.
+                  <div className="text-slate-600 text-[16px] mt-1">
+                    We pinpointed design/cost drivers and removed waste without
+                    hurting quality.
+                  </div>
+                </li>
+                <li>
+                  <span className="font-medium">
+                    Roadmap for ~22 attainable homes by 2028 (~$6M revenue)
+                  </span>
+                  .
+                  <div className="text-slate-600 text-[16px] mt-1">
+                    A practical plan: product, price points, and a partner
+                    channel to reach buyers.
+                  </div>
+                </li>
+                <li>
+                  <span className="font-medium">
+                    De-risked a $5.8M factory decision
+                  </span>{" "}
+                  with demand and unit-economics proof.
+                  <div className="text-slate-600 text-[16px] mt-1">
+                    Recommendation: validate via partnerships first; revisit
+                    factory when volume is proven.
+                  </div>
+                </li>
+              </ul>
+            </CardBody>
+          </Card>
+
+          {/* KPIs — clarified labels for non-experts */}
           <div className="mt-7 grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               {
                 kpi: "$6M",
-                label: "Modular Hourses Factory CapEx for 5 years",
+                label: "Planned revenue by 2028 (approx.)",
               },
               {
                 kpi: "17%",
-                label: "Cost reduction per unit for Single Family houses",
+                label: "Prototype cost reduction from redesign",
               },
-              { kpi: "70 units", label: "Factory breakeven (5 yrs)" },
               {
-                kpi: "3 Target Personas",
-                label: "Marketing segments based of Qualtrics surveys analyzed",
+                kpi: "70 units",
+                label: "Estimated factory breakeven (5-year horizon)",
+              },
+              {
+                kpi: "3 personas",
+                label: "Buyer segments from survey + focus group",
               },
             ].map((x, i) => (
               <Card key={i}>
@@ -301,172 +475,63 @@ export default function IntrepidBuildPage() {
                   <div className="text-2xl font-semibold text-center md:text-left">
                     {x.kpi}
                   </div>
-                  <div className="text-[17px] text-slate-600 mt-0.5 text-center md:text-left">
+                  <div className="text-[20px] text-slate-600 mt-0.5 text-center md:text-left">
                     {x.label}
                   </div>
                 </CardBody>
               </Card>
             ))}
           </div>
-        </div>
-      </motion.div>
 
-      {/* On this page (sticky, horizontal scroll on mobile) */}
-      <nav
-        className="page-center sticky top-0 z-10 mb-4 px-0 py-0"
-        aria-label="On this page"
-      >
-        <div className="mx-auto max-w-full">
-          {/* The small centered frame */}
-          <div className="mx-auto w-fit max-w-full rounded-xl border border-slate-400 bg-white/80 backdrop-blur px-4 py-1">
-            <ul className="flex justify-center gap-2 whitespace-nowrap text-mm overflow-x-auto px-1">
-              {TOC.map((t) => (
-                <li key={t.id}>
-                  <a
-                    href="#"
-                    onClick={jumpTo(t.id)}
-                    className="inline-block rounded-lg px-3 py-1.5 text-slate-700 hover:bg-slate-50"
-                  >
-                    {t.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </nav>
-
-      {/* ===== Overview ===== */}
-      <section id="overview" className="page-center mt-6">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-          Overview
-        </h2>
-        <div className="mt-6 grid md:grid-cols-2 gap-8">
-          <Card>
-            <CardHeader
-              title="Challenge"
-              icon={<Target className="h-5 w-5" />}
-            />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
-                <li>
-                  Housing gap of affordable units; 78% of sales above $400k.
-                </li>
-                <li>
-                  Low familiarity with steel-framed homes; stigma around
-                  “affordable.”
-                </li>
-                <li>
-                  Client considering a $5.8M factory without proven demand.
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader title="Role" icon={<Sparkles className="h-5 w-5" />} />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
-                <li>
-                  Designed Qualtrics survey (42 Qs) &amp; focus group; built
-                  data pipeline.
-                </li>
-                <li>
-                  Performed segmentation, ranking analysis, and message testing.
-                </li>
-                <li>
-                  Built SFH P&amp;L, breakeven &amp; sensitivity models to guide
-                  capex.
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader title="Personas" icon={<Users className="h-5 w-5" />} />
-            <CardBody className="grid gap-3 text-[17px] leading-relaxed text-slate-800">
-              {personaCards.map((p) => (
-                <div key={p.title} className="p-4 rounded-xl border bg-white">
-                  <div className="font-medium text-slate-900 mb-1.5">
-                    {p.title}
-                  </div>
-                  <ul className="list-disc pl-5 space-y-1.5">
-                    {p.bullets.map((b, i) => (
-                      <li key={i}>{b}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader
-              title="Familiarity"
-              icon={<BarChartIcon className="h-5 w-5" />}
-            />
-            <CardBody>
-              <div className="h-80">
-                {" "}
-                {/* taller so labels have space */}
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      dataKey="value"
-                      data={familiarityData}
-                      innerRadius={50}
-                      outerRadius={110} // ← larger pie = more label clearance
-                      paddingAngle={2}
-                      minAngle={8} // ← avoid tiny unreadable slices
-                      labelLine // ← show leader lines
-                      label={renderPieLabel}
-                      isAnimationActive={false}
-                    >
-                      {familiarityData.map((_, i) => (
-                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend
-                      verticalAlign="bottom"
-                      iconType="circle"
-                      wrapperStyle={{ fontSize: 14, lineHeight: "20px" }} // ← bigger legend
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+          {/* Plain-English definitions (optional but helpful) */}
+          <details className="rounded-2xl border border-slate-200 bg-white/60 p-4">
+            <summary className="cursor-pointer font-medium text-slate-900">
+              What do these terms mean?
+            </summary>
+            <div className="mt-3 grid md:grid-cols-2 gap-4 text-[16px] leading-relaxed text-slate-700">
+              <div>
+                <p>
+                  <span className="font-semibold">Attainable housing:</span>{" "}
+                  Homes priced so middle-income households can realistically buy
+                  (not luxury, not deeply subsidized).
+                </p>
+                <p className="mt-2">
+                  <span className="font-semibold">
+                    SFH (Single-Family Home):
+                  </span>{" "}
+                  A standalone house (typically 2–3 bedrooms here).
+                </p>
+                <p className="mt-2">
+                  <span className="font-semibold">
+                    AMI (Area Median Income):
+                  </span>{" "}
+                  The midpoint income for a region; we align payments so housing
+                  costs ≈ 30% of income.
+                </p>
               </div>
-
-              <div className="text-[13px] text-slate-600 mt-2">
-                Steel-framed home familiarity in survey respondents.
+              <div>
+                <p>
+                  <span className="font-semibold">
+                    P&amp;L / Unit economics:
+                  </span>{" "}
+                  A line-by-line view of costs (materials, labor, overhead) and
+                  price to ensure profit per home.
+                </p>
+                <p className="mt-2">
+                  <span className="font-semibold">
+                    CapEx (Capital Expenditure):
+                  </span>{" "}
+                  Big up-front spend (like buying a factory). We chose to delay
+                  this until demand is proven.
+                </p>
+                <p className="mt-2">
+                  <span className="font-semibold">Persona:</span> A data-driven
+                  profile of a typical buyer (budget, needs, motivations) to
+                  guide product and messaging.
+                </p>
               </div>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader
-              title="Preference"
-              icon={<LineChart className="h-5 w-5" />}
-            />
-            <CardBody>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={housingTypePrefProject}>
-                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip />
-                    <Bar dataKey="value">
-                      {housingTypePrefProject.map((_, i) => (
-                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="text-[13px] text-slate-600 mt-2">
-                Project survey: Single-family most preferred (62%).
-              </div>
-            </CardBody>
-          </Card>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -478,7 +543,7 @@ export default function IntrepidBuildPage() {
         <div className="mt-6 grid lg:grid-cols-3 gap-8">
           <Card className="lg:col-span-2">
             <CardHeader title="Study Design" />
-            <CardBody className="space-y-5 text-[17px] leading-relaxed text-slate-800">
+            <CardBody className="space-y-5 text-[20px] leading-relaxed text-slate-800">
               <div className="grid md:grid-cols-2 gap-5">
                 <div className="p-4 rounded-xl border">
                   <div className="font-medium">Survey Architecture</div>
@@ -540,7 +605,7 @@ export default function IntrepidBuildPage() {
 
           <Card>
             <CardHeader title="Message Testing (A/B)" />
-            <CardBody className="space-y-2.5 text-[17px] leading-relaxed text-slate-800">
+            <CardBody className="space-y-2.5 text-[20px] leading-relaxed text-slate-800">
               <ul className="list-disc pl-5 space-y-1.5">
                 <li>Compared descriptors: “affordable” vs “attainable.”</li>
                 <li>
@@ -572,7 +637,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Segmentation & Personas" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
                 <li>
                   Cross-tabs by AMI bands (80–120%), WTP, and housing type.
                 </li>
@@ -588,7 +653,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Competitive Benchmarks" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
                 <li>
                   Local NC modular builders: variety of plans, strong education
                   content.
@@ -608,7 +673,7 @@ export default function IntrepidBuildPage() {
 
           <Card className="md:col-span-2">
             <CardHeader title="Financial Modeling Highlights" />
-            <CardBody className="grid md:grid-cols-3 gap-5 text-[17px] leading-relaxed text-slate-800">
+            <CardBody className="grid md:grid-cols-3 gap-5 text-[20px] leading-relaxed text-slate-800">
               {[
                 { k: "Unit Econ (SFH)", v: "Target $150k build → ~20% margin" },
                 { k: "Capex Breakeven", v: "~70 units / 5 yrs (factory)" },
@@ -633,7 +698,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Go-to-Market" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
                 <li>
                   Launch with SFH: 1,520 sq ft, 2–3 BR; flexible design SKUs.
                 </li>
@@ -650,7 +715,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Partnerships & Channel" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
                 <li>
                   Partner with Habitat for Humanity to lower cost &amp; expand
                   reach.
@@ -669,7 +734,7 @@ export default function IntrepidBuildPage() {
 
           <Card className="md:col-span-2">
             <CardHeader title="Execution Plan (This Year)" />
-            <CardBody className="grid md:grid-cols-4 gap-5 text-[17px] leading-relaxed">
+            <CardBody className="grid md:grid-cols-4 gap-5 text-[20px] leading-relaxed">
               {[
                 "Finalize SFH blueprint",
                 "Complete BOM & cost validation",
@@ -698,7 +763,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Business Outcomes" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
                 <li>
                   Shifted strategy from capex to validation via pilot builds.
                 </li>
@@ -711,7 +776,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Community Impact" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
                 <li>
                   Addresses “Missing Middle” (80–120% AMI) homeownership gap.
                 </li>
@@ -725,7 +790,7 @@ export default function IntrepidBuildPage() {
           <Card>
             <CardHeader title="Metrics to Watch" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[17px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
                 <li>
                   Lead → tour → application conversion; insurer approvals.
                 </li>
@@ -763,7 +828,7 @@ export default function IntrepidBuildPage() {
 
           <Card>
             <CardHeader title="Callouts" />
-            <CardBody className="space-y-2.5 text-[17px] leading-relaxed">
+            <CardBody className="space-y-2.5 text-[20px] leading-relaxed">
               <div className="p-3 rounded-xl bg-slate-100">
                 Model home + myth-busting assets are catalytic for adoption.
               </div>
@@ -787,7 +852,7 @@ export default function IntrepidBuildPage() {
           {Object.entries(skills).map(([k, v]) => (
             <Card key={k}>
               <CardHeader title={k} />
-              <CardBody className="text-[17px] leading-relaxed text-slate-800">
+              <CardBody className="text-[20px] leading-relaxed text-slate-800">
                 <ul className="list-disc pl-5 space-y-1.5">
                   {v.map((item, i) => (
                     <li key={i}>{item}</li>
@@ -806,7 +871,7 @@ export default function IntrepidBuildPage() {
               </span>
             }
           />
-          <CardBody className="grid md:grid-cols-2 gap-5 text-[17px] leading-relaxed text-slate-800">
+          <CardBody className="grid md:grid-cols-2 gap-5 text-[20px] leading-relaxed text-slate-800">
             {deliverables.map((d, i) => (
               <div key={i} className="p-4 rounded-xl border">
                 <div className="font-medium">{d.title}</div>
@@ -855,7 +920,7 @@ export default function IntrepidBuildPage() {
 
       {/* CTA */}
       <div className="page-center mt-12 flex flex-wrap items-center justify-between gap-3">
-        <div className="text-[17px] text-slate-700 leading-relaxed">
+        <div className="text-[20px] text-slate-700 leading-relaxed">
           Want more details? I can share anonymized data tables and code
           snippets (pandas cleaning, weighting functions) on request.
         </div>

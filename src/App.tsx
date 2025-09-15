@@ -22,14 +22,14 @@ const projects: Project[] = [
     alt: "$6M Affordable Housing Plan, Optimized with Data Science",
     title: "$6M Affordable Housing Plan, Optimized with Data Science",
     desc: "Teamed with MBAs to de-risk a construction firm's $6M housing project. Our data-driven strategy, P&L, and K-means marketing analysis slashed costs by ~20%.",
-    path: "/projects/intrepid-build",
+    path: "/projects/intrepid",
   },
   {
     img: "/e2s.jpg",
     alt: "EATS2SEATS",
     title: "US Open 2024 Operations Data Analytics",
     desc: "Built a smart tool that predicts staff cancellations and automates scheduling for large sport events. It cut last-minute no-shows by 11% and saved over 160 hours of administrative work per event, ensuring reliable staffing and major cost savings.",
-    path: "/projects/eats2seats",
+    path: "/projects/e2s",
   },
   {
     img: "/busi488.jpg",
@@ -43,21 +43,21 @@ const projects: Project[] = [
     alt: "Research Assistant Project",
     title: "Data-Driven E-Commerce: Decoding 15 Million Purchases",
     desc: "Transformed massive purchase data into a strategic roadmap. By analyzing 15M+ records, we pinpointed critical buying triggers and engineered a optimized pipeline that dramatically accelerated processing speed for deep, scalable analysis.",
-    path: "/projects/ecommerce-analytics",
+    path: "/projects/ecom",
   },
   {
     img: "/fullstack.jpg",
     alt: "Full-Stack Developer Project",
     title: "Leveling Up Learning: A Gamified Office Hours Portal",
     desc: "To boost participation, helped to design a gamify office hours portal featuring a dynamic ranking and rewards system with points, badge, and ranking features. The result was a 25% surge in profile clicks out of 2,000+ CS students.",
-    path: "/projects/office-hours-portal",
+    path: "/projects/CSportal",
   },
   {
     img: "/competitions.jpg",
     alt: "Consulting Competitions",
     title: "Case Competitions: Award-Winning Strategy & Team Leadership",
     desc: "Spearheaded multiple teams to victory in high-stakes case competitions for Deloitte and P&G. We consistently delivered winning, data-driven strategies under intense pressure and tight deadlines.",
-    path: "/projects/competitions",
+    path: "/projects/CCC",
   },
 ];
 
@@ -67,19 +67,16 @@ export default function App() {
       <Route path="/" element={<Home projects={projects} />} />
 
       {/* Project detail pages */}
-      <Route path="/projects/intrepid-build" element={<IntrepidBuildPage />} />
-      <Route path="/projects/eats2seats" element={<E2SPage />} />
+      <Route path="/projects/intrepid" element={<IntrepidBuildPage />} />
+      <Route path="/projects/e2s" element={<E2SPage />} />
       <Route path="/projects/luxury" element={<LuxuryPage />} />
+      <Route path="/projects/ecom" element={<ECommerceAnalyticsPage />} />
       <Route
-        path="/projects/ecommerce-analytics"
-        element={<ECommerceAnalyticsPage />}
-      />
-      <Route
-        path="/projects/office-hours-portal"
+        path="/projects/CSportal"
         element={<ComingSoon title="Office Hours Portal " />}
       />
       <Route
-        path="/projects/competitions"
+        path="/projects/CCC"
         element={<ComingSoon title="Consulting Competitions" />}
       />
 

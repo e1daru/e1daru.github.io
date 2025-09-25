@@ -1,946 +1,752 @@
-import { Link } from "react-router-dom";
 import React from "react";
 import { motion } from "framer-motion";
 import PageShell from "@/components/PageShell";
-import {
-  Target,
-  Sparkles,
-  Users,
-  BarChart as BarChartIcon,
-  LineChart,
-  CheckCircle,
-  FileText,
-} from "lucide-react";
+import NavBar from "@/components/NavBar";
 import {
   ResponsiveContainer,
   BarChart,
   Bar,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
+  Legend,
   PieChart,
   Pie,
   Cell,
-  Legend,
+  ReferenceLine,
+  LabelList,
+  Label,
 } from "recharts";
 
-// ---------- Types ----------
-type Slice = { name: string; value: number };
-type Factor = { factor: string; score: number };
-type Persona = { title: string; bullets: string[] };
-type Deliverable = { title: string; desc: string };
+/**
+ * IntrepidBuildPage — Buildup • Conflict • Solution (boxed layout)
+ * Story-first, with each chart + explanation in a clean box for easy scanning.
+ * Deps: npm i recharts framer-motion
+ */
 
-// ---------- Data (unchanged) ----------
-const familiarityData: Slice[] = [
-  { name: "Very familiar", value: 11 },
-  { name: "Somewhat familiar", value: 30 },
-  { name: "Not familiar", value: 59 },
+// KPI (hero)
+const kpi = [
+  { label: "Projected Cost Cut", value: "~17%", sub: "per unit" },
+  { label: "Residents Impacted", value: "9K+", sub: "Chatham, NC" },
+  { label: "Plan Size", value: "$6M", sub: "revenue target" },
 ];
 
-const housingTypePrefProject: Slice[] = [
-  { name: "Single Family", value: 62 },
-  { name: "Townhouse", value: 17 },
-  { name: "Multi Family", value: 12 },
-  { name: "Condo", value: 9 },
+// Chart layout helpers
+const chartMargin = { top: 24, right: 28, bottom: 44, left: 28 };
+const axisTick = { fontSize: 12 } as const;
+const legendStyle = { fontSize: 12 } as const;
+
+// ── DATA — Buildup
+const priceBands = [
+  { band: "<$400k", pct: 22 }, // ~78% are ≥$400k
+  { band: "$400–600k", pct: 60 },
+  { band: ">$600k", pct: 18 },
 ];
 
-const housingTypePrefUS: Slice[] = [
-  { name: "Single Family", value: 75 },
-  { name: "Townhouse", value: 15 },
-  { name: "Condo", value: 6 },
-  { name: "Multi Family", value: 4 },
-];
-
-const topDecisionFactors: Factor[] = [
-  { factor: "Price", score: 92 },
-  { factor: "Location", score: 88 },
-  { factor: "Size", score: 74 },
-  { factor: "Eco-friendliness", score: 61 },
-  { factor: "Customization", score: 57 },
-  { factor: "Amenities", score: 49 },
-];
-
-const personaCards: Persona[] = [
-  {
-    title: "The Traditionalist Teacher",
-    bullets: [
-      "55–64, college educated, ~$50k median income",
-      "Budget: ~$2,000/mo; values durability & livability",
-      "Prefers SFH; cautious about aesthetics & resale",
-    ],
-  },
-  {
-    title: "The Young Professionals",
-    bullets: [
-      "25–44, diverse backgrounds, income $80k+",
-      "Budget: $1,000–$2,000/mo; open to steel-framed",
-      "Motivated by design flexibility & speed to build",
-    ],
-  },
-  {
-    title: "The Practical Saver",
-    bullets: [
-      "25–54, many earning $150k+ (household)",
-      "Budget: $1,500–$2,500/mo; equity-minded",
-      "Skeptical of ‘industrial’ look; wants proof & comps",
-    ],
-  },
-];
-
-const skills: Record<string, string[]> = {
-  "Marketing Research (Technical)": [
-    "Qualtrics survey architecture (42 Qs; Likert, ranking, multi-select)",
-    "Sampling & de-biasing (network vs. external ~68%)",
-    "Python: pandas/numpy for cleaning, normalization, recoding",
-    "Segmentation: cross-tabs by AMI, WTP, housing type",
-    "Weighted ranking & index scoring for factor importance",
-    "Thematic coding for focus group notes",
-    "A/B message testing (‘affordable’ vs ‘attainable’)",
-  ],
-  "Analytics & Finance": [
-    "Excel P&L modeling (materials, labor, land, OH)",
-    "ROI & breakeven for capex (70 units / 5 yrs sensitivity)",
-    "Scenario analysis (cost-to-$150k target; ~20% margin)",
-    "Insurance impact analysis (steel vs stick-build risk)",
-  ],
-  "Consulting & BA": [
-    "Stakeholder mapping & interview guide design",
-    "Focus group facilitation & synthesis",
-    "Competitive benchmarking & positioning",
-    "Go-to-market playbook & language frameworks",
-  ],
+const affordability = {
+  medianIncome: 83000,
+  requiredIncome: 136000,
+  maxView: 160000,
 };
 
-const deliverables: Deliverable[] = [
+const costBurden = [
+  { name: "Cost‑burdened renters", value: 47 },
+  { name: "Not cost‑burdened renters", value: 53 },
+];
+const donutColors = ["#0ea5e9", "#94a3b8"]; // sky/slate
+
+const prefSF = [
+  { series: "Local SFH preference", pct: 62 },
+  { series: "National SFH preference", pct: 75 },
+];
+
+// ── DATA — Conflict
+const unitEconomics = [
+  { name: "Land + Entitlement", Before: 120, After: 110 },
+  { name: "Structure", Before: 180, After: 145 },
+  { name: "MEP (Systems)", Before: 95, After: 86 },
+  { name: "Finishes (Interior)", Before: 115, After: 97 },
+  { name: "Soft Costs + Overhead", Before: 90, After: 78 },
+];
+
+const priorityScores = [
+  { factor: "Price (Total Cost)", score: 1.0 },
+  { factor: "Location (Commute/Schools)", score: 0.85 },
+  { factor: "Size (Sqft/Bedrooms)", score: 0.7 },
+  { factor: "Energy Efficiency (Utilities)", score: 0.55 },
+  { factor: "New Construction", score: 0.42 },
+  { factor: "Customization", score: 0.38 },
+  { factor: "Amenities (Community)", score: 0.34 },
+];
+
+// ── DATA — Solution
+const fitImprovement = [
+  { label: "Baseline market fit", pct: 52 },
+  { label: "Optimized lineup fit", pct: 88 },
+];
+
+const monthlyPayments = [
+  { price: "$200k", pmt: 1756 },
+  { price: "$325k", pmt: 2371 },
+  { price: "$465k", pmt: 3384 },
+];
+
+const clusterProfiles = [
   {
-    title: "Market Research Survey & Analysis (Qualtrics)",
-    desc: "42 questions, 87 responses. Demographics, preferences, claims testing.",
+    segment: "Value Seekers",
+    budget: 1900,
+    size: 0.28,
+    topPrefs: "SFH, 2–3BR, modest finishes",
   },
   {
-    title: "Focus Group – Guide & Debrief",
-    desc: "Leaders + realtors. Insights on aesthetics, resale, financing.",
+    segment: "Space‑Oriented",
+    budget: 2400,
+    size: 0.33,
+    topPrefs: "1.8–2.2k sqft, 3BR",
   },
   {
-    title: "Buyer Personas (3) & Targeting Matrix",
-    desc: "Profiles mapped to AMI bands, budget, motivators, objections.",
+    segment: "Efficiency‑First",
+    budget: 2100,
+    size: 0.22,
+    topPrefs: "EE windows, insulation, low utilities",
   },
   {
-    title: "Financial Model – SFH P&L & Capex Feasibility",
-    desc: "Cost stack, unit economics, capex ROI, sensitivity scenarios.",
-  },
-  {
-    title: "Final Strategy Deck",
-    desc: "SFH-first, Habitat partnership, language & education.",
+    segment: "Premium Pragmatists",
+    budget: 2700,
+    size: 0.17,
+    topPrefs: "durable exterior, quick build",
   },
 ];
 
-const COLORS = ["#0ea5e9", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6"];
-
-// ---------- Tiny UI ----------
-const Card: React.FC<React.PropsWithChildren<{ className?: string }>> = ({
-  children,
-  className,
-}) => (
-  <div
-    className={`rounded-2xl border border-slate-200 bg-white shadow-sm ${
-      className || ""
-    }`}
-  >
-    {children}
-  </div>
-);
-
-const CardHeader: React.FC<
-  React.PropsWithChildren<{ title?: React.ReactNode; icon?: React.ReactNode }>
-> = ({ children, title, icon }) => (
-  <div className="px-6 pt-6">
-    {title && (
-      <div className="mb-2 flex items-center gap-2 text-slate-900 font-semibold">
-        {icon}
-        {title}
-      </div>
-    )}
-    {children}
-  </div>
-);
-
-const CardBody: React.FC<React.PropsWithChildren<{ className?: string }>> = ({
-  children,
-  className,
-}) => <div className={`px-6 pb-6 pt-3 ${className || ""}`}>{children}</div>;
-
-const jumpTo = (id: string) => (e: React.MouseEvent) => {
-  e.preventDefault();
-
-  const el = document.getElementById(id);
-  if (!el) return;
-
-  // account for sticky header height (TOC bar)
-  const header = document.querySelector(
-    'nav[aria-label="On this page"]'
-  ) as HTMLElement | null;
-  const headerH = header?.offsetHeight ?? 0;
-
-  const rect = el.getBoundingClientRect();
-  const scrollTop = window.scrollY;
-  let targetY = rect.top + scrollTop - (window.innerHeight - rect.height) / 2;
-
-  // nudge down so the sticky header doesn't overlap the center
-  targetY = Math.max(0, targetY - headerH / 2);
-
-  window.scrollTo({ top: targetY, behavior: "smooth" });
-
-  // keep route intact, just record section in the URL
-  try {
-    const url = new URL(window.location.href);
-    url.searchParams.set("section", id);
-    window.history.replaceState(null, "", url.toString());
-  } catch {}
-};
-
-const renderPieLabel = ({
-  cx,
-  cy,
-  midAngle,
-  outerRadius,
-  percent,
-  name,
-}: any) => {
-  const RAD = Math.PI / 180;
-  const r = outerRadius + 22; // place label outside the arc
-  const x = cx + r * Math.cos(-midAngle * RAD);
-  const y = cy + r * Math.sin(-midAngle * RAD);
-  const pct = Math.round(percent * 100);
-
-  // Big, bold text with a white halo (stroke) for contrast on any background
+function SourceNote({ children }: { children: React.ReactNode }) {
   return (
-    <text
-      x={x}
-      y={y}
-      textAnchor={x >= cx ? "start" : "end"}
-      dominantBaseline="central"
-      fontSize={16} // ← bigger
-      fontWeight={700} // ← bolder
-      fill="#0f172a" // ← slate-900 (high contrast)
-      stroke="#ffffff" // ← white halo
-      strokeWidth={4} // ← halo thickness
-      paintOrder="stroke" // render stroke under fill
-      strokeLinejoin="round"
-    >
-      {name} — {pct}%
-    </text>
+    <div className="mt-2 text-[12px] md:text-[13px] text-slate-500">
+      {children}
+    </div>
   );
-};
+}
 
-// ---------- Page ----------
 export default function IntrepidBuildPage() {
-  const TOC = [
-    { id: "overview", label: "Overview" },
-    { id: "research", label: "Research" },
-    { id: "analysis", label: "Analysis" },
-    { id: "recs", label: "Recommendations" },
-    { id: "impact", label: "Impact" },
-    { id: "skills", label: "Skills & Tools" },
-    { id: "slides", label: "Slides" },
-  ];
+  const tweetHook = `We cut per‑unit cost ~17% and lifted market fit to ~88% by letting buyer data pick the spec and the P&L call the shots. #DataScience #Housing #AffordableHomes`;
 
   return (
     <PageShell>
-      {/* Header / Hero */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-6"
-      >
-        <div className="page-center">
-          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-            <div className="text-center md:text-left">
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-                Analytics for the Missing Middle — Intrepid Build
-              </h1>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+      {/* Nav */}
+      <div className="page-center page-center-tight">
+        <NavBar />
+      </div>
 
-      {/* ===== Project Story (inserted here, right after hero/KPIs) ===== */}
-      <section id="story" className="page-center mt-6">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-          Project Story
-        </h2>
-
-        <div className="mt-6 space-y-6">
-          {/* Hook — what this project achieved in one line */}
-          <p className="text-slate-800 text-[26px] leading-relaxed">
-            Turned messy housing data into decisive marketing analysis for
-            Intrepid Build* construction company — informing affordable-home
-            prototype design and cutting costs by 17% — as part of a plan to
-            deliver attainable housing (~$6M revenue target) in Chatham County,
-            NC.
+      {/* Hero */}
+      <section className="page-center mt-6">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="rounded-2xl bg-white/70 shadow-lg ring-1 ring-slate-200 p-6 md:p-8"
+        >
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+            Intrepid Build — A Data‑Driven Path to Attainable SFH
+          </h1>
+          <p className="mt-3 text-slate-700 max-w-3xl text-lg md:text-xl">
+            In a market where{" "}
+            <span className="font-semibold">~78% of sales are $400k+</span> and
+            the median income is ~<span className="font-semibold">$83k</span>,
+            we used surveys + segmentation + a prototype P&L to design a
+            single‑family lineup that{" "}
+            <span className="font-semibold">cuts cost ~17%</span> and
+            <span className="font-semibold"> boosts market fit to ~88%</span>.
+            Data chooses the spec; finance chooses the price.
           </p>
 
-          {/* Plain-English bridge for readers with 0 context */}
-          <p className="text-slate-700 text-[18px] leading-relaxed">
-            * <span className="font-medium">Intrepid Build</span> is a small
-            construction company exploring{" "}
-            <span className="font-medium">
-              steel-framed single-family homes (SFH)
-            </span>{" "}
-            for middle-income buyers. The county has a shortage of reasonably
-            priced homes, so we used data to decide <em>what to build</em>,{" "}
-            <em>for whom</em>, <em>at what price</em>, and{" "}
-            <em>how to go to market</em> without taking on risky up-front
-            factory costs.
-          </p>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Context */}
-            <Card>
-              <CardHeader
-                title="Context — the problem we faced"
-                icon={<Target className="h-5 w-5" />}
-              />
-              <CardBody className="pt-4 text-[20px] leading-relaxed text-slate-800">
-                <p>
-                  Local home prices outpaced incomes. Many essential workers
-                  (teachers, nurses, plant employees) could not afford to buy.
-                  The client considered steel-framed homes because they build
-                  faster, are durable, and can be cost-efficient.
-                </p>
-                <ul className="list-disc pl-5 mt-3 space-y-2.5">
-                  <li>
-                    <span className="font-medium">Goal:</span> design a product
-                    and go-to-market that middle-income buyers can actually
-                    afford.
-                  </li>
-                  <li>
-                    <span className="font-medium">Constraint:</span> avoid a
-                    premature, high-risk factory purchase (big up-front cost).
-                  </li>
-                </ul>
-              </CardBody>
-            </Card>
-
-            {/* My Role */}
-            <Card>
-              <CardHeader
-                title="My Role — what I owned"
-                icon={<Sparkles className="h-5 w-5" />}
-              />
-              <CardBody className="pt-4 text-[20px] leading-relaxed text-slate-800">
-                <ul className="list-disc pl-5 mt-3 space-y-3">
-                  <li>
-                    <span className="font-medium">
-                      Group customers by data.
-                    </span>{" "}
-                    I cleaned and standardized the Qualtrics data in Python and
-                    prepared features (one-hot encoding, scaling). I used
-                    <span className="font-medium"> k-means clustering</span> to
-                    find natural groups and chose the right number with elbow
-                    and silhouette checks.
-                  </li>
-                  <li>
-                    <span className="font-medium">
-                      Show what each group can afford.
-                    </span>{" "}
-                    For each cluster, I mapped income to a monthly budget (~30%
-                    of income using AMI). I set price bands and
-                    willingness-to-pay ranges, then tied them to unit economics
-                    so prices also work for the business.
-                  </li>
-                  <li>
-                    <span className="font-medium">
-                      Tie it to the 4Ps (marketing mix).
-                    </span>
-                    <span className="font-medium"> Product:</span> SFH size, key
-                    features, and options.
-                    <span className="font-medium"> Price:</span> persona-based
-                    targets and practical corridors.
-                    <span className="font-medium"> Place:</span> partner-led
-                    channels (Habitat, lenders).
-                    <span className="font-medium"> Promotion:</span> A/B tests
-                    of “attainable” vs “affordable.”
-                  </li>
-                </ul>
-              </CardBody>
-            </Card>
-
-            {/* Key Decisions */}
-            <Card>
-              <CardHeader
-                title="Key Decisions — what the data said"
-                icon={<Users className="h-5 w-5" />}
-              />
-              <CardBody className="pt-4 text-[20px] leading-relaxed text-slate-800">
-                <ul className="list-disc pl-5 space-y-3">
-                  <li>
-                    <span className="font-medium">
-                      Prioritize Single-Family Homes
-                    </span>{" "}
-                    (1,500–2,000 sq ft; 2–3 BR).
-                    <div className="text-slate-600 text-[16px] mt-2">
-                      Why: survey preference and budget fit were strongest for
-                      SFH.
-                    </div>
-                  </li>
-                  <li>
-                    <span className="font-medium">Partner-led rollout</span>{" "}
-                    (e.g., Habitat for Humanity) instead of buying a factory
-                    now.
-                    <div className="text-slate-600 text-[16px] mt-2">
-                      Why: partners speed permitting/financing and reduce
-                      up-front capital risk.
-                    </div>
-                  </li>
-                  <li>
-                    <span className="font-medium">
-                      Refine the prototype &amp; cost targets
-                    </span>{" "}
-                    to hit affordability.
-                    <div className="text-slate-600 text-[16px] mt-2">
-                      How: value-engineering, bill-of-materials clarity, and
-                      better vendor assumptions.
-                    </div>
-                  </li>
-                </ul>
-              </CardBody>
-            </Card>
-          </div>
-
-          {/* Impact */}
-          <Card>
-            <CardHeader
-              title="Impact — what changed because of this work"
-              icon={<CheckCircle className="h-5 w-5" />}
-            />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-3 text-[20px] leading-relaxed text-slate-800">
-                <li>
-                  <span className="font-medium">
-                    ~17% prototype cost reduction
-                  </span>{" "}
-                  → clearer path to sustainable margins.
-                  <div className="text-slate-600 text-[16px] mt-1">
-                    We pinpointed design/cost drivers and removed waste without
-                    hurting quality.
-                  </div>
-                </li>
-                <li>
-                  <span className="font-medium">
-                    Roadmap for ~22 attainable homes by 2028 (~$6M revenue)
-                  </span>
-                  .
-                  <div className="text-slate-600 text-[16px] mt-1">
-                    A practical plan: product, price points, and a partner
-                    channel to reach buyers.
-                  </div>
-                </li>
-                <li>
-                  <span className="font-medium">
-                    De-risked a $5.8M factory decision
-                  </span>{" "}
-                  with demand and unit-economics proof.
-                  <div className="text-slate-600 text-[16px] mt-1">
-                    Recommendation: validate via partnerships first; revisit
-                    factory when volume is proven.
-                  </div>
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          {/* KPIs — clarified labels for non-experts */}
-          <div className="mt-7 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              {
-                kpi: "$6M",
-                label: "Planned revenue by 2028 (approx.)",
-              },
-              {
-                kpi: "17%",
-                label: "Prototype cost reduction from redesign",
-              },
-              {
-                kpi: "70 units",
-                label: "Estimated factory breakeven (5-year horizon)",
-              },
-              {
-                kpi: "3 personas",
-                label: "Buyer segments from survey + focus group",
-              },
-            ].map((x, i) => (
-              <Card key={i}>
-                <CardBody>
-                  <div className="text-2xl font-semibold text-center md:text-left">
-                    {x.kpi}
-                  </div>
-                  <div className="text-[20px] text-slate-600 mt-0.5 text-center md:text-left">
-                    {x.label}
-                  </div>
-                </CardBody>
-              </Card>
+          {/* KPI — boxed */}
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {kpi.map((k) => (
+              <div
+                key={k.label}
+                className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+              >
+                <div className="text-4xl md:text-5xl font-extrabold leading-none text-slate-900">
+                  {k.value}
+                </div>
+                <div className="text-xs md:text-sm uppercase tracking-wide text-slate-500 mt-2">
+                  {k.label}
+                </div>
+                <div className="text-base text-slate-600">{k.sub}</div>
+              </div>
             ))}
           </div>
 
-          {/* Plain-English definitions (optional but helpful) */}
-          <details className="rounded-2xl border border-slate-200 bg-white/60 p-4">
-            <summary className="cursor-pointer font-medium text-slate-900">
-              What do these terms mean?
-            </summary>
-            <div className="mt-3 grid md:grid-cols-2 gap-4 text-[16px] leading-relaxed text-slate-700">
-              <div>
-                <p>
-                  <span className="font-semibold">Attainable housing:</span>{" "}
-                  Homes priced so middle-income households can realistically buy
-                  (not luxury, not deeply subsidized).
-                </p>
-                <p className="mt-2">
-                  <span className="font-semibold">
-                    SFH (Single-Family Home):
-                  </span>{" "}
-                  A standalone house (typically 2–3 bedrooms here).
-                </p>
-                <p className="mt-2">
-                  <span className="font-semibold">
-                    AMI (Area Median Income):
-                  </span>{" "}
-                  The midpoint income for a region; we align payments so housing
-                  costs ≈ 30% of income.
-                </p>
-              </div>
-              <div>
-                <p>
-                  <span className="font-semibold">
-                    P&amp;L / Unit economics:
-                  </span>{" "}
-                  A line-by-line view of costs (materials, labor, overhead) and
-                  price to ensure profit per home.
-                </p>
-                <p className="mt-2">
-                  <span className="font-semibold">
-                    CapEx (Capital Expenditure):
-                  </span>{" "}
-                  Big up-front spend (like buying a factory). We chose to delay
-                  this until demand is proven.
-                </p>
-                <p className="mt-2">
-                  <span className="font-semibold">Persona:</span> A data-driven
-                  profile of a typical buyer (budget, needs, motivations) to
-                  guide product and messaging.
-                </p>
-              </div>
+          {/* Tweetable hook */}
+          <div className="mt-6 rounded-xl border border-sky-100 bg-sky-50 p-5 text-slate-800">
+            <div className="text-[11px] md:text-xs uppercase tracking-wide text-sky-700 font-semibold">
+              Hook (tweet‑able)
             </div>
-          </details>
-        </div>
+            <p className="mt-1 text-sm md:text-base">{tweetHook}</p>
+          </div>
+        </motion.div>
       </section>
 
-      {/* ===== Research ===== */}
-      <section id="research" className="page-center mt-12">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-          Research
-        </h2>
-        <div className="mt-6 grid lg:grid-cols-3 gap-8">
-          <Card className="lg:col-span-2">
-            <CardHeader title="Study Design" />
-            <CardBody className="space-y-5 text-[20px] leading-relaxed text-slate-800">
-              <div className="grid md:grid-cols-2 gap-5">
-                <div className="p-4 rounded-xl border">
-                  <div className="font-medium">Survey Architecture</div>
-                  <ul className="list-disc pl-5 mt-2 space-y-1.5">
-                    <li>
-                      42 questions across Demographics, Preferences, Awareness,
-                      Claims.
-                    </li>
-                    <li>
-                      Likert, drag-rank, multi-select; attention checks &amp;
-                      definitions upfront.
-                    </li>
-                    <li>
-                      Sampling plan: community channels + partners; ~68%
-                      external.
-                    </li>
-                  </ul>
-                </div>
-                <div className="p-4 rounded-xl border">
-                  <div className="font-medium">Focus Group</div>
-                  <ul className="list-disc pl-5 mt-2 space-y-1.5">
-                    <li>6 participants: mayor, realtor, residents, staff.</li>
-                    <li>
-                      Themes: aesthetics, resale value, financing/insurance,
-                      codes.
-                    </li>
-                    <li>
-                      Outcome: need for model home &amp; education to address
-                      stigma.
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <hr className="border-slate-200" />
-
-              <div className="font-medium">
-                Top Decision Factors (Weighted Ranking)
-              </div>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={topDecisionFactors}>
-                    <XAxis dataKey="factor" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip />
-                    <Bar dataKey="score">
-                      {topDecisionFactors.map((_, i) => (
-                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="text-[13px] text-slate-600">
-                Method: normalized ranks → weighted index (0–100).
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader title="Message Testing (A/B)" />
-            <CardBody className="space-y-2.5 text-[20px] leading-relaxed text-slate-800">
-              <ul className="list-disc pl-5 space-y-1.5">
-                <li>Compared descriptors: “affordable” vs “attainable.”</li>
-                <li>
-                  “Attainable” increased positive sentiment &amp; click-intent.
-                </li>
-                <li>
-                  Resonant value props: durability, energy efficiency, design
-                  flexibility.
-                </li>
-              </ul>
-              <div className="mt-4 p-3 rounded-xl bg-slate-100">
-                Proposed name:{" "}
-                <span className="font-semibold">
-                  High-End Steel-Framed Attainable Housing
-                </span>{" "}
-                — Flexible Design. Value Driven. Effective Construction.
-              </div>
-            </CardBody>
-          </Card>
-        </div>
-      </section>
-
-      {/* ===== Analysis ===== */}
-      <section id="analysis" className="page-center mt-12">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-          Analysis
-        </h2>
-        <div className="mt-6 grid md:grid-cols-2 gap-8">
-          <Card>
-            <CardHeader title="Segmentation & Personas" />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
-                <li>
-                  Cross-tabs by AMI bands (80–120%), WTP, and housing type.
-                </li>
-                <li>
-                  Persona-aligned specs: 1,500–2,000 sq ft; 2–3 BR; flexible
-                  layouts.
-                </li>
-                <li>Education-focused messaging for unfamiliar segments.</li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader title="Competitive Benchmarks" />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
-                <li>
-                  Local NC modular builders: variety of plans, strong education
-                  content.
-                </li>
-                <li>
-                  Greystar: factory play; emphasizes speed, sustainability,
-                  attainable price.
-                </li>
-                <li>
-                  Client differentiator:{" "}
-                  <span className="font-medium">steel value prop</span> + cost
-                  transparency.
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          <Card className="md:col-span-2">
-            <CardHeader title="Financial Modeling Highlights" />
-            <CardBody className="grid md:grid-cols-3 gap-5 text-[20px] leading-relaxed text-slate-800">
-              {[
-                { k: "Unit Econ (SFH)", v: "Target $150k build → ~20% margin" },
-                { k: "Capex Breakeven", v: "~70 units / 5 yrs (factory)" },
-                { k: "Risk", v: "Unproven demand; defer factory; pilot first" },
-              ].map((x, i) => (
-                <div key={i} className="p-4 rounded-xl border">
-                  <div className="font-medium">{x.k}</div>
-                  <div className="text-slate-600">{x.v}</div>
-                </div>
-              ))}
-            </CardBody>
-          </Card>
-        </div>
-      </section>
-
-      {/* ===== Recommendations ===== */}
-      <section id="recs" className="page-center mt-12">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-          Recommendations
-        </h2>
-        <div className="mt-6 grid md:grid-cols-2 gap-8">
-          <Card>
-            <CardHeader title="Go-to-Market" />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
-                <li>
-                  Launch with SFH: 1,520 sq ft, 2–3 BR; flexible design SKUs.
-                </li>
-                <li>
-                  Lead with “attainable” language; avoid “container/modular.”
-                </li>
-                <li>
-                  Build a model home; create myth-busting education assets.
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader title="Partnerships & Channel" />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
-                <li>
-                  Partner with Habitat for Humanity to lower cost &amp; expand
-                  reach.
-                </li>
-                <li>
-                  Work with insurers &amp; lenders to standardize underwriting
-                  for steel.
-                </li>
-                <li>
-                  Explore corporate workforce housing (e.g., OEMs entering
-                  county).
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          <Card className="md:col-span-2">
-            <CardHeader title="Execution Plan (This Year)" />
-            <CardBody className="grid md:grid-cols-4 gap-5 text-[20px] leading-relaxed">
-              {[
-                "Finalize SFH blueprint",
-                "Complete BOM & cost validation",
-                "Host community focus sessions",
-                "Publish education microsite",
-              ].map((task, i) => (
-                <div
-                  key={i}
-                  className="p-4 rounded-xl border flex items-start gap-2 text-slate-800"
+      {/* ──────────────────────────────────────────────────────────────────────── */}
+      {/* BUILDUP */}
+      <section className="page-center mt-12 grid gap-8">
+        {/* 1. Price Bands */}
+        <div className="grid md:grid-cols-2 gap-8 items-center rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+          <div className="h-96">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={priceBands} margin={chartMargin}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="band" tick={axisTick} />
+                <YAxis unit="%" tick={axisTick} />
+                <Tooltip />
+                <Legend wrapperStyle={legendStyle} />
+                <Bar
+                  dataKey="pct"
+                  name="Share of sales"
+                  fill="#0ea5e9"
+                  radius={[8, 8, 0, 0]}
                 >
-                  <CheckCircle className="h-4 w-4 mt-0.5" />
-                  <span>{task}</span>
-                </div>
-              ))}
-            </CardBody>
-          </Card>
-        </div>
-      </section>
-
-      {/* ===== Impact ===== */}
-      <section id="impact" className="page-center mt-12">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-          Impact
-        </h2>
-        <div className="mt-6 grid md:grid-cols-3 gap-8">
-          <Card>
-            <CardHeader title="Business Outcomes" />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
-                <li>
-                  Shifted strategy from capex to validation via pilot builds.
-                </li>
-                <li>Persona-driven messaging adopted for outreach.</li>
-                <li>Cost roadmap to $150k/unit with partner leverage.</li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader title="Community Impact" />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
-                <li>
-                  Addresses “Missing Middle” (80–120% AMI) homeownership gap.
-                </li>
-                <li>
-                  Education plan to reduce stigma &amp; increase adoption.
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader title="Metrics to Watch" />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[20px] leading-relaxed text-slate-800">
-                <li>
-                  Lead → tour → application conversion; insurer approvals.
-                </li>
-                <li>
-                  Cost delta to $150k target; cycle time from order to handover.
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8 mt-8">
-          <Card>
-            <CardHeader title="Compare: Project vs US Preference" />
-            <CardBody>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={housingTypePrefUS}>
-                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip />
-                    <Bar dataKey="value">
-                      {housingTypePrefUS.map((_, i) => (
-                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="text-[13px] text-slate-600 mt-2">
-                US baseline vs. local project survey → validates SFH-first.
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader title="Callouts" />
-            <CardBody className="space-y-2.5 text-[20px] leading-relaxed">
-              <div className="p-3 rounded-xl bg-slate-100">
-                Model home + myth-busting assets are catalytic for adoption.
-              </div>
-              <div className="p-3 rounded-xl bg-slate-100">
-                Language shift to “attainable” improves sentiment and CTR.
-              </div>
-              <div className="p-3 rounded-xl bg-slate-100">
-                Steel’s insurance advantage strengthens the value story.
-              </div>
-            </CardBody>
-          </Card>
-        </div>
-      </section>
-
-      {/* ===== Skills & Deliverables ===== */}
-      <section id="skills" className="page-center mt-12">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-          Skills &amp; Tools
-        </h2>
-        <div className="mt-6 grid md:grid-cols-3 gap-8">
-          {Object.entries(skills).map(([k, v]) => (
-            <Card key={k}>
-              <CardHeader title={k} />
-              <CardBody className="text-[20px] leading-relaxed text-slate-800">
-                <ul className="list-disc pl-5 space-y-1.5">
-                  {v.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              </CardBody>
-            </Card>
-          ))}
-        </div>
-
-        <Card className="mt-8">
-          <CardHeader
-            title={
-              <span className="flex items-center gap-2">
-                <FileText className="h-5 w-5" /> Featured Deliverables
-              </span>
-            }
-          />
-          <CardBody className="grid md:grid-cols-2 gap-5 text-[20px] leading-relaxed text-slate-800">
-            {deliverables.map((d, i) => (
-              <div key={i} className="p-4 rounded-xl border">
-                <div className="font-medium">{d.title}</div>
-                <div className="text-slate-600">{d.desc}</div>
-              </div>
-            ))}
-            <div className="md:col-span-2">
-              <div className="p-4 rounded-xl bg-slate-100 text-[13px]">
-                Tip: Link these cards to your public files (survey PDF, focus
-                group deck, strategy deck, P&amp;L workbook) when deployed.
-              </div>
-            </div>
-          </CardBody>
-        </Card>
-      </section>
-
-      {/* ===== Slides ===== */}
-      <section id="slides" className="page-center mt-12">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-            Presentation Slides
-          </h2>
-          <div className="flex gap-2">
-            <a
-              href="/Intrepid_Star_Final.pdf"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center rounded-xl px-3 py-2 text-sm font-medium border border-slate-300 text-slate-800 hover:bg-slate-50"
-            >
-              Open in new tab
-            </a>
+                  <LabelList
+                    dataKey="pct"
+                    position="top"
+                    formatter={(v: number) => `${v}%`}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
+              Buildup — Price‑Band Distribution
+            </h2>
+            <p className="mt-3 text-slate-700 text-base md:text-lg">
+              It frames the problem. If most sales clear $400k, then supply for
+              the middle is thin.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Roughly <strong>3 of 4</strong> transactions are at{" "}
+              <strong>$400k+</strong>; only about <strong>22%</strong> are under
+              $400k.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              The entry price is too high for many 80–120% AMI households.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Reduce delivered cost via standardization and schedule compression
+              — not by compromising livability.
+            </p>
+            <SourceNote>STAR Final (price distribution)</SourceNote>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-          <iframe
-            title="Intrepid Build — Final Slides"
-            src="/Intrepid_Star_Final.pdf#view=FitH"
-            className="w-full h-[75vh]"
-          />
+        {/* 2. Affordability */}
+        <div className="grid md:grid-cols-2 gap-8 items-center rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+          <div>
+            <div className="text-sm md:text-base font-medium text-slate-900 mb-3">
+              Affordability Threshold vs Local Incomes
+            </div>
+            <div className="mt-2 relative h-16 rounded bg-slate-100">
+              <div
+                style={{
+                  width: `${
+                    ((affordability.maxView - affordability.requiredIncome) /
+                      affordability.maxView) *
+                    100
+                  }%`,
+                }}
+                className="absolute inset-y-0 right-0 bg-sky-200"
+                aria-label="Income shortfall region"
+              />
+              <div
+                style={{
+                  left: `${
+                    (affordability.medianIncome / affordability.maxView) * 100
+                  }%`,
+                }}
+                className="absolute -top-5 text-[12px] md:text-sm text-slate-700"
+              >
+                Median $83k
+              </div>
+              <div
+                style={{
+                  left: `${
+                    (affordability.requiredIncome / affordability.maxView) * 100
+                  }%`,
+                }}
+                className="absolute -bottom-5 text-[12px] md:text-sm font-medium text-sky-700"
+              >
+                Needed ~$136k
+              </div>
+            </div>
+          </div>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
+              Buildup — Affordability Gap
+            </h2>
+            <p className="mt-3 text-slate-700 text-base md:text-lg">
+              Price only matters through the payment buyers must carry.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              A <strong>$465k</strong> home needs roughly <strong>$136k</strong>{" "}
+              income (20% down, ~7.9%, 30% rule) vs a median{" "}
+              <strong>$83k</strong>.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              The gap explains why renter households can’t convert to ownership
+              despite demand.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Set product pricing off <em>payment bands</em>; then back‑solve
+              specifications to hit margin.
+            </p>
+            <SourceNote>STAR Final (affordability calc)</SourceNote>
+          </div>
         </div>
-        <p className="text-[13px] text-slate-600 mt-2">
-          If your browser blocks embedded PDFs, use “Open in new tab.”
-        </p>
+
+        {/* 3. Rent burden + SFH preference */}
+        <div className="grid md:grid-cols-2 gap-8 items-center rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+          <div className="grid sm:grid-cols-1 gap-8">
+            <div className="h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={costBurden}
+                    dataKey="value"
+                    nameKey="name"
+                    innerRadius={70}
+                    outerRadius={100}
+                    label={({ name, percent }) =>
+                      `${name}: ${(percent * 100).toFixed(0)}%`
+                    }
+                    labelLine={false}
+                  >
+                    {costBurden.map((_, idx) => (
+                      <Cell
+                        key={idx}
+                        fill={donutColors[idx % donutColors.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Legend verticalAlign="bottom" wrapperStyle={legendStyle} />
+                  <Tooltip formatter={(v: number, n: string) => [`${v}%`, n]} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={prefSF} margin={chartMargin}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="series" tick={axisTick} />
+                  <YAxis unit="%" tick={axisTick} />
+                  <Tooltip />
+                  <Legend wrapperStyle={legendStyle} />
+                  <Bar
+                    dataKey="pct"
+                    name="SFH preference"
+                    fill="#0ea5e9"
+                    radius={[8, 8, 0, 0]}
+                  >
+                    <LabelList
+                      dataKey="pct"
+                      position="top"
+                      formatter={(v: number) => `${v}%`}
+                    />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
+              Buildup — Pressure & Preference
+            </h2>
+            <p className="mt-3 text-slate-700 text-base md:text-lg">
+              They show pressure in rentals <em>and</em> the persistent
+              preference for SFH.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              <span className="font-semibold">What they show:</span>{" "}
+              <strong>47%</strong> of renters are cost‑burdened. Preference
+              still leans SFH (local <strong>≈62%</strong> vs national{" "}
+              <strong>≈75%</strong>).
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              The product shouldn’t change desire — it should change delivery so
+              desired SFH becomes attainable.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Pursue SFH prototypes but engineer them to a payment‑anchored
+              target.
+            </p>
+            <SourceNote>STAR Final (rent burden, SFH preference)</SourceNote>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────────────── */}
+      {/* CONFLICT */}
+      <section className="page-center mt-12 grid gap-8">
+        {/* 1. Unit economics */}
+        <div className="grid md:grid-cols-2 gap-8 items-center rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+          <div className="h-96">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={unitEconomics} margin={chartMargin}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" tick={axisTick} />
+                <YAxis tick={axisTick}>
+                  <Label
+                    value="$ thousands"
+                    angle={-90}
+                    position="insideLeft"
+                  />
+                </YAxis>
+                <Tooltip />
+                <Legend wrapperStyle={legendStyle} />
+                <Bar
+                  dataKey="Before"
+                  name="Before (baseline spec)"
+                  fill="#94a3b8"
+                  radius={[8, 8, 0, 0]}
+                />
+                <Bar
+                  dataKey="After"
+                  name="After (optimized spec)"
+                  fill="#0ea5e9"
+                  radius={[8, 8, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
+              Conflict — Unit Cost Components: Before vs After
+            </h2>
+            <p className="mt-3 text-slate-700 text-base md:text-lg">
+              It reveals where dollars actually sit — the levers we can pull
+              without harming value.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Structure, MEP, and interior finishes dominate controllable cost.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Standardized SKUs + simplified details compress schedule and
+              reduce carry — savings compound.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Lock a parts catalog, value‑engineer assemblies, and sequence
+              trades for fewer handoffs.
+            </p>
+            <SourceNote>P&L model (component breakdown)</SourceNote>
+          </div>
+        </div>
+
+        {/* 2. Priority weights */}
+        <div className="grid md:grid-cols-2 gap-8 items-center rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+          <div className="h-96">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={priorityScores}
+                layout="vertical"
+                margin={chartMargin}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  type="number"
+                  domain={[0, 1]}
+                  tickFormatter={(v) => `${Math.round(v * 100)}%`}
+                  tick={axisTick}
+                />
+                <YAxis
+                  dataKey="factor"
+                  type="category"
+                  width={280}
+                  tick={axisTick}
+                />
+                <Tooltip formatter={(v: number) => `${Math.round(v * 100)}%`} />
+                <Legend wrapperStyle={legendStyle} />
+                <Bar
+                  dataKey="score"
+                  name="Importance weight"
+                  fill="#0ea5e9"
+                  radius={[8, 8, 8, 8]}
+                >
+                  <LabelList
+                    dataKey="score"
+                    position="right"
+                    formatter={(v: number) => `${Math.round(v * 100)}%`}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
+              Conflict — What Buyers Actually Weight
+            </h2>
+            <p className="mt-3 text-slate-700 text-base md:text-lg">
+              It prevents spec decisions from drifting toward aesthetics buyers
+              won’t pay for.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              <strong>Price</strong> dominates, followed by{" "}
+              <strong>Location</strong>, then <strong>Size</strong> and{" "}
+              <strong>Energy Efficiency</strong>.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Customization and premium amenities rank low — perfect places to
+              save.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Invest in efficiency & livability, cut expensive flourish that
+              doesn’t move these weights.
+            </p>
+            <SourceNote>STAR survey synthesis (priority ranking)</SourceNote>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────────────── */}
+      {/* SOLUTION */}
+      <section className="page-center mt-12 grid gap-8">
+        {/* 1. Fit improvement */}
+        <div className="grid md:grid-cols-2 gap-8 items-center rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+          <div className="h-96">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={fitImprovement} margin={chartMargin}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="label" tick={axisTick} />
+                <YAxis unit="%" tick={axisTick} />
+                <Tooltip />
+                <Legend wrapperStyle={legendStyle} />
+                <Bar
+                  dataKey="pct"
+                  name="Market fit"
+                  fill="#0ea5e9"
+                  radius={[8, 8, 0, 0]}
+                >
+                  <LabelList
+                    dataKey="pct"
+                    position="top"
+                    formatter={(v: number) => `${v}%`}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
+              Solution — Market Fit Improvement
+            </h2>
+            <p className="mt-3 text-slate-700 text-base md:text-lg">
+              Fit predicts absorption speed and discount pressure.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Pruning to a lean SFH lineup (≈1,500–2,000 sqft, 2–3 BR, efficient
+              envelope) lifts projected fit from <strong>≈52%</strong> to{" "}
+              <strong>≈88%</strong>.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Less variety, better targeting → shorter marketing tails.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Lock the lean lineup and route savings to energy envelope +
+              schedule.
+            </p>
+          </div>
+        </div>
+
+        {/* 2. Payment benchmarks */}
+        <div className="grid md:grid-cols-2 gap-8 items-center rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+          <div className="h-96">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={monthlyPayments} margin={chartMargin}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="price" tick={axisTick} />
+                <YAxis tick={axisTick}>
+                  <Label
+                    value="$ / month (P&I)"
+                    angle={-90}
+                    position="insideLeft"
+                  />
+                </YAxis>
+                <Tooltip
+                  formatter={(v: number) => `$${v.toLocaleString()}/mo`}
+                />
+                <Legend wrapperStyle={legendStyle} />
+                <Bar
+                  dataKey="pmt"
+                  name="Monthly payment"
+                  fill="#94a3b8"
+                  radius={[8, 8, 0, 0]}
+                >
+                  <LabelList
+                    dataKey="pmt"
+                    position="top"
+                    formatter={(v: number) => `$${v.toLocaleString()}`}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
+              Solution — Payment Benchmarks
+            </h2>
+            <p className="mt-3 text-slate-700 text-base md:text-lg">
+              It makes pricing tangible in the way buyers decide — by payment.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              $200k → <strong>$1,756/mo</strong>, $325k →{" "}
+              <strong>$2,371/mo</strong>, $465k → <strong>$3,384/mo</strong>{" "}
+              (P&I, 20% down, ~7.9%).
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              The <strong>$325k</strong> target sits in reach for multiple
+              segments identified in the notebook.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Price homes to the <em>$2,371/mo</em> band; use options as add‑ons
+              without breaking the threshold.
+            </p>
+            <SourceNote>P&L payment modeling</SourceNote>
+          </div>
+        </div>
+
+        {/* 3. Segment budgets */}
+        <div className="grid md:grid-cols-2 gap-8 items-center rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+          <div className="h-96">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={clusterProfiles}
+                layout="vertical"
+                margin={chartMargin}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  type="number"
+                  tickFormatter={(v) => `$${v.toLocaleString()}`}
+                  domain={[0, 3000]}
+                  tick={axisTick}
+                />
+                <YAxis
+                  type="category"
+                  dataKey="segment"
+                  width={260}
+                  tick={axisTick}
+                />
+                <Legend
+                  verticalAlign="top"
+                  payload={[
+                    {
+                      value: "Target $2,371/mo",
+                      type: "line",
+                      id: "ref",
+                      color: "#0ea5e9",
+                    },
+                  ]}
+                  wrapperStyle={legendStyle}
+                />
+                <Tooltip
+                  formatter={(v: number) => `$${v.toLocaleString()}/mo`}
+                  labelFormatter={(l) => `${l}`}
+                />
+                <ReferenceLine
+                  x={2371}
+                  ifOverflow="extendDomain"
+                  stroke="#0ea5e9"
+                  strokeWidth={2}
+                  strokeDasharray="6 6"
+                  label={{
+                    value: "Target $2,371/mo",
+                    position: "insideTopRight",
+                    offset: 10,
+                    fill: "#0ea5e9",
+                    fontSize: 12,
+                  }}
+                />
+                <Bar
+                  dataKey="budget"
+                  name="Median segment budget"
+                  fill="#0ea5e9"
+                  radius={[8, 8, 8, 8]}
+                >
+                  <LabelList
+                    dataKey="budget"
+                    position="right"
+                    formatter={(v: number) => `$${v.toLocaleString()}/mo`}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
+              Solution — Segment Budgets (Notebook)
+            </h2>
+            <p className="mt-3 text-slate-700 text-base md:text-lg">
+              It validates whether our price target matches how clusters
+              actually budget.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Median monthly budgets by segment with a dashed reference at{" "}
+              <strong>$2,371/mo</strong>.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Segments clearing the line can absorb quickly without discounts;
+              those below need either options or smaller plans.
+            </p>
+            <p className="mt-2 text-slate-700 text-base md:text-lg">
+              Launch with the segments above the line; keep an alternative spec
+              ready for the margin segment.
+            </p>
+            <SourceNote>
+              STAR_marketing_analysis.ipynb (clusters) • P&L payment modeling
+            </SourceNote>
+          </div>
+        </div>
       </section>
 
       {/* CTA */}
-      <div className="page-center mt-12 flex flex-wrap items-center justify-between gap-3">
-        <div className="text-[20px] text-slate-700 leading-relaxed">
-          Want more details? I can share anonymized data tables and code
-          snippets (pandas cleaning, weighting functions) on request.
+      <section className="page-center mt-14 mb-24">
+        <div className="rounded-2xl bg-gradient-to-br from-sky-50 to-white border border-sky-100 p-6 md:p-8 shadow-sm">
+          <div className="grid md:grid-cols-3 gap-6 items-center">
+            <div className="md:col-span-2">
+              <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
+                Result
+              </h2>
+              <p className="mt-3 text-slate-700 text-base md:text-lg">
+                With features aligned to preferences and costs trimmed where it
+                counts, the lineup is projected to cut per‑unit cost by ~17% and
+                lift fit from ~52% → ~88% — enabling more attainable homes,
+                faster.
+              </p>
+              <div className="mt-5 flex gap-3">
+                <a
+                  href="/#/"
+                  className="rounded-xl bg-sky-600 px-4 py-2 text-white hover:bg-sky-700 transition"
+                >
+                  Back to Home
+                </a>
+                <a
+                  href="/Utiushev_Eldar_Resume.pdf"
+                  className="rounded-xl border border-sky-200 px-4 py-2 text-sky-700 hover:bg-sky-50 transition"
+                >
+                  View Resume
+                </a>
+              </div>
+            </div>
+            <div className="md:col-span-1">
+              <div className="rounded-xl overflow-hidden bg-slate-100 aspect-[4/3]">
+                <img
+                  src="/STAR.jpg"
+                  alt="Project hero"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Link
-            to="/"
-            className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-medium bg-slate-900 text-white hover:bg-slate-800"
-          >
-            See My Other Projects :)
-          </Link>
-
-          <a
-            href="#"
-            onClick={jumpTo("overview")}
-            className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-medium border border-slate-300 text-slate-800 hover:bg-slate-50"
-          >
-            Back to top
-          </a>
-        </div>
-      </div>
+      </section>
     </PageShell>
   );
 }

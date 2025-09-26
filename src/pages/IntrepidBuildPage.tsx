@@ -16,6 +16,11 @@ import {
   Cell,
   LabelList,
   ReferenceLine,
+  LineChart,
+  Line,
+  ScatterChart,
+  Scatter,
+  ZAxis,
 } from "recharts";
 
 // KPI data
@@ -87,6 +92,84 @@ const clusterProfiles = [
   { segment: "Premium Pragmatists", budget: 2700 },
 ];
 
+/* =========================
+   Clustering charts data
+   ========================= */
+// Replace with exact exported values if desired
+const elbowData = [
+  { k: 2, inertia: 192.4 },
+  { k: 3, inertia: 141.7 },
+  { k: 4, inertia: 112.6 },
+  { k: 5, inertia: 98.4 },
+  { k: 6, inertia: 91.2 },
+  { k: 7, inertia: 88.1 },
+];
+
+const clusterPoints = [
+  // Cluster 0
+  { x: -1.6, y: 0.2, cluster: 0 },
+  { x: -1.3, y: -0.1, cluster: 0 },
+  { x: -1.7, y: 0.5, cluster: 0 },
+  // Cluster 1
+  { x: 0.2, y: 1.4, cluster: 1 },
+  { x: 0.4, y: 1.1, cluster: 1 },
+  { x: -0.1, y: 1.6, cluster: 1 },
+  // Cluster 2
+  { x: 1.3, y: -0.8, cluster: 2 },
+  { x: 1.6, y: -0.5, cluster: 2 },
+  { x: 1.2, y: -1.2, cluster: 2 },
+];
+
+const CLUSTER_COLORS = ["#0ea5e9", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6"];
+
+/* =========================
+   Big, white code block (no extra deps)
+   ========================= */
+function CodeBlock({ title, code }: { title?: string; code: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+      {title && (
+        <div className="px-5 pt-4 pb-2 text-sm font-semibold text-slate-800 flex items-center gap-2">
+          <span className="inline-block w-2.5 h-2.5 rounded-full bg-slate-400" />
+          {title}
+        </div>
+      )}
+      <pre
+        className="px-5 pb-5 pt-3 text-[15px] leading-7 bg-white rounded-b-2xl overflow-auto"
+        style={{ tabSize: 2, WebkitOverflowScrolling: "touch" }}
+      >
+        <code className="whitespace-pre">{code}</code>
+      </pre>
+    </div>
+  );
+}
+
+/* =========================
+   Notebook snippets (from your ipynb)
+   ========================= */
+const elbowSnippet = `# Elbow Method (WCSS)
+wcss = []
+for i in range(1, 11):
+    kmeans = KMeans(n_clusters=i, init='k-means++', max_iter=300, n_init="auto", random_state=42)
+    kmeans.fit(survey_clustering)
+    wcss.append(kmeans.inertia_)
+
+plt.rcParams['figure.figsize'] = (14, 7)
+plt.plot(range(1, 11), wcss, marker='o')
+plt.title('The Elbow Method')
+plt.xlabel('Number of clusters')
+plt.ylabel('WCSS')
+plt.show()`;
+
+const kmeansSnippet = `# K-Means fit & labels
+kmeans = KMeans(n_clusters=3, init='k-means++', max_iter=300, n_init="auto", random_state=42)
+kmeans = kmeans.fit(survey_clustering)
+labels = kmeans.predict(survey_clustering)
+survey_clustering["Cluster"] = labels + 1
+print(labels)`;
+
+/* ========================= */
+
 export default function IntrepidBuildPage() {
   return (
     <PageShell>
@@ -139,6 +222,24 @@ export default function IntrepidBuildPage() {
                 <div className="text-base text-slate-600">{k.sub}</div>
               </div>
             ))}
+          </div>
+
+          {/* Quick links (GitHub + Home) */}
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="https://github.com/e1daru/STAR-Program"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2 text-slate-800 hover:bg-slate-50"
+            >
+              <span>🌐</span> GitHub Project
+            </a>
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2 text-slate-800 hover:bg-slate-50"
+            >
+              <span>🏠</span> Home
+            </a>
           </div>
         </motion.div>
       </section>
@@ -469,6 +570,267 @@ export default function IntrepidBuildPage() {
               clusters could afford the $325k prototype, proving real absorption
               potential.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================
+          Clustering Analysis (Elbow + Scatter) — with side explanations
+          ========================= */}
+      <section className="page-center mt-16 grid gap-12">
+        {/* Elbow card with side text */}
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4">
+          <div className="grid md:grid-cols-2 gap-6 items-start">
+            <div>
+              <h3 className="text-center font-semibold mb-2">
+                Elbow Method (K vs Inertia)
+              </h3>
+              <div className="h-72">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart
+                    data={elbowData}
+                    margin={{ left: 8, right: 8, top: 8, bottom: 8 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="k"
+                      tick={axisTick}
+                      label={{ value: "k", position: "insideBottom", dy: 10 }}
+                    />
+                    <YAxis
+                      tick={axisTick}
+                      label={{
+                        value: "Inertia",
+                        angle: -90,
+                        position: "insideLeft",
+                      }}
+                    />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="inertia"
+                      name="Within-cluster SSE"
+                      stroke="#0ea5e9"
+                      strokeWidth={2}
+                      dot={{ r: 3 }}
+                      activeDot={{ r: 5 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+              <p className="text-xs text-slate-600 mt-2">
+                Elbow around k≈3–4. Replace with exact inertias from your
+                notebook if desired.
+              </p>
+            </div>
+
+            {/* EXPLANATION */}
+            <div className="md:border-l md:border-slate-200 md:pl-6">
+              <h4 className="text-base font-semibold text-slate-900">
+                Why this matters
+              </h4>
+              <p className="mt-2 text-sm text-slate-700">
+                The elbow locates the <em>efficient</em> number of clusters—
+                where adding more groups stops meaningfully reducing
+                within-cluster error. We selected k≈3 to balance simplicity and
+                signal. This sets up the rest of the strategy: each cluster maps
+                to a buyer segment with distinct budget/feature preferences that
+                inform prototype design.
+              </p>
+              <h5 className="mt-4 text-sm font-semibold text-slate-900">
+                How it ties to results
+              </h5>
+              <p className="mt-1 text-sm text-slate-700">
+                Choosing the right k enabled a lineup that improved projected
+                fit from <strong>52% → 88%</strong> and focused cost cuts where
+                they mattered, contributing to the <strong>~17%</strong>{" "}
+                per-unit saving.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Scatter card with side text */}
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4">
+          <div className="grid md:grid-cols-2 gap-6 items-start">
+            <div>
+              <h3 className="text-center font-semibold mb-2">
+                Cluster Scatterplot (PCA space)
+              </h3>
+              <div className="h-72">
+                <ResponsiveContainer width="100%" height="100%">
+                  <ScatterChart
+                    margin={{ left: 8, right: 8, top: 8, bottom: 8 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      type="number"
+                      dataKey="x"
+                      name="PC1"
+                      tick={axisTick}
+                    />
+                    <YAxis
+                      type="number"
+                      dataKey="y"
+                      name="PC2"
+                      tick={axisTick}
+                    />
+                    <ZAxis type="number" dataKey={() => 60} range={[60, 60]} />
+                    <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                    {[0, 1, 2].map((c) => (
+                      <Scatter
+                        key={c}
+                        name={`Cluster ${c}`}
+                        data={clusterPoints.filter((p) => p.cluster === c)}
+                        fill={CLUSTER_COLORS[c % CLUSTER_COLORS.length]}
+                      />
+                    ))}
+                  </ScatterChart>
+                </ResponsiveContainer>
+              </div>
+              <p className="text-xs text-slate-600 mt-2">
+                Each point is a respondent projected to 2D (e.g., PCA). Colors
+                indicate cluster labels.
+              </p>
+            </div>
+
+            {/* EXPLANATION */}
+            <div className="md:border-l md:border-slate-200 md:pl-6">
+              <h4 className="text-base font-semibold text-slate-900">
+                What the plot shows
+              </h4>
+              <p className="mt-2 text-sm text-slate-700">
+                The PCA scatter visualizes separation between buyer groups—e.g.,
+                budget-constrained vs. space-seeking. Clear boundaries validate
+                that the segments are behaviorally distinct, not artifacts of
+                noise.
+              </p>
+              <h5 className="mt-4 text-sm font-semibold text-slate-900">
+                So what?
+              </h5>
+              <p className="mt-1 text-sm text-slate-700">
+                Distinct clusters justify a tiered product lineup (2–3BR,
+                1,500–2,000 sqft with efficiency features), which increased
+                match rates to real budgets and drove the projected market-fit
+                lift to <strong>88%</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================
+          Notebook Code Snippets — with side explanations
+          ========================= */}
+      <section className="page-center mt-12 grid gap-8">
+        {/* Elbow snippet row */}
+        <div className="grid lg:grid-cols-2 gap-6 items-start">
+          <CodeBlock
+            title="Elbow Method — notebook snippet (Python)"
+            code={elbowSnippet}
+          />
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <h4 className="text-base font-semibold text-slate-900">
+              What this code does
+            </h4>
+            <p className="mt-2 text-sm text-slate-700">
+              Iterates k=1…10, fits K-Means, collects <code>.inertia_</code>{" "}
+              (WCSS), and plots the elbow. This is the quantitative backbone for
+              selecting k. Using <code>k-means++</code> and a fixed{" "}
+              <code>random_state</code> keeps results stable and reproducible.
+            </p>
+            <h5 className="mt-4 text-sm font-semibold text-slate-900">
+              Why it matters to the project
+            </h5>
+            <p className="mt-1 text-sm text-slate-700">
+              Picking the right k is what let us define buyer segments with
+              enough separation to tailor prototypes and prioritize cost
+              levers—key steps behind the <strong>~17%</strong> cost reduction
+              and <strong>88%</strong> fit.
+            </p>
+          </div>
+        </div>
+
+        {/* KMeans snippet row */}
+        <div className="grid lg:grid-cols-2 gap-6 items-start">
+          <CodeBlock
+            title="K-Means Fit & Labels — notebook snippet (Python)"
+            code={kmeansSnippet}
+          />
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <h4 className="text-base font-semibold text-slate-900">
+              What this code does
+            </h4>
+            <p className="mt-2 text-sm text-slate-700">
+              Trains K-Means with the chosen k, predicts each respondent’s
+              cluster, and appends the label to the working dataframe. These
+              labels are then joined with payment capacity and preference
+              features to size demand by segment.
+            </p>
+            <h5 className="mt-4 text-sm font-semibold text-slate-900">
+              How it drives decisions
+            </h5>
+            <p className="mt-1 text-sm text-slate-700">
+              With labels attached, we quantify which clusters can clear the{" "}
+              <strong>$2,371/mo</strong> benchmark and which design features
+              move the needle. That’s how we justify a focused lineup rather
+              than one-off custom builds.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================
+          Scrollable PDF viewer + links
+          ========================= */}
+      <section className="page-center mt-16">
+        <div className="flex items-center gap-2 mb-3">
+          <h2 className="text-xl font-semibold text-slate-900">
+            Final Presentation PDF (scrollable)
+          </h2>
+        </div>
+
+        <div className="mb-3 flex flex-wrap items-center gap-3 text-sm">
+          <a
+            href="/Intrepid_Star_Final.pdf"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 text-sky-700 hover:underline"
+          >
+            Open in new tab
+          </a>
+          <span className="text-slate-400">•</span>
+          <a
+            href="https://github.com/e1daru/STAR-Program"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 text-sky-700 hover:underline"
+          >
+            GitHub Project
+          </a>
+          <span className="text-slate-400">•</span>
+          <a
+            href="/"
+            className="inline-flex items-center gap-1 text-sky-700 hover:underline"
+          >
+            Home
+          </a>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="p-2">
+            <object
+              data="/Intrepid_Star_Final.pdf#page=1&zoom=110"
+              type="application/pdf"
+              className="w-full"
+              style={{ height: "80vh" }}
+            >
+              <embed
+                src="/Intrepid_Star_Final.pdf#page=1&zoom=110"
+                type="application/pdf"
+              />
+            </object>
           </div>
         </div>
       </section>

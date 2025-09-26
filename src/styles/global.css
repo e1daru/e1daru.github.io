@@ -114,6 +114,7 @@ nav.nav-line {
   font-weight: 700;
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
+  margin-top: 1.6rem;
   line-height: 1.2;
 }
 .profile .summary {
@@ -121,6 +122,7 @@ nav.nav-line {
   max-width: auto;
   color: #333;
   margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 .profile .email a {
   text-decoration: none;
@@ -305,22 +307,20 @@ section + section {
   background: var(--carolina-blue);
   color: #fff;
 }
-.btn-blue:hover {
-  background: var(--carolina-blue-dark);
-}
 
 .btn-dark {
   background: #333;
   color: #fff;
-}
-.btn-dark:hover {
-  background: #111;
 }
 
 .btn-lightblue {
   background: #0077b5; /* LinkedIn blue */
   color: #fff;
 }
+/* Keep the text color fixed on hover */
+.btn-blue:hover,
+.btn-dark:hover,
 .btn-lightblue:hover {
-  background: #005582;
+  color: #fff; /* lock white text */
+  text-decoration: none; /* remove underline if any */
 }

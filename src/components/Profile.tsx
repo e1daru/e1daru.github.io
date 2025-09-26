@@ -3,6 +3,28 @@ export default function Profile() {
     <section className="profile page-center">
       <div className="photo">
         <img src="/Utiushev_Eldar_Photo.jpg" alt="Eldar Utiushev" />
+
+        <div className="mt-12 flex flex-wrap justify-center gap-6 text-center">
+          <a href="mailto:eldaru33@gmail.com" className="btn btn-blue">
+            Email Me
+          </a>
+          <a
+            href="https://github.com/e1daru"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="btn btn-dark"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://www.linkedin.com/in/eldaru"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="btn btn-lightblue"
+          >
+            LinkedIn
+          </a>
+        </div>
       </div>
 
       <div className="info">
@@ -24,28 +46,6 @@ export default function Profile() {
           projects, and co-founding initiatives that{" "}
           <strong>bring people together</strong>.
         </p>
-
-        <div className="mt-6 flex flex-wrap gap-3">
-          <a href="mailto:eldaru33@gmail.com" className="btn btn-blue">
-            Email Me
-          </a>
-          <a
-            href="https://github.com/e1daru"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="btn btn-dark"
-          >
-            GitHub
-          </a>
-          <a
-            href="https://www.linkedin.com/in/eldaru"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="btn btn-lightblue"
-          >
-            LinkedIn
-          </a>
-        </div>
       </div>
     </section>
   );

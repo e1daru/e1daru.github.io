@@ -15,21 +15,25 @@ export default function Profile() {
         </h1>
 
         <p className="summary">
-          I build data-driven solutions, craft software products, and help
-          organizations turn ideas into results. Along the way, I’ve led teams
-          at national events, advised on multi-million-dollar projects, and
-          co-founded initiatives that bring people together.
+          I believe <strong>data</strong> and <strong>technology</strong> should
+          empower people to solve meaningful problems and create{" "}
+          <strong>lasting impact</strong>. By combining analytics, software, and
+          leadership, I bridge the gap between ideas and execution—building
+          data-driven solutions, crafting software products, leading teams at
+          national events, advising on <strong>multi-million-dollar</strong>{" "}
+          projects, and co-founding initiatives that{" "}
+          <strong>bring people together</strong>.
         </p>
 
-        <p className="email">
-          <a href="mailto:eldaru33@gmail.com">eldaru33@gmail.com</a>
-        </p>
-
-        <div className="socials">
+        <div className="mt-6 flex flex-wrap gap-3">
+          <a href="mailto:eldaru33@gmail.com" className="btn btn-blue">
+            Email Me
+          </a>
           <a
             href="https://github.com/e1daru"
             target="_blank"
             rel="noreferrer noopener"
+            className="btn btn-dark"
           >
             GitHub
           </a>
@@ -37,6 +41,7 @@ export default function Profile() {
             href="https://www.linkedin.com/in/eldaru"
             target="_blank"
             rel="noreferrer noopener"
+            className="btn btn-lightblue"
           >
             LinkedIn
           </a>

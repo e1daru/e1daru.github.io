@@ -284,3 +284,43 @@ h1 + p {
 section + section {
   margin-top: 3rem;
 }
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Variants */
+.btn-blue {
+  background: var(--carolina-blue);
+  color: #fff;
+}
+.btn-blue:hover {
+  background: var(--carolina-blue-dark);
+}
+
+.btn-dark {
+  background: #333;
+  color: #fff;
+}
+.btn-dark:hover {
+  background: #111;
+}
+
+.btn-lightblue {
+  background: #0077b5; /* LinkedIn blue */
+  color: #fff;
+}
+.btn-lightblue:hover {
+  background: #005582;
+}

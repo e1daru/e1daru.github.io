@@ -25,9 +25,9 @@ import {
 
 // KPI data
 const kpi = [
-  { label: "Projected Cost Cut", value: "~17%", sub: "per unit", icon: "💸" },
+  { label: "Projected Cost Cut", value: "~17%", sub: "per house", icon: "💸" },
   { label: "Residents Impacted", value: "9K+", sub: "Chatham, NC", icon: "👥" },
-  { label: "Plan Size", value: "$6M", sub: "Revenue Target", icon: "📈" },
+  { label: "Plan Size", value: "$6M", sub: "5y Revenue Target", icon: "📈" },
 ];
 
 // Chart helpers
@@ -179,34 +179,70 @@ export default function IntrepidBuildPage() {
       </div>
 
       {/* Hero */}
-      <section className="page-center mt-10">
+      <section className="mt-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="rounded-2xl bg-gradient-to-br from-sky-50 to-white shadow-lg ring-1 ring-slate-200 p-8"
+          className="rounded-2xl bg-gradient-to-br from-sky-50 to-white shadow-lg ring-1 ring-slate-200 p-8 md:p-14"
         >
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900">
+          {/* Title */}
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight text-center">
             Intrepid Build — Analytics for the Missing Middle
           </h1>
-          <p className="mt-4 text-slate-700 max-w-3xl text-lg md:text-xl">
-            As a consultant for <strong>Intrepid Build</strong>, I was tasked
-            with solving an urgent problem: how can a small construction company
-            in Chatham County deliver <strong>single-family homes</strong> that
-            local families can actually afford? Using{" "}
-            <strong>
-              survey analytics, clustering in Python, and financial modeling in
-              Excel
-            </strong>
-            , I turned messy data into a business plan projected to cut costs by{" "}
-            <strong>17%</strong>, raise market fit from{" "}
-            <strong>52% → 88%</strong>, and unlock a{" "}
-            <strong>$6M attainable housing pipeline</strong> serving over{" "}
-            <strong>9,000 residents</strong>.
-          </p>
 
-          {/* KPIs */}
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {/* Text + Image (side-by-side under the title) */}
+          <div className="mt-10 grid md:grid-cols-12 gap-12 items-start">
+            {/* Left: intro text */}
+            <div className="md:col-span-7">
+              <p className="text-slate-700 text-lg md:text-xl leading-8 max-w-prose">
+                As a consultant for <strong>Intrepid Build</strong>, my MBA
+                &amp; UG team was tasked with solving an urgent problem: how can
+                a small construction company in Chatham County deliver{" "}
+                <strong>innovative steel-frame homes</strong> that local
+                families can actually afford? Using{" "}
+                <strong>
+                  survey analytics, clustering in Python, and financial modeling
+                  in Excel
+                </strong>
+                , I turned messy data into a business plan projected to cut
+                costs by <strong>17%</strong>, raise market fit from{" "}
+                <strong>52% → 88%</strong>, and unlock a{" "}
+                <strong>$6M attainable housing pipeline</strong> serving over{" "}
+                <strong>9,000 residents in 10y plan</strong>.
+              </p>
+
+              {/* Quiet, roomy buttons */}
+              <div className="mt-8 flex flex-wrap gap-4">
+                <a
+                  href="https://github.com/e1daru/STAR-Program"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-300 bg-white px-6 py-3 text-base font-medium text-slate-900 shadow-sm hover:bg-slate-100 hover:border-slate-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+                >
+                  <span>🌐</span> GitHub Project
+                </a>
+                <a
+                  href="/"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-300 bg-white px-6 py-3 text-base font-medium text-slate-900 shadow-sm hover:bg-slate-100 hover:border-slate-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+                >
+                  <span>🏠</span> Home
+                </a>
+              </div>
+            </div>
+
+            {/* Right: image with breathing room */}
+            <div className="md:col-span-5">
+              <img
+                src="/intrepid%20build.jpg" /* consider renaming to /intrepid-build.jpg */
+                alt="Intrepid Build Project"
+                className="w-full rounded-2xl shadow-md ring-1 ring-slate-200 object-cover aspect-[16/10] md:h-[340px]"
+              />
+            </div>
+          </div>
+
+          {/* KPIs with more space */}
+          <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-8">
             {kpi.map((k) => (
               <div
                 key={k.label}
@@ -222,24 +258,6 @@ export default function IntrepidBuildPage() {
                 <div className="text-base text-slate-600">{k.sub}</div>
               </div>
             ))}
-          </div>
-
-          {/* Quick links (GitHub + Home) */}
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a
-              href="https://github.com/e1daru/STAR-Program"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2 text-slate-800 hover:bg-slate-50"
-            >
-              <span>🌐</span> GitHub Project
-            </a>
-            <a
-              href="/"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2 text-slate-800 hover:bg-slate-50"
-            >
-              <span>🏠</span> Home
-            </a>
           </div>
         </motion.div>
       </section>
@@ -288,7 +306,7 @@ export default function IntrepidBuildPage() {
             <h3 className="text-center font-semibold mb-2">
               Household Income vs. Needed Income ($/year)
             </h3>
-            <div className="relative h-16 rounded bg-slate-100">
+            <div className="relative h-16 rounded bg-slate-100 my-8">
               <div
                 style={{
                   width: `${
@@ -381,28 +399,31 @@ export default function IntrepidBuildPage() {
         </div>
 
         {/* Buyer Priorities */}
-        <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div className="grid md:grid-cols-[1fr_1fr] gap-8 items-center">
           <div className="h-80">
-            <h3 className="text-center font-semibold mb-2">
+            <h3 className="text-center font-semibold mb-4">
               Buyer Priorities (Survey Weights %)
             </h3>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={priorityScores}
                 layout="vertical"
-                margin={chartMargin}
+                margin={{ left: 20, right: 80, top: 40, bottom: 20 }} // closer left, more top space
+                barCategoryGap={14}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   type="number"
                   domain={[0, 1]}
                   tickFormatter={(v) => `${Math.round(v * 100)}%`}
+                  interval={0} // force all ticks
+                  tick={{ fontSize: 12 }}
                 />
                 <YAxis
                   type="category"
                   dataKey="factor"
                   width={200}
-                  tick={axisTick}
+                  tick={{ fontSize: 12 }}
                 />
                 <Tooltip formatter={(v: number) => `${Math.round(v * 100)}%`} />
                 <Legend wrapperStyle={legendStyle} />
@@ -411,19 +432,21 @@ export default function IntrepidBuildPage() {
                     dataKey="score"
                     position="right"
                     formatter={(v: number) => `${Math.round(v * 100)}%`}
+                    offset={8}
                   />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
+
           <div>
             <h2 className="text-2xl font-bold text-slate-900">
               What Buyers Really Value
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              To test trade-offs, I analyzed 80+ survey responses. Families put{" "}
-              <strong>Price first</strong>, then <strong>Location</strong>,
-              followed by <strong>Size</strong> and{" "}
+              To test trade-offs, I analyzed Qualtrics survey responses.
+              Families put <strong>Price first</strong>, then{" "}
+              <strong>Location</strong>, followed by <strong>Size</strong> and{" "}
               <strong>Energy Efficiency</strong>.{" "}
               <strong>Customization ranked last</strong>. The insight was clear:
               households will pay for comfort and operating efficiency, not
@@ -514,24 +537,31 @@ export default function IntrepidBuildPage() {
         </div>
 
         {/* Cluster Budgets */}
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="h-80">
-            <h3 className="text-center font-semibold mb-2">
+        <div className="grid md:grid-cols-[1fr_1fr] gap-8 items-center">
+          <div className="h-80 my-10">
+            <h3 className="text-center font-semibold mb-4">
               Cluster Housing Budgets ($/mo)
             </h3>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={clusterProfiles}
                 layout="vertical"
-                margin={chartMargin}
+                margin={{ left: 20, right: 80, top: 60, bottom: 20 }} // less left margin, more top for label
+                barCategoryGap={14} // more gap between bars
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" tickFormatter={(v) => `$${v}`} />
+                <XAxis
+                  type="number"
+                  tickFormatter={(v) => `$${v}`}
+                  interval={0} // force show all ticks
+                  tick={{ fontSize: 12 }}
+                  domain={[0, "dataMax + 400"]}
+                />
                 <YAxis
                   type="category"
                   dataKey="segment"
                   width={200}
-                  tick={axisTick}
+                  tick={{ fontSize: 12 }}
                 />
                 <ReferenceLine
                   x={2371}
@@ -539,8 +569,11 @@ export default function IntrepidBuildPage() {
                   strokeDasharray="6 6"
                   label={{
                     value: "Target $2,371/mo",
-                    position: "insideTopRight",
+                    position: "top", // place above chart
+                    dy: -10,
                     fill: "#0ea5e9",
+                    fontWeight: "bold",
+                    textAnchor: "middle",
                   }}
                 />
                 <Tooltip
@@ -552,11 +585,13 @@ export default function IntrepidBuildPage() {
                     dataKey="budget"
                     position="right"
                     formatter={(v: number) => `$${v.toLocaleString()}/mo`}
+                    offset={8}
                   />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
+
           <div>
             <h2 className="text-2xl font-bold text-slate-900">
               Validated by Segments
@@ -575,207 +610,162 @@ export default function IntrepidBuildPage() {
       </section>
 
       {/* =========================
-          Clustering Analysis (Elbow + Scatter) — with side explanations
+          Clustering Analysis (Elbow + Scatter) — styled like other sections
           ========================= */}
-      <section className="page-center mt-16 grid gap-12">
-        {/* Elbow card with side text */}
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4">
-          <div className="grid md:grid-cols-2 gap-6 items-start">
-            <div>
-              <h3 className="text-center font-semibold mb-2">
-                Elbow Method (K vs Inertia)
-              </h3>
-              <div className="h-72">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={elbowData}
-                    margin={{ left: 8, right: 8, top: 8, bottom: 8 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                      dataKey="k"
-                      tick={axisTick}
-                      label={{ value: "k", position: "insideBottom", dy: 10 }}
-                    />
-                    <YAxis
-                      tick={axisTick}
-                      label={{
-                        value: "Inertia",
-                        angle: -90,
-                        position: "insideLeft",
-                      }}
-                    />
-                    <Tooltip />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="inertia"
-                      name="Within-cluster SSE"
-                      stroke="#0ea5e9"
-                      strokeWidth={2}
-                      dot={{ r: 3 }}
-                      activeDot={{ r: 5 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-              <p className="text-xs text-slate-600 mt-2">
-                Elbow around k≈3–4. Replace with exact inertias from your
-                notebook if desired.
-              </p>
-            </div>
-
-            {/* EXPLANATION */}
-            <div className="md:border-l md:border-slate-200 md:pl-6">
-              <h4 className="text-base font-semibold text-slate-900">
-                Why this matters
-              </h4>
-              <p className="mt-2 text-sm text-slate-700">
-                The elbow locates the <em>efficient</em> number of clusters—
-                where adding more groups stops meaningfully reducing
-                within-cluster error. We selected k≈3 to balance simplicity and
-                signal. This sets up the rest of the strategy: each cluster maps
-                to a buyer segment with distinct budget/feature preferences that
-                inform prototype design.
-              </p>
-              <h5 className="mt-4 text-sm font-semibold text-slate-900">
-                How it ties to results
-              </h5>
-              <p className="mt-1 text-sm text-slate-700">
-                Choosing the right k enabled a lineup that improved projected
-                fit from <strong>52% → 88%</strong> and focused cost cuts where
-                they mattered, contributing to the <strong>~17%</strong>{" "}
-                per-unit saving.
-              </p>
-            </div>
+      <section className="page-center mt-16 grid gap-16">
+        {/* Elbow Method */}
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="h-80">
+            <h3 className="text-center font-semibold mb-2">
+              Elbow Method (K vs Inertia)
+            </h3>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={elbowData}
+                margin={{ left: 8, right: 8, top: 8, bottom: 8 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="k"
+                  tick={axisTick}
+                  label={{ value: "k", position: "insideBottom", dy: 10 }}
+                />
+                <YAxis
+                  tick={axisTick}
+                  label={{
+                    value: "Inertia",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
+                />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="inertia"
+                  name="Within-cluster SSE"
+                  stroke="#0ea5e9"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 5 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Why the Elbow Matters
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              The Elbow Method identifies the most efficient number of clusters
+              — the point where adding more clusters stops giving big
+              improvements. In our case, k≈3 gave the best balance. That choice
+              underpins the strategy: each cluster represents a buyer group with
+              unique budgets and needs, guiding prototype design.
+            </p>
+            <p className="mt-3 text-slate-700 text-lg">
+              This decision helped us boost projected fit from{" "}
+              <strong>52% → 88%</strong> and target the cost savings of{" "}
+              <strong>~17%</strong>.
+            </p>
           </div>
         </div>
 
-        {/* Scatter card with side text */}
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4">
-          <div className="grid md:grid-cols-2 gap-6 items-start">
-            <div>
-              <h3 className="text-center font-semibold mb-2">
-                Cluster Scatterplot (PCA space)
-              </h3>
-              <div className="h-72">
-                <ResponsiveContainer width="100%" height="100%">
-                  <ScatterChart
-                    margin={{ left: 8, right: 8, top: 8, bottom: 8 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                      type="number"
-                      dataKey="x"
-                      name="PC1"
-                      tick={axisTick}
-                    />
-                    <YAxis
-                      type="number"
-                      dataKey="y"
-                      name="PC2"
-                      tick={axisTick}
-                    />
-                    <ZAxis type="number" dataKey={() => 60} range={[60, 60]} />
-                    <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                    {[0, 1, 2].map((c) => (
-                      <Scatter
-                        key={c}
-                        name={`Cluster ${c}`}
-                        data={clusterPoints.filter((p) => p.cluster === c)}
-                        fill={CLUSTER_COLORS[c % CLUSTER_COLORS.length]}
-                      />
-                    ))}
-                  </ScatterChart>
-                </ResponsiveContainer>
-              </div>
-              <p className="text-xs text-slate-600 mt-2">
-                Each point is a respondent projected to 2D (e.g., PCA). Colors
-                indicate cluster labels.
-              </p>
-            </div>
-
-            {/* EXPLANATION */}
-            <div className="md:border-l md:border-slate-200 md:pl-6">
-              <h4 className="text-base font-semibold text-slate-900">
-                What the plot shows
-              </h4>
-              <p className="mt-2 text-sm text-slate-700">
-                The PCA scatter visualizes separation between buyer groups—e.g.,
-                budget-constrained vs. space-seeking. Clear boundaries validate
-                that the segments are behaviorally distinct, not artifacts of
-                noise.
-              </p>
-              <h5 className="mt-4 text-sm font-semibold text-slate-900">
-                So what?
-              </h5>
-              <p className="mt-1 text-sm text-slate-700">
-                Distinct clusters justify a tiered product lineup (2–3BR,
-                1,500–2,000 sqft with efficiency features), which increased
-                match rates to real budgets and drove the projected market-fit
-                lift to <strong>88%</strong>.
-              </p>
-            </div>
+        {/* Cluster Scatterplot */}
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="h-80">
+            <h3 className="text-center font-semibold mb-2">
+              Cluster Scatterplot (PCA space)
+            </h3>
+            <ResponsiveContainer width="100%" height="100%">
+              <ScatterChart margin={{ left: 8, right: 8, top: 8, bottom: 8 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" dataKey="x" name="PC1" tick={axisTick} />
+                <YAxis type="number" dataKey="y" name="PC2" tick={axisTick} />
+                <ZAxis type="number" dataKey={() => 60} range={[60, 60]} />
+                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                {[0, 1, 2].map((c) => (
+                  <Scatter
+                    key={c}
+                    name={`Cluster ${c}`}
+                    data={clusterPoints.filter((p) => p.cluster === c)}
+                    fill={CLUSTER_COLORS[c % CLUSTER_COLORS.length]}
+                  />
+                ))}
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Visualizing the Segments
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              The scatterplot shows how respondents split into distinct groups
+              in 2D space. Clear boundaries between clusters confirm that the
+              segments are real, not random.
+            </p>
+            <p className="mt-3 text-slate-700 text-lg">
+              This validation gave us confidence to design a lineup for real
+              household budgets:
+              <strong>
+                2–3BR, 1,500–2,000 sqft, efficiency-focused homes
+              </strong>{" "}
+              that matched demand and drove market fit to <strong>88%</strong>.
+            </p>
           </div>
         </div>
       </section>
 
       {/* =========================
-          Notebook Code Snippets — with side explanations
+          Notebook Code Snippets — styled like other sections
           ========================= */}
-      <section className="page-center mt-12 grid gap-8">
-        {/* Elbow snippet row */}
-        <div className="grid lg:grid-cols-2 gap-6 items-start">
-          <CodeBlock
-            title="Elbow Method — notebook snippet (Python)"
-            code={elbowSnippet}
-          />
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h4 className="text-base font-semibold text-slate-900">
-              What this code does
-            </h4>
-            <p className="mt-2 text-sm text-slate-700">
-              Iterates k=1…10, fits K-Means, collects <code>.inertia_</code>{" "}
-              (WCSS), and plots the elbow. This is the quantitative backbone for
-              selecting k. Using <code>k-means++</code> and a fixed{" "}
-              <code>random_state</code> keeps results stable and reproducible.
+      <section className="page-center mt-16 grid gap-16">
+        {/* Elbow snippet */}
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <CodeBlock
+              title="Elbow Method — notebook snippet (Python)"
+              code={elbowSnippet}
+            />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Code Behind the Elbow
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              This code loops k=1…10, fits <strong>K-Means</strong>, and records
+              WCSS. Plotting those values produces the “elbow.” It’s the
+              quantitative backbone for cluster selection.
             </p>
-            <h5 className="mt-4 text-sm font-semibold text-slate-900">
-              Why it matters to the project
-            </h5>
-            <p className="mt-1 text-sm text-slate-700">
-              Picking the right k is what let us define buyer segments with
-              enough separation to tailor prototypes and prioritize cost
-              levers—key steps behind the <strong>~17%</strong> cost reduction
-              and <strong>88%</strong> fit.
+            <p className="mt-3 text-slate-700 text-lg">
+              Without it, we’d be guessing. With it, we justified segmenting
+              buyers into 3 groups, enabling cost-focused design that cut
+              per-unit costs by <strong>~17%</strong>.
             </p>
           </div>
         </div>
 
-        {/* KMeans snippet row */}
-        <div className="grid lg:grid-cols-2 gap-6 items-start">
-          <CodeBlock
-            title="K-Means Fit & Labels — notebook snippet (Python)"
-            code={kmeansSnippet}
-          />
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h4 className="text-base font-semibold text-slate-900">
-              What this code does
-            </h4>
-            <p className="mt-2 text-sm text-slate-700">
-              Trains K-Means with the chosen k, predicts each respondent’s
-              cluster, and appends the label to the working dataframe. These
-              labels are then joined with payment capacity and preference
-              features to size demand by segment.
+        {/* KMeans snippet */}
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <CodeBlock
+              title="K-Means Fit & Labels — notebook snippet (Python)"
+              code={kmeansSnippet}
+            />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Code for Buyer Segments
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              This snippet trains <strong>K-Means</strong> with the chosen k and
+              predicts each household’s cluster. We then attach these labels
+              back to the survey data for deeper analysis.
             </p>
-            <h5 className="mt-4 text-sm font-semibold text-slate-900">
-              How it drives decisions
-            </h5>
-            <p className="mt-1 text-sm text-slate-700">
-              With labels attached, we quantify which clusters can clear the{" "}
-              <strong>$2,371/mo</strong> benchmark and which design features
-              move the needle. That’s how we justify a focused lineup rather
-              than one-off custom builds.
+            <p className="mt-3 text-slate-700 text-lg">
+              These cluster IDs let us tie budgets, payment thresholds, and
+              feature preferences to real families — proving which segments
+              could afford the <strong>$325k</strong> prototype.
             </p>
           </div>
         </div>
@@ -851,19 +841,21 @@ export default function IntrepidBuildPage() {
           <div className="mt-6 flex justify-center gap-4">
             <a
               href="/Intrepid_Star_Final.pdf"
-              className="rounded-xl border border-sky-200 px-5 py-2 text-sky-700 hover:bg-sky-50 transition"
+              className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-700 hover:bg-sky-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
             >
               View STAR Deck
             </a>
             <a
-              href="/STAR_marketing_analysis.ipynb"
-              className="rounded-xl border border-sky-200 px-5 py-2 text-sky-700 hover:bg-sky-50 transition"
+              href="https://github.com/e1daru/STAR-Program"
+              className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-700 hover:bg-sky-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
             >
               View Notebook
             </a>
             <a
-              href="/Intrepid Affordable Housing Project Profit and Loss.xlsx"
-              className="rounded-xl border border-sky-200 px-5 py-2 text-sky-700 hover:bg-sky-50 transition"
+              href="/Intrepid%20Affordable%20Housing%20Project%20Profit%20and%20Loss.xlsx"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-700 hover:bg-sky-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
             >
               View P&amp;L Model
             </a>

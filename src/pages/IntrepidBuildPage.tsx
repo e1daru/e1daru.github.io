@@ -280,7 +280,7 @@ export default function IntrepidBuildPage() {
                   <LabelList
                     dataKey="pct"
                     position="top"
-                    formatter={(v: number) => `${v}%`}
+                    formatter={(label: React.ReactNode) => `${label}%`}
                   />
                 </Bar>
               </BarChart>
@@ -431,8 +431,10 @@ export default function IntrepidBuildPage() {
                   <LabelList
                     dataKey="score"
                     position="right"
-                    formatter={(v: number) => `${Math.round(v * 100)}%`}
                     offset={8}
+                    formatter={(label: React.ReactNode) =>
+                      `${Math.round(Number(label) * 100)}%`
+                    }
                   />
                 </Bar>
               </BarChart>
@@ -475,7 +477,7 @@ export default function IntrepidBuildPage() {
                   <LabelList
                     dataKey="pct"
                     position="top"
-                    formatter={(v: number) => `${v}%`}
+                    formatter={(label: React.ReactNode) => `${label}%`}
                   />
                 </Bar>
               </BarChart>
@@ -515,7 +517,9 @@ export default function IntrepidBuildPage() {
                   <LabelList
                     dataKey="pmt"
                     position="top"
-                    formatter={(v: number) => `$${v.toLocaleString()}`}
+                    formatter={(label: React.ReactNode) =>
+                      `$${Number(label).toLocaleString()}`
+                    }
                   />
                 </Bar>
               </BarChart>
@@ -584,8 +588,10 @@ export default function IntrepidBuildPage() {
                   <LabelList
                     dataKey="budget"
                     position="right"
-                    formatter={(v: number) => `$${v.toLocaleString()}/mo`}
                     offset={8}
+                    formatter={(label: React.ReactNode) =>
+                      `$${Number(label).toLocaleString()}/mo`
+                    }
                   />
                 </Bar>
               </BarChart>

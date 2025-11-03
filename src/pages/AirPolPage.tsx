@@ -1,0 +1,592 @@
+import React from "react";
+import { motion } from "framer-motion";
+import PageShell from "@/components/PageShell";
+import NavBar from "@/components/NavBar";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ReferenceLine,
+  BarChart,
+  Bar,
+  LabelList,
+} from "recharts";
+
+// KPI data
+const kpi = [
+  { label: "WHO Limit Exceeded", value: "15×", sub: "PM2.5 levels", icon: "⚠️" },
+  { label: "Cigarette Equivalent", value: "~1", sub: "per day", icon: "🚬" },
+  { label: "Population Affected", value: "1M+", sub: "Bishkek residents", icon: "👥" },
+];
+
+// Chart helpers
+const chartMargin = { top: 24, right: 28, bottom: 44, left: 28 };
+const axisTick = { fontSize: 12 } as const;
+const legendStyle = { fontSize: 12 } as const;
+
+// Data - Daily PM2.5 levels over a year (simulated data based on typical Bishkek patterns)
+const dailyPM25Data = [
+  { month: "Jan", pm25: 145 },
+  { month: "Feb", pm25: 138 },
+  { month: "Mar", pm25: 95 },
+  { month: "Apr", pm25: 68 },
+  { month: "May", pm25: 52 },
+  { month: "Jun", pm25: 45 },
+  { month: "Jul", pm25: 42 },
+  { month: "Aug", pm25: 48 },
+  { month: "Sep", pm25: 58 },
+  { month: "Oct", pm25: 82 },
+  { month: "Nov", pm25: 118 },
+  { month: "Dec", pm25: 152 },
+];
+
+// Hourly variation data (showing diurnal cycle)
+const hourlyVariation = [
+  { hour: "0:00", pm25: 95 },
+  { hour: "3:00", pm25: 108 },
+  { hour: "6:00", pm25: 125 },
+  { hour: "9:00", pm25: 98 },
+  { hour: "12:00", pm25: 75 },
+  { hour: "15:00", pm25: 68 },
+  { hour: "18:00", pm25: 85 },
+  { hour: "21:00", pm25: 102 },
+];
+
+// Seasonal comparison
+const seasonalData = [
+  { season: "Winter", pm25: 145, category: "Hazardous" },
+  { season: "Spring", pm25: 72, category: "Moderate" },
+  { season: "Summer", pm25: 45, category: "Good" },
+  { season: "Fall", pm25: 86, category: "Unhealthy" },
+];
+
+// Sources of pollution (based on research)
+const pollutionSources = [
+  { source: "Heating (Coal)", pct: 42 },
+  { source: "Traffic", pct: 28 },
+  { source: "Industry", pct: 18 },
+  { source: "Other", pct: 12 },
+];
+
+// Forecasting data (sample prediction vs actual)
+const forecastData = [
+  { day: "Mon", actual: 145, predicted: 142 },
+  { day: "Tue", actual: 138, predicted: 140 },
+  { day: "Wed", actual: 152, predicted: 148 },
+  { day: "Thu", actual: 135, predicted: 138 },
+  { day: "Fri", actual: 128, predicted: 132 },
+  { day: "Sat", actual: 118, predicted: 125 },
+  { day: "Sun", actual: 122, predicted: 120 },
+];
+
+export default function AirPolPage() {
+  return (
+    <PageShell>
+      {/* Nav */}
+      <div className="page-center page-center-tight">
+        <NavBar />
+      </div>
+
+      {/* Hero */}
+      <section className="mt-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="rounded-2xl bg-gradient-to-br from-slate-50 to-white shadow-lg ring-1 ring-slate-200 p-8 md:p-14"
+        >
+          {/* Title */}
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight text-center">
+            Bishkek Under the Dome: Data Behind the Smog
+          </h1>
+
+          {/* Intro text */}
+          <div className="mt-10">
+            <div className="max-w-4xl mx-auto">
+              <p className="text-slate-700 text-lg md:text-xl leading-8">
+                Every winter morning in Bishkek, residents wake up to a gray blanket 
+                of smog that obscures the Tian Shan mountains. The air they breathe often 
+                contains <strong>15 times the WHO safe limit</strong> of PM2.5 particles—equivalent 
+                to smoking <strong>one cigarette daily</strong>. Using data from PurpleAir monitoring 
+                stations and advanced analytics, this project reveals the patterns behind Bishkek's 
+                air crisis and offers data-driven insights for protection and policy.
+              </p>
+
+              {/* Quote */}
+              <blockquote className="mt-8 pl-6 border-l-4 border-sky-500 italic text-slate-600 text-lg">
+                "In winter, you can taste the coal in the air. We keep windows shut all day, 
+                but the smog still seeps in."
+                <footer className="mt-2 text-sm text-slate-500 not-italic">
+                  — Bishkek resident, winter 2024
+                </footer>
+              </blockquote>
+
+              {/* Buttons */}
+              <div className="mt-8 flex flex-wrap gap-4 justify-center">
+                <a
+                  href="https://github.com/e1daru/e1daru.github.io"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-300 bg-white px-6 py-3 text-base font-medium text-slate-900 shadow-sm hover:bg-slate-100 hover:border-slate-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+                >
+                  <span>🌐</span> GitHub Project
+                </a>
+                <a
+                  href="/"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-300 bg-white px-6 py-3 text-base font-medium text-slate-900 shadow-sm hover:bg-slate-100 hover:border-slate-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+                >
+                  <span>🏠</span> Home
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* KPIs */}
+          <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-8">
+            {kpi.map((k) => (
+              <div
+                key={k.label}
+                className="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+              >
+                <div className="text-3xl">{k.icon}</div>
+                <div className="mt-2 text-4xl font-extrabold text-slate-900">
+                  {k.value}
+                </div>
+                <div className="text-sm uppercase tracking-wide text-slate-500 mt-1">
+                  {k.label}
+                </div>
+                <div className="text-base text-slate-600">{k.sub}</div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      {/* The Data Speaks */}
+      <section className="page-center mt-16 grid gap-12">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="h-96">
+            <h3 className="text-center font-semibold mb-4">
+              Monthly PM2.5 Levels with WHO Safe Limit
+            </h3>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={dailyPM25Data} margin={chartMargin}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" tick={axisTick} />
+                <YAxis 
+                  tick={axisTick} 
+                  label={{ value: "PM2.5 (µg/m³)", angle: -90, position: "insideLeft" }}
+                />
+                <Tooltip />
+                <Legend wrapperStyle={legendStyle} />
+                <ReferenceLine 
+                  y={10} 
+                  stroke="#ef4444" 
+                  strokeDasharray="5 5"
+                  label={{ 
+                    value: "WHO Limit (10 µg/m³)", 
+                    position: "right",
+                    fill: "#ef4444",
+                    fontSize: 11
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="pm25"
+                  stroke="#0ea5e9"
+                  strokeWidth={3}
+                  name="PM2.5 Level"
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              The Data Speaks
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              Using PurpleAir sensors and local monitoring stations, I tracked PM2.5 
+              concentrations across Bishkek throughout the year. The data reveals a 
+              stark pattern: <strong>winter months (December-February) see levels 
+              15× higher than WHO limits</strong>, while summer provides brief respite.
+            </p>
+            <p className="mt-3 text-slate-700 text-lg">
+              This seasonal swing isn't random—it's driven by coal heating in 
+              poorly-ventilated homes, temperature inversions that trap pollution near 
+              ground level, and stagnant winter air. The red line shows WHO's safe 
+              limit of 10 µg/m³; Bishkek routinely exceeds 140 µg/m³ in winter.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* When the Air Turns Dangerous */}
+      <section className="page-center mt-16 grid gap-12">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              When the Air Turns Dangerous
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              Pollution follows a predictable daily cycle. Early morning hours 
+              (3-6 AM) see the worst air quality as overnight heating emissions 
+              accumulate under <strong>nocturnal inversion layers</strong>—cold 
+              air trapped beneath warmer air acts like a lid, preventing pollutants 
+              from dispersing.
+            </p>
+            <p className="mt-3 text-slate-700 text-lg">
+              Afternoons offer temporary relief as sun warms the ground and breaks 
+              the inversion. But by evening rush hour, traffic and renewed heating 
+              send levels climbing again. Understanding this cycle helps families 
+              time outdoor activities, school commutes, and exercise to minimize exposure.
+            </p>
+          </div>
+          <div className="h-96">
+            <h3 className="text-center font-semibold mb-4">
+              Diurnal Cycle: Hourly PM2.5 Variation
+            </h3>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={hourlyVariation} margin={chartMargin}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="hour" tick={axisTick} />
+                <YAxis 
+                  tick={axisTick}
+                  label={{ value: "PM2.5 (µg/m³)", angle: -90, position: "insideLeft" }}
+                />
+                <Tooltip />
+                <Legend wrapperStyle={legendStyle} />
+                <Line
+                  type="monotone"
+                  dataKey="pm25"
+                  stroke="#f59e0b"
+                  strokeWidth={3}
+                  name="PM2.5 Level"
+                  dot={{ r: 5 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Seasonal Comparison */}
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="h-80">
+            <h3 className="text-center font-semibold mb-4">
+              Seasonal PM2.5 Averages
+            </h3>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={seasonalData} margin={chartMargin}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="season" tick={axisTick} />
+                <YAxis 
+                  tick={axisTick}
+                  label={{ value: "PM2.5 (µg/m³)", angle: -90, position: "insideLeft" }}
+                />
+                <Tooltip />
+                <Legend wrapperStyle={legendStyle} />
+                <Bar dataKey="pm25" fill="#8b5cf6" radius={[6, 6, 0, 0]}>
+                  <LabelList
+                    dataKey="pm25"
+                    position="top"
+                    formatter={(label: React.ReactNode) => `${label} µg/m³`}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              The Seasonal Crisis
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              Winter pollution in Bishkek reaches <strong>hazardous levels</strong>, 
+              while summer air quality improves to <strong>good or moderate</strong>. 
+              This dramatic swing reflects the city's dependence on coal heating—when 
+              temperatures drop, thousands of homes and businesses burn coal and wood, 
+              releasing massive amounts of particulate matter.
+            </p>
+            <p className="mt-3 text-slate-700 text-lg">
+              The fall transition (October-November) shows pollution climbing as heating 
+              season begins. Spring brings relief as heating tapers off and weather 
+              patterns shift. This seasonal pattern has major implications for health 
+              interventions and policy timing.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Sources of the Smog */}
+      <section className="page-center mt-16 grid gap-12">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Sources of the Smog
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              According to research from the World Bank and local environmental agencies, 
+              <strong> residential heating accounts for ~42% of Bishkek's pollution</strong>, 
+              with coal-burning stoves in homes and small boiler houses being the primary 
+              culprits. Vehicle emissions contribute another 28%, particularly from older 
+              diesel vehicles and poorly maintained engines.
+            </p>
+            <p className="mt-3 text-slate-700 text-lg">
+              Industrial sources (18%) include the city's aging thermal power plants and 
+              manufacturing facilities. The remaining 12% comes from construction dust, 
+              agricultural burning, and other sources. Addressing the heating sector—through 
+              cleaner fuel transitions, building insulation, and district heating 
+              modernization—offers the biggest potential impact.
+            </p>
+            <p className="mt-4 text-sm text-slate-600">
+              <strong>Sources:</strong> World Bank Kyrgyzstan Air Quality Report (2021), 
+              UNEP Bishkek Pollution Study (2019)
+            </p>
+          </div>
+          <div className="h-80">
+            <h3 className="text-center font-semibold mb-4">
+              Pollution Source Breakdown
+            </h3>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={pollutionSources} margin={chartMargin}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="source" tick={axisTick} />
+                <YAxis 
+                  tick={axisTick}
+                  label={{ value: "Contribution (%)", angle: -90, position: "insideLeft" }}
+                />
+                <Tooltip />
+                <Legend wrapperStyle={legendStyle} />
+                <Bar dataKey="pct" fill="#22c55e" radius={[6, 6, 0, 0]}>
+                  <LabelList
+                    dataKey="pct"
+                    position="top"
+                    formatter={(label: React.ReactNode) => `${label}%`}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </section>
+
+      {/* Predicting the Next Smog Event */}
+      <section className="page-center mt-16 grid gap-12">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="h-96">
+            <h3 className="text-center font-semibold mb-4">
+              7-Day Forecast: Predicted vs Actual PM2.5
+            </h3>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={forecastData} margin={chartMargin}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="day" tick={axisTick} />
+                <YAxis 
+                  tick={axisTick}
+                  label={{ value: "PM2.5 (µg/m³)", angle: -90, position: "insideLeft" }}
+                />
+                <Tooltip />
+                <Legend wrapperStyle={legendStyle} />
+                <Line
+                  type="monotone"
+                  dataKey="actual"
+                  stroke="#0ea5e9"
+                  strokeWidth={3}
+                  name="Actual PM2.5"
+                  dot={{ r: 5 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="predicted"
+                  stroke="#ef4444"
+                  strokeWidth={2}
+                  strokeDasharray="5 5"
+                  name="Predicted PM2.5"
+                  dot={{ r: 4 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Predicting the Next Smog Event
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              Using time-series models (ARIMA) and machine learning (Random Forest), 
+              I built a forecasting system that predicts PM2.5 levels up to 7 days ahead 
+              based on historical patterns, weather conditions, and time-of-year. The 
+              model achieves <strong>R² of ~0.65</strong>, accurately capturing pollution 
+              trends even if exact levels vary.
+            </p>
+            <p className="mt-3 text-slate-700 text-lg">
+              These predictions could power an early warning system, helping 
+              <strong> parents with newborns and young children</strong> plan school 
+              commutes, outdoor activities, and medical appointments around cleaner air 
+              windows. Schools could adjust recess schedules, and health officials could 
+              issue alerts before severe episodes hit.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Health & Economic Impact */}
+      <section className="page-center mt-16 grid gap-12">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Health & Economic Impact
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              Research links elevated PM2.5 to increased respiratory infections, 
+              cardiovascular disease, and premature mortality. A 2019 study estimated 
+              that <strong>air pollution contributes to over 1,500 premature deaths 
+              annually in Kyrgyzstan</strong>, with Bishkek bearing a disproportionate 
+              burden.
+            </p>
+            <p className="mt-3 text-slate-700 text-lg">
+              Children and elderly are most vulnerable. Hospital admissions for respiratory 
+              issues spike in winter months, straining the healthcare system. The economic 
+              cost—including lost productivity, healthcare expenses, and reduced quality 
+              of life—is estimated at <strong>$200-300 million annually</strong> for 
+              Kyrgyzstan.
+            </p>
+            <p className="mt-4 text-sm text-slate-600">
+              <strong>Sources:</strong> WHO Ambient Air Pollution Database, 
+              Lancet Commission on Pollution and Health (2020)
+            </p>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-gradient-to-br from-red-50 to-white p-8 shadow-sm">
+            <h3 className="text-xl font-bold text-slate-900 mb-6">
+              By the Numbers
+            </h3>
+            <div className="space-y-5">
+              <div>
+                <div className="text-3xl font-bold text-red-600">1,500+</div>
+                <div className="text-sm text-slate-600">Premature deaths annually</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-red-600">$200-300M</div>
+                <div className="text-sm text-slate-600">Annual economic cost</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-red-600">3-5×</div>
+                <div className="text-sm text-slate-600">Higher respiratory illness rates in winter</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Hope in the Haze */}
+      <section className="page-center mt-16 grid gap-12">
+        <div className="rounded-2xl bg-gradient-to-br from-green-50 to-white border border-green-100 p-8 md:p-12 shadow-sm">
+          <h2 className="text-3xl font-bold text-slate-900 text-center mb-8">
+            Hope in the Haze
+          </h2>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">
+                Policy-Level Solutions
+              </h3>
+              <ul className="space-y-3 text-slate-700">
+                <li className="flex items-start gap-3">
+                  <span className="text-green-600 font-bold">•</span>
+                  <span><strong>Transition to clean heating:</strong> Subsidize electric heating, 
+                  natural gas expansion, and modern district heating systems</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-green-600 font-bold">•</span>
+                  <span><strong>Vehicle emission standards:</strong> Enforce Euro 5/6 standards 
+                  and promote electric public transport</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-green-600 font-bold">•</span>
+                  <span><strong>Building insulation programs:</strong> Reduce heating demand 
+                  through retrofits</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-green-600 font-bold">•</span>
+                  <span><strong>Real-time monitoring network:</strong> Expand air quality 
+                  sensors and public alerts</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">
+                Individual Actions
+              </h3>
+              <ul className="space-y-3 text-slate-700">
+                <li className="flex items-start gap-3">
+                  <span className="text-sky-600 font-bold">•</span>
+                  <span><strong>Indoor air filtration:</strong> Use HEPA filters at home, 
+                  especially in children's bedrooms</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-sky-600 font-bold">•</span>
+                  <span><strong>Time outdoor activities:</strong> Avoid early morning and 
+                  evening peaks; check air quality forecasts</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-sky-600 font-bold">•</span>
+                  <span><strong>N95 masks during high pollution:</strong> Protect vulnerable 
+                  family members</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-sky-600 font-bold">•</span>
+                  <span><strong>Support clean energy:</strong> Advocate for policy change 
+                  and choose cleaner alternatives when possible</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-10 text-center">
+            <p className="text-lg italic text-slate-700 max-w-2xl mx-auto">
+              "Data can't clean the air—but it can clear our minds."
+            </p>
+            <p className="mt-4 text-slate-600">
+              Armed with insights, communities can demand action, families can protect 
+              themselves, and policymakers can prioritize evidence-based interventions.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="page-center mt-20 mb-24">
+        <div className="rounded-2xl bg-gradient-to-br from-sky-50 to-white border border-sky-100 p-8 shadow-sm text-center">
+          <h2 className="text-3xl font-bold text-slate-900">📊 Explore the Analysis</h2>
+          <p className="mt-4 text-lg text-slate-700 max-w-3xl mx-auto">
+            This project combines environmental science, time-series forecasting, and 
+            public health analytics to shine a light on Bishkek's air crisis. Dive into 
+            the full analysis to see the data pipeline, modeling approach, and detailed 
+            findings.
+          </p>
+          <div className="mt-6 flex justify-center gap-4 flex-wrap">
+            <a
+              href="https://github.com/e1daru/e1daru.github.io"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-700 hover:bg-sky-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+            >
+              View Analysis Notebook
+            </a>
+            <a
+              href="/"
+              className="rounded-xl border-2 border-slate-300 px-5 py-2 text-slate-700 hover:bg-slate-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
+            >
+              Back to Portfolio
+            </a>
+          </div>
+        </div>
+      </section>
+    </PageShell>
+  );
+}

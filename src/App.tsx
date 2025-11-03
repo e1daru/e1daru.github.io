@@ -33,7 +33,7 @@ const projects: Project[] = [
     path: "/projects/e2s",
   },
   {
-    img: "/busi488.jpg",
+    img: "/airpol.svg",
     alt: "Bishkek Air Pollution Analysis",
     title: "Bishkek Under the Dome: Data Behind the Smog",
     desc: "Deep-dive analysis of air quality in Bishkek, Kyrgyzstan. Using PurpleAir sensors and time-series forecasting, revealed pollution patterns 15× WHO limits and built predictive models to help families minimize exposure.",

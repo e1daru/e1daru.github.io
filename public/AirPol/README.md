@@ -32,11 +32,22 @@ cd public/AirPol
 python3 extract_chart_data.py
 ```
 
-This creates four JSON files in `src/data/`:
-- `monthly_pm25.json` - Monthly average PM2.5 levels
-- `hourly_variation.json` - Average PM2.5 by hour of day
-- `seasonal_pm25.json` - Seasonal averages with health categories
-- `forecast_7day.json` - Recent 7-day actual values
+This creates four JSON files that are copied to `src/data/`:
+- `monthly_pm25.json` - Monthly average PM2.5 levels (12 months)
+- `hourly_variation.json` - Average PM2.5 by hour of day (24 hours)
+- `seasonal_pm25.json` - Seasonal averages with health categories (4 seasons)
+- `forecast_7day.json` - Recent 7-day actual values (last week of data)
+
+**Note**: After running the extraction script, copy the generated files to the React app:
+```bash
+cp chart_data/*.json ../../src/data/
+```
+
+The AirPolPage.tsx component imports these JSON files to populate all four main charts:
+1. Monthly PM2.5 Levels with WHO Safe Limit
+2. Diurnal Cycle: Hourly PM2.5 Variation
+3. The Seasonal Crisis
+4. 7-Day Forecast: Predicted vs Actual PM2.5
 
 ## Key Findings
 

@@ -25,9 +25,19 @@ import forecastDataRaw from "@/data/forecast_7day.json";
 
 // KPI data (updated based on actual data: mean 21 µg/m³, 53.5% over WHO limit)
 const kpi = [
-  { label: "WHO Limit Exceeded", value: "2.1×", sub: "average PM2.5", icon: "⚠️" },
+  {
+    label: "WHO Limit Exceeded",
+    value: "2.1×",
+    sub: "average PM2.5",
+    icon: "⚠️",
+  },
   { label: "Over Limit", value: "53.5%", sub: "of the time", icon: "⏰" },
-  { label: "Population Affected", value: "1M+", sub: "Bishkek residents", icon: "👥" },
+  {
+    label: "Population Affected",
+    value: "1M+",
+    sub: "Bishkek residents",
+    icon: "👥",
+  },
 ];
 
 // Chart helpers
@@ -74,19 +84,40 @@ export default function AirPolPage() {
           <div className="mt-10">
             <div className="max-w-4xl mx-auto">
               <p className="text-slate-700 text-lg md:text-xl leading-8">
-                Every winter morning in Bishkek, residents wake up to a gray blanket 
-                of smog that obscures the Tian Shan mountains. Analyzing nearly 40,000 hours 
-                of air quality data from PurpleAir sensors (2020-2025), this project reveals 
-                that <strong>Bishkek exceeds WHO safe limits 53.5% of the time</strong>, with 
-                winter months averaging <strong>4× the safe limit</strong>. Using advanced 
-                analytics, I uncover the patterns behind Bishkek's air crisis and offer 
+                Every winter morning in Bishkek, residents wake up to a gray
+                blanket of smog that obscures the Tian Shan mountains. Analyzing
+                nearly 40,000 hours of air quality data from PurpleAir sensors
+                (2020-2025), this project reveals that{" "}
+                <strong>
+                  Bishkek exceeds WHO safe limits 53.5% of the time
+                </strong>
+                , with winter months averaging{" "}
+                <strong>4× the safe limit</strong>. Using advanced analytics, I
+                uncover the patterns behind Bishkek's air crisis and offer
                 data-driven insights for protection and policy.
+              </p>
+
+              {/* Smoking equivalence */}
+              <p className="mt-4 text-slate-700 text-lg md:text-xl leading-8">
+                To put the numbers in human terms, the citywide mean of about
+                <strong> 21 µg/m³</strong> PM2.5 is roughly equivalent to
+                smoking
+                <strong> ~1 cigarette per day</strong>, based on the Berkeley
+                Earth conversion (≈22 µg/m³ ≈ 1 cigarette/day).
+                <a
+                  className="text-sky-700 underline ml-2"
+                  href="https://berkeleyearth.org/archive/air-pollution-and-cigarettes/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Source
+                </a>
               </p>
 
               {/* Quote */}
               <blockquote className="mt-8 pl-6 border-l-4 border-sky-500 italic text-slate-600 text-lg">
-                "In winter, you can taste the coal in the air. We keep windows shut all day, 
-                but the smog still seeps in."
+                "In winter, you can taste the coal in the air. We keep windows
+                shut all day, but the smog still seeps in."
                 <footer className="mt-2 text-sm text-slate-500 not-italic">
                   — Bishkek resident, winter 2024
                 </footer>
@@ -144,21 +175,25 @@ export default function AirPolPage() {
               <LineChart data={dailyPM25Data} margin={chartMargin}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" tick={axisTick} />
-                <YAxis 
-                  tick={axisTick} 
-                  label={{ value: "PM2.5 (µg/m³)", angle: -90, position: "insideLeft" }}
+                <YAxis
+                  tick={axisTick}
+                  label={{
+                    value: "PM2.5 (µg/m³)",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
                 />
                 <Tooltip />
                 <Legend wrapperStyle={legendStyle} />
-                <ReferenceLine 
-                  y={10} 
-                  stroke="#ef4444" 
+                <ReferenceLine
+                  y={10}
+                  stroke="#ef4444"
                   strokeDasharray="5 5"
-                  label={{ 
-                    value: "WHO Limit (10 µg/m³)", 
+                  label={{
+                    value: "WHO Limit (10 µg/m³)",
                     position: "right",
                     fill: "#ef4444",
-                    fontSize: 11
+                    fontSize: 11,
                   }}
                 />
                 <Line
@@ -178,18 +213,26 @@ export default function AirPolPage() {
               The Data Speaks
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              Using PurpleAir sensors and local monitoring stations, I tracked PM2.5 
-              concentrations across Bishkek from 2020-2025. The data reveals a 
-              clear pattern: <strong>winter months (December-February) average 
-              43.5 µg/m³—over 4× the WHO safe limit</strong>, with January peaking 
-              at 51.1 µg/m³, while summer drops to a healthy 9.2 µg/m³.
+              Using PurpleAir sensors and local monitoring stations, I tracked
+              PM2.5 concentrations across Bishkek from 2020-2025. The data
+              reveals a clear pattern:{" "}
+              <strong>
+                winter months (December-February) average 43.5 µg/m³—over 4× the
+                WHO safe limit
+              </strong>
+              , with January peaking at 51.1 µg/m³, while summer drops to a
+              healthy 9.2 µg/m³.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
-              This seasonal swing isn't random—it's driven by coal heating in 
-              poorly-ventilated homes, temperature inversions that trap pollution near 
-              ground level, and stagnant winter air. The red line shows WHO's safe 
-              limit of 10 µg/m³; during peak winter months, Bishkek consistently exceeds 
-              this by 4-5 times.
+              This seasonal swing isn't random—it's driven by coal heating in
+              poorly-ventilated homes, temperature inversions that trap
+              pollution near ground level, and stagnant winter air. The red line
+              shows WHO's safe limit of 10 µg/m³; during peak winter months,
+              Bishkek consistently exceeds this by 4-5 times.
+            </p>
+            <p className="mt-3 text-slate-600 text-sm">
+              Note: Hours and dates are shown in{" "}
+              <strong>local time (Asia/Bishkek, UTC+6)</strong>.
             </p>
           </div>
         </div>
@@ -203,18 +246,24 @@ export default function AirPolPage() {
               When the Air Turns Dangerous
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              The actual data shows a surprising pattern: pollution is <strong>lowest 
-              in early morning (5-9 AM at ~12-13 µg/m³)</strong> when heating demand 
-              is reduced and traffic is light. However, levels climb steadily throughout 
-              the day, peaking in the <strong>afternoon and early evening (4-6 PM at 
-              32 µg/m³)</strong> due to traffic, renewed heating, and atmospheric conditions.
+              The all-year average shows a clear diurnal cycle: pollution is
+              <strong>
+                {" "}
+                lowest in late morning (around 9–11 AM at ~12–13 µg/m³)
+              </strong>
+              and{" "}
+              <strong>
+                highest in the late evening (around 10–11 PM at ~32 µg/m³)
+              </strong>
+              . This reflects a combination of evening heating, traffic, and
+              weak dispersion.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
-              This pattern differs from typical urban pollution cycles, suggesting that 
-              Bishkek's afternoon heating and human activity have a stronger impact than 
-              overnight accumulation. Understanding this cycle helps families plan outdoor 
-              activities for mornings when air quality is best, and avoid peak pollution 
-              hours in the late afternoon and evening.
+              Unlike many cities where <em>morning rush hour</em> dominates PM
+              peaks, Bishkek’s worst hours arrive late in the day. Planning
+              exercise and school commutes in the cleaner{" "}
+              <strong>morning window</strong> and limiting exposure in the
+              <strong> late evening</strong> can meaningfully reduce dose.
             </p>
           </div>
           <div className="h-96">
@@ -225,9 +274,13 @@ export default function AirPolPage() {
               <LineChart data={hourlyVariation} margin={chartMargin}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="hour" tick={axisTick} />
-                <YAxis 
+                <YAxis
                   tick={axisTick}
-                  label={{ value: "PM2.5 (µg/m³)", angle: -90, position: "insideLeft" }}
+                  label={{
+                    value: "PM2.5 (µg/m³)",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
                 />
                 <Tooltip />
                 <Legend wrapperStyle={legendStyle} />
@@ -254,9 +307,13 @@ export default function AirPolPage() {
               <BarChart data={seasonalData} margin={chartMargin}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="season" tick={axisTick} />
-                <YAxis 
+                <YAxis
                   tick={axisTick}
-                  label={{ value: "PM2.5 (µg/m³)", angle: -90, position: "insideLeft" }}
+                  label={{
+                    value: "PM2.5 (µg/m³)",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
                 />
                 <Tooltip />
                 <Legend wrapperStyle={legendStyle} />
@@ -275,18 +332,20 @@ export default function AirPolPage() {
               The Seasonal Crisis
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              The data shows a dramatic 5× seasonal variation: winter pollution averages 
-              <strong>43.5 µg/m³ (Unhealthy for Sensitive Groups)</strong>, while summer 
-              drops to a healthy <strong>9.2 µg/m³ (Good)</strong>. This reflects the 
-              city's heavy dependence on coal heating—when temperatures drop, thousands of 
-              homes and businesses burn coal and wood, releasing massive amounts of 
-              particulate matter.
+              The data shows a dramatic 5× seasonal variation: winter pollution
+              averages
+              <strong>43.5 µg/m³ (Unhealthy for Sensitive Groups)</strong>,
+              while summer drops to a healthy <strong>9.2 µg/m³ (Good)</strong>.
+              This reflects the city's heavy dependence on coal heating—when
+              temperatures drop, thousands of homes and businesses burn coal and
+              wood, releasing massive amounts of particulate matter.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
-              Fall (19.2 µg/m³) and Spring (13.2 µg/m³) serve as transition periods, with 
-              fall showing pollution climbing as heating season begins, and spring bringing 
-              relief as heating tapers off. This clear seasonal pattern has major implications 
-              for health interventions and policy timing—winters demand aggressive action.
+              Fall (19.2 µg/m³) and Spring (13.2 µg/m³) serve as transition
+              periods, with fall showing pollution climbing as heating season
+              begins, and spring bringing relief as heating tapers off. This
+              clear seasonal pattern has major implications for health
+              interventions and policy timing—winters demand aggressive action.
             </p>
           </div>
         </div>
@@ -300,22 +359,28 @@ export default function AirPolPage() {
               Sources of the Smog
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              According to research from the World Bank and local environmental agencies, 
-              <strong> residential heating accounts for ~42% of Bishkek's pollution</strong>, 
-              with coal-burning stoves in homes and small boiler houses being the primary 
-              culprits. Vehicle emissions contribute another 28%, particularly from older 
-              diesel vehicles and poorly maintained engines.
+              According to research from the World Bank and local environmental
+              agencies,
+              <strong>
+                {" "}
+                residential heating accounts for ~42% of Bishkek's pollution
+              </strong>
+              , with coal-burning stoves in homes and small boiler houses being
+              the primary culprits. Vehicle emissions contribute another 28%,
+              particularly from older diesel vehicles and poorly maintained
+              engines.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
-              Industrial sources (18%) include the city's aging thermal power plants and 
-              manufacturing facilities. The remaining 12% comes from construction dust, 
-              agricultural burning, and other sources. Addressing the heating sector—through 
-              cleaner fuel transitions, building insulation, and district heating 
-              modernization—offers the biggest potential impact.
+              Industrial sources (18%) include the city's aging thermal power
+              plants and manufacturing facilities. The remaining 12% comes from
+              construction dust, agricultural burning, and other sources.
+              Addressing the heating sector—through cleaner fuel transitions,
+              building insulation, and district heating modernization—offers the
+              biggest potential impact.
             </p>
             <p className="mt-4 text-sm text-slate-600">
-              <strong>Sources:</strong> World Bank Kyrgyzstan Air Quality Report (2021), 
-              UNEP Bishkek Pollution Study (2019)
+              <strong>Sources:</strong> World Bank Kyrgyzstan Air Quality Report
+              (2021), UNEP Bishkek Pollution Study (2019)
             </p>
           </div>
           <div className="h-80">
@@ -326,9 +391,13 @@ export default function AirPolPage() {
               <BarChart data={pollutionSources} margin={chartMargin}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="source" tick={axisTick} />
-                <YAxis 
+                <YAxis
                   tick={axisTick}
-                  label={{ value: "Contribution (%)", angle: -90, position: "insideLeft" }}
+                  label={{
+                    value: "Contribution (%)",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
                 />
                 <Tooltip />
                 <Legend wrapperStyle={legendStyle} />
@@ -350,15 +419,19 @@ export default function AirPolPage() {
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="h-96">
             <h3 className="text-center font-semibold mb-4">
-              7-Day Forecast: Predicted vs Actual PM2.5
+              Winter Week 2023: Predicted vs Actual PM2.5 (Jan 16-22)
             </h3>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={forecastData} margin={chartMargin}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" tick={axisTick} />
-                <YAxis 
+                <YAxis
                   tick={axisTick}
-                  label={{ value: "PM2.5 (µg/m³)", angle: -90, position: "insideLeft" }}
+                  label={{
+                    value: "PM2.5 (µg/m³)",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
                 />
                 <Tooltip />
                 <Legend wrapperStyle={legendStyle} />
@@ -387,18 +460,21 @@ export default function AirPolPage() {
               Predicting the Next Smog Event
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              The chart shows the most recent week of actual PM2.5 readings from August 2025, 
-              demonstrating the quality of summer air in Bishkek (averaging 5-7 µg/m³). While 
-              these levels are healthy, winter predictions would show significantly higher values. 
-              Using historical patterns, weather data, and time-series analysis, predictive models 
-              can forecast pollution levels several days ahead.
+              The chart shows the worst winter week on record (January 16-22,
+              2023), when PM2.5 averaged{" "}
+              <strong>151 µg/m³—over 15× the WHO safe limit</strong>. This week
+              peaked at a dangerous <strong>265 µg/m³ on Sunday</strong>,
+              equivalent to smoking 12 cigarettes in a single day. Using
+              historical patterns, weather data, and time-series analysis,
+              predictive models can forecast pollution levels several days ahead,
+              as shown by the predicted values tracking closely to actual readings.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
-              Such predictions could power an early warning system, helping 
-              <strong> vulnerable populations</strong> plan activities around cleaner air 
-              windows. Schools could adjust recess schedules, hospitals could prepare for 
-              respiratory admissions, and health officials could issue alerts before severe 
-              winter episodes hit.
+              Such predictions could power an early warning system, helping
+              <strong> vulnerable populations</strong> plan activities around
+              cleaner air windows. Schools could adjust recess schedules,
+              hospitals could prepare for respiratory admissions, and health
+              officials could issue alerts before severe winter episodes hit.
             </p>
           </div>
         </div>
@@ -412,21 +488,24 @@ export default function AirPolPage() {
               Health & Economic Impact
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              Research links elevated PM2.5 to increased respiratory infections, 
-              cardiovascular disease, and premature mortality. A 2019 study estimated 
-              that <strong>air pollution contributes to over 1,500 premature deaths 
-              annually in Kyrgyzstan</strong>, with Bishkek bearing a disproportionate 
-              burden.
+              Research links elevated PM2.5 to increased respiratory infections,
+              cardiovascular disease, and premature mortality. A 2019 study
+              estimated that{" "}
+              <strong>
+                air pollution contributes to over 1,500 premature deaths
+                annually in Kyrgyzstan
+              </strong>
+              , with Bishkek bearing a disproportionate burden.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
-              Children and elderly are most vulnerable. Hospital admissions for respiratory 
-              issues spike in winter months, straining the healthcare system. The economic 
-              cost—including lost productivity, healthcare expenses, and reduced quality 
-              of life—is estimated at <strong>$200-300 million annually</strong> for 
-              Kyrgyzstan.
+              Children and elderly are most vulnerable. Hospital admissions for
+              respiratory issues spike in winter months, straining the
+              healthcare system. The economic cost—including lost productivity,
+              healthcare expenses, and reduced quality of life—is estimated at{" "}
+              <strong>$200-300 million annually</strong> for Kyrgyzstan.
             </p>
             <p className="mt-4 text-sm text-slate-600">
-              <strong>Sources:</strong> WHO Ambient Air Pollution Database, 
+              <strong>Sources:</strong> WHO Ambient Air Pollution Database,
               Lancet Commission on Pollution and Health (2020)
             </p>
           </div>
@@ -437,15 +516,21 @@ export default function AirPolPage() {
             <div className="space-y-5">
               <div>
                 <div className="text-3xl font-bold text-red-600">1,500+</div>
-                <div className="text-sm text-slate-600">Premature deaths annually</div>
+                <div className="text-sm text-slate-600">
+                  Premature deaths annually
+                </div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-red-600">$200-300M</div>
-                <div className="text-sm text-slate-600">Annual economic cost</div>
+                <div className="text-sm text-slate-600">
+                  Annual economic cost
+                </div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-red-600">3-5×</div>
-                <div className="text-sm text-slate-600">Higher respiratory illness rates in winter</div>
+                <div className="text-sm text-slate-600">
+                  Higher respiratory illness rates in winter
+                </div>
               </div>
             </div>
           </div>
@@ -458,7 +543,7 @@ export default function AirPolPage() {
           <h2 className="text-3xl font-bold text-slate-900 text-center mb-8">
             Hope in the Haze
           </h2>
-          
+
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-xl font-semibold text-slate-900 mb-4">
@@ -467,23 +552,32 @@ export default function AirPolPage() {
               <ul className="space-y-3 text-slate-700">
                 <li className="flex items-start gap-3">
                   <span className="text-green-600 font-bold">•</span>
-                  <span><strong>Transition to clean heating:</strong> Subsidize electric heating, 
-                  natural gas expansion, and modern district heating systems</span>
+                  <span>
+                    <strong>Transition to clean heating:</strong> Subsidize
+                    electric heating, natural gas expansion, and modern district
+                    heating systems
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-600 font-bold">•</span>
-                  <span><strong>Vehicle emission standards:</strong> Enforce Euro 5/6 standards 
-                  and promote electric public transport</span>
+                  <span>
+                    <strong>Vehicle emission standards:</strong> Enforce Euro
+                    5/6 standards and promote electric public transport
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-600 font-bold">•</span>
-                  <span><strong>Building insulation programs:</strong> Reduce heating demand 
-                  through retrofits</span>
+                  <span>
+                    <strong>Building insulation programs:</strong> Reduce
+                    heating demand through retrofits
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-600 font-bold">•</span>
-                  <span><strong>Real-time monitoring network:</strong> Expand air quality 
-                  sensors and public alerts</span>
+                  <span>
+                    <strong>Real-time monitoring network:</strong> Expand air
+                    quality sensors and public alerts
+                  </span>
                 </li>
               </ul>
             </div>
@@ -495,23 +589,31 @@ export default function AirPolPage() {
               <ul className="space-y-3 text-slate-700">
                 <li className="flex items-start gap-3">
                   <span className="text-sky-600 font-bold">•</span>
-                  <span><strong>Indoor air filtration:</strong> Use HEPA filters at home, 
-                  especially in children's bedrooms</span>
+                  <span>
+                    <strong>Indoor air filtration:</strong> Use HEPA filters at
+                    home, especially in children's bedrooms
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-sky-600 font-bold">•</span>
-                  <span><strong>Time outdoor activities:</strong> Avoid early morning and 
-                  evening peaks; check air quality forecasts</span>
+                  <span>
+                    <strong>Time outdoor activities:</strong> Avoid early
+                    morning and evening peaks; check air quality forecasts
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-sky-600 font-bold">•</span>
-                  <span><strong>N95 masks during high pollution:</strong> Protect vulnerable 
-                  family members</span>
+                  <span>
+                    <strong>N95 masks during high pollution:</strong> Protect
+                    vulnerable family members
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-sky-600 font-bold">•</span>
-                  <span><strong>Support clean energy:</strong> Advocate for policy change 
-                  and choose cleaner alternatives when possible</span>
+                  <span>
+                    <strong>Support clean energy:</strong> Advocate for policy
+                    change and choose cleaner alternatives when possible
+                  </span>
                 </li>
               </ul>
             </div>
@@ -522,8 +624,9 @@ export default function AirPolPage() {
               "Data can't clean the air—but it can clear our minds."
             </p>
             <p className="mt-4 text-slate-600">
-              Armed with insights, communities can demand action, families can protect 
-              themselves, and policymakers can prioritize evidence-based interventions.
+              Armed with insights, communities can demand action, families can
+              protect themselves, and policymakers can prioritize evidence-based
+              interventions.
             </p>
           </div>
         </div>
@@ -532,12 +635,14 @@ export default function AirPolPage() {
       {/* Call to Action */}
       <section className="page-center mt-20 mb-24">
         <div className="rounded-2xl bg-gradient-to-br from-sky-50 to-white border border-sky-100 p-8 shadow-sm text-center">
-          <h2 className="text-3xl font-bold text-slate-900">📊 Explore the Analysis</h2>
+          <h2 className="text-3xl font-bold text-slate-900">
+            📊 Explore the Analysis
+          </h2>
           <p className="mt-4 text-lg text-slate-700 max-w-3xl mx-auto">
-            This project combines environmental science, time-series forecasting, and 
-            public health analytics to shine a light on Bishkek's air crisis. Dive into 
-            the full analysis to see the data pipeline, modeling approach, and detailed 
-            findings.
+            This project combines environmental science, time-series
+            forecasting, and public health analytics to shine a light on
+            Bishkek's air crisis. Dive into the full analysis to see the data
+            pipeline, modeling approach, and detailed findings.
           </p>
           <div className="mt-6 flex justify-center gap-4 flex-wrap">
             <a

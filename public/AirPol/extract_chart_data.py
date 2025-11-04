@@ -12,10 +12,20 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 
-# Load data
-PA_FILE = "92387 2016-08-26 2025-08-26 60-Minute Average.csv"
-OUTPUT_DIR = Path("chart_data")
+BASE_DIR = Path(__file__).parent.resolve()
+
+# Load data (resolve paths relative to this script's folder)
+PA_FILE = BASE_DIR / "92387 2016-08-26 2025-08-26 60-Minute Average.csv"
+OUTPUT_DIR = (BASE_DIR / "chart_data")
 OUTPUT_DIR.mkdir(exist_ok=True)
+
+# Optionally mirror outputs into the app imports folder
+MIRROR_DIR = (BASE_DIR.parent.parent / "src/data")
+try:
+    MIRROR_DIR.mkdir(parents=True, exist_ok=True)
+    MIRROR_ENABLED = True
+except Exception:
+    MIRROR_ENABLED = False
 
 print("Loading PurpleAir data...")
 df = pd.read_csv(PA_FILE)
@@ -23,9 +33,13 @@ df = pd.read_csv(PA_FILE)
 # Standardize column names
 df.columns = [c.strip().lower().replace(" ", "_") for c in df.columns]
 
-# Parse datetime
+# Parse datetime as UTC, then convert to Bishkek local time for human-facing aggregations
 df['time_stamp'] = pd.to_datetime(df['time_stamp'], utc=True)
 df = df.set_index('time_stamp').sort_index()
+
+# Use Asia/Bishkek (UTC+6) to align hours/days to local behavior
+LOCAL_TZ = 'Asia/Bishkek'
+df_local = df.tz_convert(LOCAL_TZ)
 
 # Use pm2.5_atm as the PM2.5 value (atmospheric correction already applied)
 pm25_col = 'pm2.5_atm'
@@ -36,14 +50,16 @@ print(f"Total records: {len(df)}")
 # Filter to valid PM2.5 readings (remove extreme outliers)
 df = df[df[pm25_col].notna()]
 df = df[(df[pm25_col] >= 0) & (df[pm25_col] < 500)]  # Remove extreme outliers
+df_local = df_local.loc[df.index]  # keep same rows after filtering
 
 print(f"Records after filtering: {len(df)}")
 
-# 1. Monthly PM2.5 Levels with WHO Safe Limit
+# 1. Monthly PM2.5 Levels with WHO Safe Limit (local month names)
 print("\n1. Generating Monthly PM2.5 data...")
-df['month'] = df.index.month
-df['month_name'] = df.index.strftime('%b')
-monthly = df.groupby(['month', 'month_name'])[pm25_col].mean().reset_index()
+# Use local-indexed frame for label-friendly month names
+df_local['month'] = df_local.index.month
+df_local['month_name'] = df_local.index.strftime('%b')
+monthly = df_local.groupby(['month', 'month_name'])[pm25_col].mean().reset_index()
 monthly = monthly.sort_values('month')
 monthly_data = [
     {"month": row['month_name'], "pm25": round(float(row[pm25_col]), 1)}
@@ -51,17 +67,29 @@ monthly_data = [
 ]
 print(f"Monthly averages: {len(monthly_data)} months")
 
-# 2. Diurnal Cycle: Hourly PM2.5 Variation
+# 2. Diurnal Cycle: Hourly PM2.5 Variation (local time)
 print("\n2. Generating Hourly Variation data...")
-df['hour'] = df.index.hour
-hourly = df.groupby('hour')[pm25_col].mean().reset_index()
+df_local['hour'] = df_local.index.hour
+hourly = df_local.groupby('hour')[pm25_col].mean().reset_index()
 hourly_data = [
     {"hour": f"{int(row['hour']):02d}:00", "pm25": round(float(row[pm25_col]), 1)}
     for _, row in hourly.iterrows()
 ]
 print(f"Hourly averages: {len(hourly_data)} hours")
 
-# 3. Seasonal PM2.5 Averages
+# Optional: winter-only hourly (Dec–Feb)
+winter_mask = df_local.index.month.isin([12, 1, 2])
+hourly_winter = (df_local.loc[winter_mask]
+                 .groupby('hour')[pm25_col]
+                 .mean()
+                 .reset_index())
+hourly_winter_data = [
+    {"hour": f"{int(row['hour']):02d}:00", "pm25": round(float(row[pm25_col]), 1)}
+    for _, row in hourly_winter.iterrows()
+]
+print(f"Hourly (winter) averages: {len(hourly_winter_data)} hours")
+
+# 3. Seasonal PM2.5 Averages (local calendar)
 print("\n3. Generating Seasonal data...")
 def get_season(month):
     if month in [12, 1, 2]:
@@ -73,8 +101,8 @@ def get_season(month):
     else:
         return "Fall"
 
-df['season'] = df['month'].apply(get_season)
-seasonal = df.groupby('season')[pm25_col].mean().reset_index()
+df_local['season'] = df_local['month'].apply(get_season)
+seasonal = df_local.groupby('season')[pm25_col].mean().reset_index()
 
 # Order seasons properly
 season_order = ["Winter", "Spring", "Summer", "Fall"]
@@ -105,11 +133,11 @@ seasonal_data = [
 ]
 print(f"Seasonal averages: {len(seasonal_data)} seasons")
 
-# 4. 7-Day Forecast: Use most recent data
+# 4. 7-Day Forecast: Use most recent data (local days)
 print("\n4. Generating Recent 7-Day data...")
-# Get the most recent complete 7 days
-recent = df.tail(7*24).copy()  # Last 7 days of hourly data
-recent['date'] = recent.index.date
+# Get the most recent complete 7 days using local-indexed frame
+recent = df_local.tail(7*24).copy()  # Last ~7 days of hourly data
+recent['date'] = recent.index.date  # local calendar date
 daily_recent = recent.groupby('date')[pm25_col].mean().reset_index()
 daily_recent = daily_recent.tail(7)  # Ensure we have exactly 7 days
 
@@ -133,6 +161,7 @@ print(f"Forecast data: {len(forecast_data)} days")
 output_files = {
     "monthly_pm25.json": monthly_data,
     "hourly_variation.json": hourly_data,
+    "hourly_variation_winter.json": hourly_winter_data,
     "seasonal_pm25.json": seasonal_data,
     "forecast_7day.json": forecast_data
 }
@@ -143,6 +172,16 @@ for filename, data in output_files.items():
         json.dump(data, f, indent=2)
     print(f"\nSaved: {filepath}")
     print(f"Sample: {data[:2] if len(data) > 2 else data}")
+
+    # Mirror to src/data for direct imports by the React app
+    if MIRROR_ENABLED:
+        mirror_path = MIRROR_DIR / filename
+        try:
+            with open(mirror_path, 'w') as mf:
+                json.dump(data, mf, indent=2)
+            print(f"Mirrored: {mirror_path}")
+        except Exception as e:
+            print(f"Mirror failed for {filename}: {e}")
 
 # Print summary statistics
 print("\n" + "="*60)

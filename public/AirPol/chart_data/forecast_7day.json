@@ -1,37 +1,37 @@
 [
   {
     "day": "Mon",
-    "actual": 5.8,
-    "predicted": 5.6
+    "actual": 4.8,
+    "predicted": 4.7
   },
   {
     "day": "Tue",
-    "actual": 6.3,
-    "predicted": 6.6
+    "actual": 6.2,
+    "predicted": 6.4
   },
   {
     "day": "Wed",
-    "actual": 6.4,
-    "predicted": 6.5
+    "actual": 7.0,
+    "predicted": 7.2
   },
   {
     "day": "Thu",
-    "actual": 4.4,
-    "predicted": 4.4
+    "actual": 4.6,
+    "predicted": 4.5
   },
   {
     "day": "Fri",
-    "actual": 6.6,
-    "predicted": 6.6
+    "actual": 5.3,
+    "predicted": 5.3
   },
   {
     "day": "Sat",
-    "actual": 7.0,
-    "predicted": 7.3
+    "actual": 7.5,
+    "predicted": 7.7
   },
   {
     "day": "Sun",
-    "actual": 6.6,
+    "actual": 6.9,
     "predicted": 6.9
   }
 ]

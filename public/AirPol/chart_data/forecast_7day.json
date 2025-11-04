@@ -1,0 +1,37 @@
+[
+  {
+    "day": "Mon",
+    "actual": 5.8,
+    "predicted": 5.9
+  },
+  {
+    "day": "Tue",
+    "actual": 6.3,
+    "predicted": 6.2
+  },
+  {
+    "day": "Wed",
+    "actual": 6.4,
+    "predicted": 6.1
+  },
+  {
+    "day": "Thu",
+    "actual": 4.4,
+    "predicted": 4.5
+  },
+  {
+    "day": "Fri",
+    "actual": 6.6,
+    "predicted": 6.3
+  },
+  {
+    "day": "Sat",
+    "actual": 7.0,
+    "predicted": 6.8
+  },
+  {
+    "day": "Sun",
+    "actual": 6.6,
+    "predicted": 6.5
+  }
+]

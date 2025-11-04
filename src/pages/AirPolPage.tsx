@@ -419,7 +419,7 @@ export default function AirPolPage() {
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="h-96">
             <h3 className="text-center font-semibold mb-4">
-              7-Day Forecast: Predicted vs Actual PM2.5
+              Winter Week 2023: Predicted vs Actual PM2.5 (Jan 16-22)
             </h3>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={forecastData} margin={chartMargin}>
@@ -460,13 +460,14 @@ export default function AirPolPage() {
               Predicting the Next Smog Event
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              The chart shows the most recent week of actual PM2.5 readings from
-              August 2025, demonstrating the quality of summer air in Bishkek
-              (averaging 5-7 µg/m³). While these levels are healthy, winter
-              predictions would show significantly higher values. Using
+              The chart shows the worst winter week on record (January 16-22,
+              2023), when PM2.5 averaged{" "}
+              <strong>151 µg/m³—over 15× the WHO safe limit</strong>. This week
+              peaked at a dangerous <strong>265 µg/m³ on Sunday</strong>,
+              equivalent to smoking 12 cigarettes in a single day. Using
               historical patterns, weather data, and time-series analysis,
-              predictive models can forecast pollution levels several days
-              ahead.
+              predictive models can forecast pollution levels several days ahead,
+              as shown by the predicted values tracking closely to actual readings.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
               Such predictions could power an early warning system, helping

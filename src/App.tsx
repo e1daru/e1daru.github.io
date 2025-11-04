@@ -4,6 +4,7 @@ import IntrepidBuildPage from "@/pages/IntrepidBuildPage";
 import E2SPage from "@/pages/E2SPage";
 import LuxuryPage from "@/pages/LuxuryPage";
 import ECommerceAnalyticsPage from "@/pages/ECommerceAnalyticsPage";
+import AirPolPage from "@/pages/AirPolPage";
 import type { Project } from "@/types";
 
 // Simple placeholder page you can replace later
@@ -30,6 +31,13 @@ const projects: Project[] = [
     title: "US Open 2024 Operations Data Analytics",
     desc: "Built a smart tool that predicts staff cancellations and automates scheduling for large sport events. It cut last-minute no-shows by 11% and saved over 160 hours of administrative work per event, ensuring reliable staffing and major cost savings.",
     path: "/projects/e2s",
+  },
+  {
+    img: "/airpol.svg",
+    alt: "Bishkek Air Pollution Analysis",
+    title: "Bishkek Under the Dome: Data Behind the Smog",
+    desc: "Deep-dive analysis of air quality in Bishkek, Kyrgyzstan. Using PurpleAir sensors and time-series forecasting, revealed pollution patterns 15× WHO limits and built predictive models to help families minimize exposure.",
+    path: "/projects/airpol",
   },
   {
     img: "/busi488.jpg",
@@ -69,6 +77,7 @@ export default function App() {
       {/* Project detail pages */}
       <Route path="/projects/intrepid" element={<IntrepidBuildPage />} />
       <Route path="/projects/e2s" element={<E2SPage />} />
+      <Route path="/projects/airpol" element={<AirPolPage />} />
       <Route path="/projects/luxury" element={<LuxuryPage />} />
       <Route path="/projects/ecom" element={<ECommerceAnalyticsPage />} />
       <Route

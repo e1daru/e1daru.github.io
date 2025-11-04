@@ -18,10 +18,10 @@ import {
 } from "recharts";
 
 // Import actual data from analysis
-import monthlyData from "/AirPol/chart_data/monthly_pm25.json";
-import hourlyData from "/AirPol/chart_data/hourly_variation.json";
-import seasonalDataRaw from "/AirPol/chart_data/seasonal_pm25.json";
-import forecastDataRaw from "/AirPol/chart_data/forecast_7day.json";
+import monthlyData from "@/data/monthly_pm25.json";
+import hourlyData from "@/data/hourly_variation.json";
+import seasonalDataRaw from "@/data/seasonal_pm25.json";
+import forecastDataRaw from "@/data/forecast_7day.json";
 
 // KPI data (updated based on actual data: mean 21 µg/m³, 53.5% over WHO limit)
 const kpi = [

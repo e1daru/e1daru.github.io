@@ -17,10 +17,16 @@ import {
   LabelList,
 } from "recharts";
 
-// KPI data
+// Import actual data from analysis
+import monthlyData from "/AirPol/chart_data/monthly_pm25.json";
+import hourlyData from "/AirPol/chart_data/hourly_variation.json";
+import seasonalDataRaw from "/AirPol/chart_data/seasonal_pm25.json";
+import forecastDataRaw from "/AirPol/chart_data/forecast_7day.json";
+
+// KPI data (updated based on actual data: mean 21 µg/m³, 53.5% over WHO limit)
 const kpi = [
-  { label: "WHO Limit Exceeded", value: "15×", sub: "PM2.5 levels", icon: "⚠️" },
-  { label: "Cigarette Equivalent", value: "~1", sub: "per day", icon: "🚬" },
+  { label: "WHO Limit Exceeded", value: "2.1×", sub: "average PM2.5", icon: "⚠️" },
+  { label: "Over Limit", value: "53.5%", sub: "of the time", icon: "⏰" },
   { label: "Population Affected", value: "1M+", sub: "Bishkek residents", icon: "👥" },
 ];
 
@@ -29,41 +35,11 @@ const chartMargin = { top: 24, right: 28, bottom: 44, left: 28 };
 const axisTick = { fontSize: 12 } as const;
 const legendStyle = { fontSize: 12 } as const;
 
-// Data - Daily PM2.5 levels over a year (simulated data based on typical Bishkek patterns)
-const dailyPM25Data = [
-  { month: "Jan", pm25: 145 },
-  { month: "Feb", pm25: 138 },
-  { month: "Mar", pm25: 95 },
-  { month: "Apr", pm25: 68 },
-  { month: "May", pm25: 52 },
-  { month: "Jun", pm25: 45 },
-  { month: "Jul", pm25: 42 },
-  { month: "Aug", pm25: 48 },
-  { month: "Sep", pm25: 58 },
-  { month: "Oct", pm25: 82 },
-  { month: "Nov", pm25: 118 },
-  { month: "Dec", pm25: 152 },
-];
-
-// Hourly variation data (showing diurnal cycle)
-const hourlyVariation = [
-  { hour: "0:00", pm25: 95 },
-  { hour: "3:00", pm25: 108 },
-  { hour: "6:00", pm25: 125 },
-  { hour: "9:00", pm25: 98 },
-  { hour: "12:00", pm25: 75 },
-  { hour: "15:00", pm25: 68 },
-  { hour: "18:00", pm25: 85 },
-  { hour: "21:00", pm25: 102 },
-];
-
-// Seasonal comparison
-const seasonalData = [
-  { season: "Winter", pm25: 145, category: "Hazardous" },
-  { season: "Spring", pm25: 72, category: "Moderate" },
-  { season: "Summer", pm25: 45, category: "Good" },
-  { season: "Fall", pm25: 86, category: "Unhealthy" },
-];
+// Use actual data from analysis
+const dailyPM25Data = monthlyData;
+const hourlyVariation = hourlyData;
+const seasonalData = seasonalDataRaw;
+const forecastData = forecastDataRaw;
 
 // Sources of pollution (based on research)
 const pollutionSources = [
@@ -71,17 +47,6 @@ const pollutionSources = [
   { source: "Traffic", pct: 28 },
   { source: "Industry", pct: 18 },
   { source: "Other", pct: 12 },
-];
-
-// Forecasting data (sample prediction vs actual)
-const forecastData = [
-  { day: "Mon", actual: 145, predicted: 142 },
-  { day: "Tue", actual: 138, predicted: 140 },
-  { day: "Wed", actual: 152, predicted: 148 },
-  { day: "Thu", actual: 135, predicted: 138 },
-  { day: "Fri", actual: 128, predicted: 132 },
-  { day: "Sat", actual: 118, predicted: 125 },
-  { day: "Sun", actual: 122, predicted: 120 },
 ];
 
 export default function AirPolPage() {
@@ -110,11 +75,12 @@ export default function AirPolPage() {
             <div className="max-w-4xl mx-auto">
               <p className="text-slate-700 text-lg md:text-xl leading-8">
                 Every winter morning in Bishkek, residents wake up to a gray blanket 
-                of smog that obscures the Tian Shan mountains. The air they breathe often 
-                contains <strong>15 times the WHO safe limit</strong> of PM2.5 particles—equivalent 
-                to smoking <strong>one cigarette daily</strong>. Using data from PurpleAir monitoring 
-                stations and advanced analytics, this project reveals the patterns behind Bishkek's 
-                air crisis and offers data-driven insights for protection and policy.
+                of smog that obscures the Tian Shan mountains. Analyzing nearly 40,000 hours 
+                of air quality data from PurpleAir sensors (2020-2025), this project reveals 
+                that <strong>Bishkek exceeds WHO safe limits 53.5% of the time</strong>, with 
+                winter months averaging <strong>4× the safe limit</strong>. Using advanced 
+                analytics, I uncover the patterns behind Bishkek's air crisis and offer 
+                data-driven insights for protection and policy.
               </p>
 
               {/* Quote */}
@@ -213,15 +179,17 @@ export default function AirPolPage() {
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
               Using PurpleAir sensors and local monitoring stations, I tracked PM2.5 
-              concentrations across Bishkek throughout the year. The data reveals a 
-              stark pattern: <strong>winter months (December-February) see levels 
-              15× higher than WHO limits</strong>, while summer provides brief respite.
+              concentrations across Bishkek from 2020-2025. The data reveals a 
+              clear pattern: <strong>winter months (December-February) average 
+              43.5 µg/m³—over 4× the WHO safe limit</strong>, with January peaking 
+              at 51.1 µg/m³, while summer drops to a healthy 9.2 µg/m³.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
               This seasonal swing isn't random—it's driven by coal heating in 
               poorly-ventilated homes, temperature inversions that trap pollution near 
               ground level, and stagnant winter air. The red line shows WHO's safe 
-              limit of 10 µg/m³; Bishkek routinely exceeds 140 µg/m³ in winter.
+              limit of 10 µg/m³; during peak winter months, Bishkek consistently exceeds 
+              this by 4-5 times.
             </p>
           </div>
         </div>
@@ -235,17 +203,18 @@ export default function AirPolPage() {
               When the Air Turns Dangerous
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              Pollution follows a predictable daily cycle. Early morning hours 
-              (3-6 AM) see the worst air quality as overnight heating emissions 
-              accumulate under <strong>nocturnal inversion layers</strong>—cold 
-              air trapped beneath warmer air acts like a lid, preventing pollutants 
-              from dispersing.
+              The actual data shows a surprising pattern: pollution is <strong>lowest 
+              in early morning (5-9 AM at ~12-13 µg/m³)</strong> when heating demand 
+              is reduced and traffic is light. However, levels climb steadily throughout 
+              the day, peaking in the <strong>afternoon and early evening (4-6 PM at 
+              32 µg/m³)</strong> due to traffic, renewed heating, and atmospheric conditions.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
-              Afternoons offer temporary relief as sun warms the ground and breaks 
-              the inversion. But by evening rush hour, traffic and renewed heating 
-              send levels climbing again. Understanding this cycle helps families 
-              time outdoor activities, school commutes, and exercise to minimize exposure.
+              This pattern differs from typical urban pollution cycles, suggesting that 
+              Bishkek's afternoon heating and human activity have a stronger impact than 
+              overnight accumulation. Understanding this cycle helps families plan outdoor 
+              activities for mornings when air quality is best, and avoid peak pollution 
+              hours in the late afternoon and evening.
             </p>
           </div>
           <div className="h-96">
@@ -306,17 +275,18 @@ export default function AirPolPage() {
               The Seasonal Crisis
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              Winter pollution in Bishkek reaches <strong>hazardous levels</strong>, 
-              while summer air quality improves to <strong>good or moderate</strong>. 
-              This dramatic swing reflects the city's dependence on coal heating—when 
-              temperatures drop, thousands of homes and businesses burn coal and wood, 
-              releasing massive amounts of particulate matter.
+              The data shows a dramatic 5× seasonal variation: winter pollution averages 
+              <strong>43.5 µg/m³ (Unhealthy for Sensitive Groups)</strong>, while summer 
+              drops to a healthy <strong>9.2 µg/m³ (Good)</strong>. This reflects the 
+              city's heavy dependence on coal heating—when temperatures drop, thousands of 
+              homes and businesses burn coal and wood, releasing massive amounts of 
+              particulate matter.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
-              The fall transition (October-November) shows pollution climbing as heating 
-              season begins. Spring brings relief as heating tapers off and weather 
-              patterns shift. This seasonal pattern has major implications for health 
-              interventions and policy timing.
+              Fall (19.2 µg/m³) and Spring (13.2 µg/m³) serve as transition periods, with 
+              fall showing pollution climbing as heating season begins, and spring bringing 
+              relief as heating tapers off. This clear seasonal pattern has major implications 
+              for health interventions and policy timing—winters demand aggressive action.
             </p>
           </div>
         </div>
@@ -417,18 +387,18 @@ export default function AirPolPage() {
               Predicting the Next Smog Event
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              Using time-series models (ARIMA) and machine learning (Random Forest), 
-              I built a forecasting system that predicts PM2.5 levels up to 7 days ahead 
-              based on historical patterns, weather conditions, and time-of-year. The 
-              model achieves <strong>R² of ~0.65</strong>, accurately capturing pollution 
-              trends even if exact levels vary.
+              The chart shows the most recent week of actual PM2.5 readings from August 2025, 
+              demonstrating the quality of summer air in Bishkek (averaging 5-7 µg/m³). While 
+              these levels are healthy, winter predictions would show significantly higher values. 
+              Using historical patterns, weather data, and time-series analysis, predictive models 
+              can forecast pollution levels several days ahead.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
-              These predictions could power an early warning system, helping 
-              <strong> parents with newborns and young children</strong> plan school 
-              commutes, outdoor activities, and medical appointments around cleaner air 
-              windows. Schools could adjust recess schedules, and health officials could 
-              issue alerts before severe episodes hit.
+              Such predictions could power an early warning system, helping 
+              <strong> vulnerable populations</strong> plan activities around cleaner air 
+              windows. Schools could adjust recess schedules, hospitals could prepare for 
+              respiratory admissions, and health officials could issue alerts before severe 
+              winter episodes hit.
             </p>
           </div>
         </div>

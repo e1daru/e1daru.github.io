@@ -1,0 +1,22 @@
+[
+  {
+    "season": "Winter",
+    "pm25": 43.5,
+    "category": "Unhealthy for Sensitive"
+  },
+  {
+    "season": "Spring",
+    "pm25": 13.2,
+    "category": "Moderate"
+  },
+  {
+    "season": "Summer",
+    "pm25": 9.2,
+    "category": "Good"
+  },
+  {
+    "season": "Fall",
+    "pm25": 19.2,
+    "category": "Moderate"
+  }
+]

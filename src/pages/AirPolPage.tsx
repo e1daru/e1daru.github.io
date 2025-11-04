@@ -22,6 +22,7 @@ import monthlyData from "@/data/monthly_pm25.json";
 import hourlyData from "@/data/hourly_variation.json";
 import seasonalDataRaw from "@/data/seasonal_pm25.json";
 import forecastDataRaw from "@/data/forecast_7day.json";
+import forecastMeta from "@/data/forecast_7day_meta.json";
 
 // KPI data (updated based on actual data: mean 21 µg/m³, 53.5% over WHO limit)
 const kpi = [
@@ -419,7 +420,7 @@ export default function AirPolPage() {
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="h-96">
             <h3 className="text-center font-semibold mb-4">
-              7-Day Forecast: Predicted vs Actual PM2.5
+              {forecastMeta.title}
             </h3>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={forecastData} margin={chartMargin}>
@@ -435,6 +436,17 @@ export default function AirPolPage() {
                 />
                 <Tooltip />
                 <Legend wrapperStyle={legendStyle} />
+                <ReferenceLine
+                  y={10}
+                  stroke="#ef4444"
+                  strokeDasharray="5 5"
+                  label={{
+                    value: "WHO Limit (10 µg/m³)",
+                    position: "right",
+                    fill: "#ef4444",
+                    fontSize: 11,
+                  }}
+                />
                 <Line
                   type="monotone"
                   dataKey="actual"
@@ -460,20 +472,23 @@ export default function AirPolPage() {
               Predicting the Next Smog Event
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
-              The chart shows the most recent week of actual PM2.5 readings from
-              August 2025, demonstrating the quality of summer air in Bishkek
-              (averaging 5-7 µg/m³). While these levels are healthy, winter
-              predictions would show significantly higher values. Using
-              historical patterns, weather data, and time-series analysis,
-              predictive models can forecast pollution levels several days
-              ahead.
+              The chart reveals the severity of Bishkek's worst winter week on
+              record (January 15–21, 2023), when PM2.5 levels averaged{" "}
+              <strong>{forecastMeta.avg_pm25} µg/m³—over 17× the WHO safe limit</strong>.
+              On {forecastMeta.peak_day}, pollution spiked to a catastrophic{" "}
+              <strong>{forecastMeta.peak_pm25} µg/m³</strong>, equivalent to
+              breathing the air of <strong>~18 cigarettes in a single day</strong>.
+              This is not a dystopian future scenario—this actually happened.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
-              Such predictions could power an early warning system, helping
-              <strong> vulnerable populations</strong> plan activities around
-              cleaner air windows. Schools could adjust recess schedules,
-              hospitals could prepare for respiratory admissions, and health
-              officials could issue alerts before severe winter episodes hit.
+              Using historical patterns, weather data, and time-series analysis,
+              predictive models can forecast such pollution spikes several days
+              ahead. An early warning system powered by these predictions could
+              help <strong>vulnerable populations</strong> (children, elderly,
+              those with respiratory conditions) avoid outdoor exposure, allow
+              schools to cancel recess or close entirely, enable hospitals to
+              prepare for respiratory admissions, and give health officials time
+              to issue emergency alerts before severe episodes hit.
             </p>
           </div>
         </div>

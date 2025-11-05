@@ -563,14 +563,14 @@ export default function AirPolPage() {
             </h2>
             <p className="mt-3 text-slate-700 text-lg">
               The chart reveals the severity of Bishkek's worst winter week on
-              record (January 15–21, 2023), when PM2.5 levels averaged{" "}
+              record (January 16–22, 2023), when PM2.5 levels averaged{" "}
               <strong>
-                {forecastMeta.avg_pm25} µg/m³—over 17× the WHO safe limit
+                {forecastMeta.avg_pm25} µg/m³—over 15× the WHO safe limit
               </strong>
               . On {forecastMeta.peak_day}, pollution spiked to a catastrophic{" "}
               <strong>{forecastMeta.peak_pm25} µg/m³</strong>, equivalent to
               breathing the air of{" "}
-              <strong>~18 cigarettes in a single day</strong>. This is not a
+              <strong>~12 cigarettes in a single day</strong>. This is not a
               dystopian future scenario—this actually happened.
             </p>
             <p className="mt-3 text-slate-700 text-lg">

@@ -171,7 +171,7 @@ export default function AirPolPage() {
             <img
               src="/airpol-hero.jpg"
               alt="Winter smog layer over Bishkek beneath the Tian Shan mountains"
-              className="w-full h-[240px] md:h-[360px] object-cover"
+              className="w-full h-[240px] md:h-[660px] object-cover"
               onError={(e) => {
                 const img = e.currentTarget as HTMLImageElement;
                 if (img.src.endsWith("/airpol-hero.jpg"))

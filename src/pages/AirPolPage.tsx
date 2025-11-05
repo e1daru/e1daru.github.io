@@ -50,7 +50,97 @@ const legendStyle = { fontSize: 12 } as const;
 const dailyPM25Data = monthlyData;
 const hourlyVariation = hourlyData;
 const seasonalData = seasonalDataRaw;
-const forecastData = forecastDataRaw;
+// Align forecast labels to local calendar dates using meta week_start/end.
+// Some datasets encode only day-of-week; we reconstruct YYYY-MM-DD labels that
+// match the first entry's day name to avoid UTC/local mismatches on the chart.
+const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
+
+function addDaysISO(isoDate: string, days: number): string {
+  // Avoid timezone issues by operating on date parts and returning an ISO date string
+  const [y, m, d] = isoDate.split("-").map(Number);
+  // Create UTC date to prevent local TZ shifts
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  dt.setUTCDate(dt.getUTCDate() + days);
+  const yy = dt.getUTCFullYear();
+  const mm = String(dt.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(dt.getUTCDate()).padStart(2, "0");
+  return `${yy}-${mm}-${dd}`;
+}
+
+function formatLabel(isoDate: string): string {
+  // Render short, locale-neutral label like "Jan 16"
+  const [y, m, d] = isoDate.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return `${monthNames[dt.getUTCMonth()]} ${String(dt.getUTCDate()).padStart(
+    2,
+    "0"
+  )}`;
+}
+
+function dayNameFromISO(isoDate: string): (typeof dayNames)[number] {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  return dayNames[dt.getUTCDay()];
+}
+
+// Build aligned labels: shift week_start forward until its weekday matches the
+// first element's day field, then emit 7 consecutive dates as labels.
+let forecastData = forecastDataRaw as Array<{
+  day: string;
+  actual: number;
+  predicted: number;
+  label?: string;
+  date?: string;
+}>;
+try {
+  const metaStart = forecastMeta?.week_start as string | undefined;
+  if (metaStart && Array.isArray(forecastData) && forecastData.length === 7) {
+    const firstDayName = (forecastData[0]?.day || "").slice(
+      0,
+      3
+    ) as (typeof dayNames)[number];
+    // Compute offset from metaStart to firstDayName (0..6)
+    let offset = 0;
+    if (firstDayName && dayNames.includes(firstDayName as any)) {
+      const startName = dayNameFromISO(metaStart);
+      const startIdx = dayNames.indexOf(startName);
+      const firstIdx = dayNames.indexOf(firstDayName);
+      offset = (firstIdx - startIdx + 7) % 7;
+    }
+
+    const labels: string[] = [];
+    for (let i = 0; i < 7; i++) {
+      labels.push(addDaysISO(metaStart, offset + i));
+    }
+
+    // Attach stable date/label per row to ensure predicted and actual share the same x
+    forecastData = forecastData.map((row, i) => ({
+      ...row,
+      date: labels[i],
+      label: formatLabel(labels[i]),
+    }));
+  } else {
+    // Fallback: keep existing day labels
+    forecastData = forecastData.map((row) => ({ ...row, label: row.day }));
+  }
+} catch {
+  // On any unexpected meta/parse issues, fall back to existing day label
+  forecastData = forecastData.map((row) => ({ ...row, label: row.day }));
+}
 
 // Sources of pollution (based on research)
 const pollutionSources = [
@@ -425,7 +515,7 @@ export default function AirPolPage() {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={forecastData} margin={chartMargin}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" tick={axisTick} />
+                <XAxis dataKey="label" tick={axisTick} />
                 <YAxis
                   tick={axisTick}
                   label={{
@@ -474,11 +564,14 @@ export default function AirPolPage() {
             <p className="mt-3 text-slate-700 text-lg">
               The chart reveals the severity of Bishkek's worst winter week on
               record (January 15–21, 2023), when PM2.5 levels averaged{" "}
-              <strong>{forecastMeta.avg_pm25} µg/m³—over 17× the WHO safe limit</strong>.
-              On {forecastMeta.peak_day}, pollution spiked to a catastrophic{" "}
+              <strong>
+                {forecastMeta.avg_pm25} µg/m³—over 17× the WHO safe limit
+              </strong>
+              . On {forecastMeta.peak_day}, pollution spiked to a catastrophic{" "}
               <strong>{forecastMeta.peak_pm25} µg/m³</strong>, equivalent to
-              breathing the air of <strong>~18 cigarettes in a single day</strong>.
-              This is not a dystopian future scenario—this actually happened.
+              breathing the air of{" "}
+              <strong>~18 cigarettes in a single day</strong>. This is not a
+              dystopian future scenario—this actually happened.
             </p>
             <p className="mt-3 text-slate-700 text-lg">
               Using historical patterns, weather data, and time-series analysis,

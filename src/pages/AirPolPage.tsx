@@ -753,7 +753,7 @@ export default function AirPolPage() {
           </p>
           <div className="mt-6 flex justify-center gap-4 flex-wrap">
             <a
-              href="https://github.com/e1daru/e1daru.github.io"
+              href="https://github.com/e1daru/e1daru.github.io/tree/main/public/AirPol"
               target="_blank"
               rel="noreferrer"
               className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-700 hover:bg-sky-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"

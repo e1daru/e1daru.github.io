@@ -133,29 +133,98 @@ seasonal_data = [
 ]
 print(f"Seasonal averages: {len(seasonal_data)} seasons")
 
-# 4. 7-Day Forecast: Use most recent data (local days)
-print("\n4. Generating Recent 7-Day data...")
-# Get the most recent complete 7 days using local-indexed frame
-recent = df_local.tail(7*24).copy()  # Last ~7 days of hourly data
-recent['date'] = recent.index.date  # local calendar date
-daily_recent = recent.groupby('date')[pm25_col].mean().reset_index()
-daily_recent = daily_recent.tail(7)  # Ensure we have exactly 7 days
+"""
+4. 7-Day Forecast: Generate from a specific winter week if meta provided,
+   otherwise fall back to the most recent 7 local days.
 
-# Create day labels
+Meta file locations checked (first found wins):
+ - BASE_DIR/chart_data/forecast_7day_meta.json
+ - MIRROR_DIR/forecast_7day_meta.json
+
+Behavior:
+ - Compute daily means in local time.
+ - If meta.week_start is present (YYYY-MM-DD), use that date and the next 6 days
+   as the forecast window; predicted values are a naive previous-day actual
+   (for day 1, use the day before week_start if available; else small jitter).
+ - Labels use day-of-week abbreviations (Mon..Sun) for backwards-compat.
+"""
+print("\n4. Generating 7-Day forecast data...")
+
+def _read_meta():
+    candidates = [
+        OUTPUT_DIR / "forecast_7day_meta.json",
+        MIRROR_DIR / "forecast_7day_meta.json" if MIRROR_ENABLED else None,
+    ]
+    for p in candidates:
+        if p and p.exists():
+            try:
+                return json.loads(p.read_text())
+            except Exception:
+                pass
+    return None
+
+meta = _read_meta()
+
+# Build daily means in local time
+df_local_days = df_local.copy()
+df_local_days['date'] = df_local_days.index.date
+daily_means = (df_local_days.groupby('date')[pm25_col]
+               .mean()
+               .reset_index())
+
+def _iso_to_date(iso: str):
+    return pd.to_datetime(iso).date()
+
 day_names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 forecast_data = []
-for i, (_, row) in enumerate(daily_recent.iterrows()):
-    day_idx = i % 7
-    # For demonstration, add slight variation to "predicted" values
-    actual = round(float(row[pm25_col]), 1)
-    predicted = round(float(actual * (0.95 + np.random.random() * 0.1)), 1)  # ±5% variation
-    forecast_data.append({
-        "day": day_names[day_idx],
-        "actual": actual,
-        "predicted": predicted
-    })
 
-print(f"Forecast data: {len(forecast_data)} days")
+if meta and 'week_start' in meta:
+    start_date = _iso_to_date(meta['week_start'])
+    window = [ (pd.to_datetime(start_date) + pd.Timedelta(days=i)).date() for i in range(7) ]
+
+    # Build a lookup for daily actuals
+    daily_map = {row['date']: float(row[pm25_col]) for _, row in daily_means.iterrows()}
+
+    for i, d in enumerate(window):
+        actual = round(float(daily_map.get(d, np.nan)), 1) if d in daily_map else None
+        # predicted = previous day's actual (d - 1)
+        prev_d = (pd.to_datetime(d) - pd.Timedelta(days=1)).date()
+        prev_actual = daily_map.get(prev_d)
+        if prev_actual is None:
+            # fallback jitter if previous day missing
+            pred_val = actual if actual is not None else np.nan
+            predicted = round(float(pred_val * 1.02), 1) if pred_val == pred_val else None
+        else:
+            predicted = round(float(prev_actual), 1)
+
+        # Use the weekday of the current date for the label
+        dow = pd.to_datetime(d).dayofweek  # Mon=0
+        label = day_names[dow]
+        forecast_data.append({
+            "day": label,
+            "actual": actual if actual is not None else 0.0,
+            "predicted": predicted if predicted is not None else 0.0,
+        })
+else:
+    # Fallback: most recent complete 7 days
+    recent = df_local.tail(7*24).copy()
+    recent['date'] = recent.index.date
+    daily_recent = recent.groupby('date')[pm25_col].mean().reset_index()
+    daily_recent = daily_recent.tail(7)
+    for i, (_, row) in enumerate(daily_recent.iterrows()):
+        d = row['date']
+        dow = pd.to_datetime(d).dayofweek  # Mon=0
+        actual = round(float(row[pm25_col]), 1)
+        # simple naive prediction = previous day value if available
+        prev = daily_recent.iloc[i-1][pm25_col] if i > 0 else actual * 1.02
+        predicted = round(float(prev), 1)
+        forecast_data.append({
+            "day": day_names[dow],
+            "actual": actual,
+            "predicted": predicted,
+        })
+
+print(f"Forecast data: {len(forecast_data)} days (meta-driven: {bool(meta and 'week_start' in meta)})")
 
 # Save all data
 output_files = {

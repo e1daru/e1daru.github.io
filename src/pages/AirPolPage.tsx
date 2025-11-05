@@ -158,6 +158,30 @@ export default function AirPolPage() {
         <NavBar />
       </div>
 
+      {/* Hero Image */}
+      <section className="mt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="page-center"
+        >
+          <div className="relative overflow-hidden rounded-2xl ring-1 ring-slate-200 shadow-md">
+            {/* If the photo isn't present at /airpol-hero.jpg, fall back to the SVG */}
+            <img
+              src="/airpol-hero.jpg"
+              alt="Winter smog layer over Bishkek beneath the Tian Shan mountains"
+              className="w-full h-[240px] md:h-[360px] object-cover"
+              onError={(e) => {
+                const img = e.currentTarget as HTMLImageElement;
+                if (img.src.endsWith("/airpol-hero.jpg"))
+                  img.src = "/airpol.svg";
+              }}
+            />
+          </div>
+        </motion.div>
+      </section>
+
       {/* Hero */}
       <section className="mt-12">
         <motion.div
@@ -753,7 +777,7 @@ export default function AirPolPage() {
           </p>
           <div className="mt-6 flex justify-center gap-4 flex-wrap">
             <a
-              href="https://github.com/e1daru/e1daru.github.io/tree/main/public/AirPol"
+              href="https://github.com/e1daru/e1daru.github.io/tree/main/public/AirPol/first_analysis.ipynb"
               target="_blank"
               rel="noreferrer"
               className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-700 hover:bg-sky-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"

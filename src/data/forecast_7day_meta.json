@@ -1,9 +1,9 @@
 {
-  "title": "Winter Week 2023: Predicted vs Actual PM2.5 (Jan 15\u2013Jan 21)",
+  "title": "Winter Week 2023: Predicted vs Actual PM2.5 (Jan 16\u2013Jan 22)",
   "subtitle": "Worst 7-day winter window based on hourly rolling mean (local time)",
-  "week_start": "2023-01-15",
-  "week_end": "2023-01-21",
-  "avg_pm25": 173.4,
-  "peak_pm25": 402.9,
-  "peak_day": "Mon"
+  "week_start": "2023-01-16",
+  "week_end": "2023-01-22",
+  "avg_pm25": 151.2,
+  "peak_pm25": 264.8,
+  "peak_day": "Sun"
 }

@@ -1,37 +1,37 @@
 [
   {
     "day": "Mon",
-    "actual": 402.9,
-    "predicted": 411.0
+    "actual": 126.0,
+    "predicted": 128.5
   },
   {
     "day": "Tue",
-    "actual": 126.0,
-    "predicted": 402.9
-  },
-  {
-    "day": "Wed",
     "actual": 127.6,
     "predicted": 126.0
   },
   {
-    "day": "Thu",
+    "day": "Wed",
     "actual": 111.6,
     "predicted": 127.6
   },
   {
-    "day": "Fri",
+    "day": "Thu",
     "actual": 108.1,
     "predicted": 111.6
   },
   {
-    "day": "Sat",
+    "day": "Fri",
     "actual": 127.8,
     "predicted": 108.1
   },
   {
-    "day": "Sun",
-    "actual": 209.9,
+    "day": "Sat",
+    "actual": 192.6,
     "predicted": 127.8
+  },
+  {
+    "day": "Sun",
+    "actual": 264.8,
+    "predicted": 192.6
   }
 ]

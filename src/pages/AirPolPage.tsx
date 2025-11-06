@@ -164,7 +164,7 @@ export default function AirPolPage() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="page-center"
+          className="page-center "
         >
           <div className="relative overflow-hidden rounded-2xl ring-1 ring-slate-200 shadow-md">
             {/* If the photo isn't present at /airpol-hero.jpg, fall back to the SVG */}

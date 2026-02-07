@@ -252,6 +252,58 @@
         margin: 4px 0 0;
       }
 
+      .download-banner {
+        max-width: 210mm;
+        margin: 16px auto 20px;
+        padding: 14px 24px;
+        background: linear-gradient(135deg, #f0f7f4, #e8f0ec);
+        border: 1px solid var(--rule);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-family: var(--sans);
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+
+      .download-banner span {
+        line-height: 1.4;
+      }
+
+      .download-banner a {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 20px;
+        background: var(--accent);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        transition: background 0.2s;
+      }
+
+      .download-banner a:hover {
+        background: #1e4538;
+      }
+
+      .download-banner a svg {
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
+      }
+
+      @media print {
+        .download-banner {
+          display: none;
+        }
+      }
+
       @media (max-width: 640px) {
         .resume {
           padding: 16px 16px 18px;
@@ -299,6 +351,15 @@
     </style>
   </head>
   <body>
+    <div class="download-banner">
+      <span>Prefer a printable version? Download my résumé as a PDF.</span>
+      <a href="Eldar_Utiushev_Resume_2026.pdf" download>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 16l-5-5h3V4h4v7h3l-5 5zm-7 2h14v2H5v-2z" />
+        </svg>
+        Download PDF
+      </a>
+    </div>
     <main>
       <article class="resume">
         <header>
@@ -308,7 +369,14 @@
           </div>
           <div class="header-right">
             <div class="contact">
-              <a href="mailto:eldaru33@gmail.com">eldaru33@gmail.com</a>
+              <a
+                href="/cdn-cgi/l/email-protection#26434a42475453151566414b474f4a0845494b"
+                ><span
+                  class="__cf_email__"
+                  data-cfemail="94f1f8f0f5e6e1a7a7d4f3f9f5fdf8baf7fbf9"
+                  >[email&#160;protected]</span
+                ></a
+              >
               <a href="https://e1daru.github.io/profile"
                 >e1daru.github.io/profile</a
               >
@@ -562,7 +630,8 @@
             &middot; Excel &middot; Tableau &middot; Power BI
           </p>
           <p class="info-line">
-            <strong>Languages:</strong> Russian - native; English - fluent
+            <strong>Languages:</strong> English (Fluent) &middot; Russian
+            (Native)
           </p>
         </section>
       </article>

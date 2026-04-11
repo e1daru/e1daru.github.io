@@ -1,29 +1,21 @@
 import React from "react";
-import PageShell from "@/components/PageShell";
 import { motion } from "framer-motion";
+import PageShell from "@/components/PageShell";
+import NavBar from "@/components/NavBar";
 import {
+  ResponsiveContainer,
   BarChart,
   Bar,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
+  Legend,
   LineChart,
   Line,
-  CartesianGrid,
   Cell,
+  LabelList,
 } from "recharts";
-import {
-  Brain,
-  ChartBarBig,
-  CheckCircle2,
-  Cpu,
-  FileText,
-  GitCompare,
-  Rocket,
-  Settings,
-  Users,
-} from "lucide-react";
 
 // ---------- Tiny JSON fetch hook ----------
 function useJSON<T = any>(url: string) {
@@ -51,69 +43,88 @@ function useJSON<T = any>(url: string) {
 }
 
 // ---------- Types ----------
-type KPI = { kpi: string; label: string };
 type Plan = { week: string; demand: number; scheduled: number };
 type FeatureImportance = { name: string; value: number };
 type TrendPoint = { label: string; rate: number };
 
-// ---------- Visual theme ----------
-const COLORS = ["#0ea5e9", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6"]; // matches Intrepid page
+// ---------- Chart helpers (matching Intrepid) ----------
+const chartMargin = { top: 24, right: 28, bottom: 44, left: 28 };
+const axisTick = { fontSize: 12 } as const;
+const legendStyle = { fontSize: 12 } as const;
+const COLORS = ["#0ea5e9", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6"];
 
-// ---------- Tiny UI ----------
-const Card: React.FC<React.PropsWithChildren<{ className?: string }>> = ({
-  children,
-  className,
-}) => (
-  <div
-    className={`rounded-2xl border border-slate-200 bg-white shadow-sm ${
-      className || ""
-    }`}
-  >
-    {children}
-  </div>
-);
+// ---------- KPI data ----------
+const kpi = [
+  { label: "Staff Managed", value: "200+", sub: "at large events", icon: "👥" },
+  {
+    label: "Dropout Reduction",
+    value: "11%",
+    sub: "23% → 12%",
+    icon: "📉",
+  },
+  {
+    label: "Payroll Hours Saved",
+    value: "~160",
+    sub: "per 200-staff event",
+    icon: "⏱️",
+  },
+  {
+    label: "Cost Saved / Event",
+    value: "$2,880",
+    sub: "160h × $18/h",
+    icon: "💰",
+  },
+];
 
-const CardHeader: React.FC<
-  React.PropsWithChildren<{ title?: React.ReactNode; icon?: React.ReactNode }>
-> = ({ children, title, icon }) => (
-  <div className="px-6 pt-6">
-    {title && (
-      <div className="mb-2 flex items-center gap-2 text-slate-900 font-semibold">
-        {icon}
-        {title}
-      </div>
-    )}
-    {children}
-  </div>
-);
+// ---------- Code snippets ----------
+const noShowModelSnippet = `# RandomForest No-Show Classifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
 
-const CardBody: React.FC<React.PropsWithChildren<{ className?: string }>> = ({
-  children,
-  className,
-}) => <div className={`px-6 pb-6 pt-3 ${className || ""}`}>{children}</div>;
+rf = RandomForestClassifier(
+    n_estimators=200,
+    max_depth=10,
+    random_state=42
+)
+rf.fit(X_train, y_train)
 
-function useTabs(initial: string) {
-  const [tab, setTab] = React.useState(initial);
-  const TabButton = ({ value, children }: any) => (
-    <button
-      onClick={() => setTab(value)}
-      aria-pressed={tab === value}
-      className={`rounded-xl border px-4 py-2.5 text-sm md:text-[15px] transition ${
-        tab === value
-          ? "bg-slate-900 text-white border-slate-900"
-          : "bg-white text-slate-700 hover:bg-slate-50"
-      }`}
-    >
-      {children}
-    </button>
+# Cross-validated AUC
+scores = cross_val_score(rf, X, y, cv=5, scoring='roc_auc')
+print(f"Mean AUC: {scores.mean():.3f} ± {scores.std():.3f}")`;
+
+const payrollETLSnippet = `# Payroll ETL — shift → hours → payouts
+import pandas as pd
+
+shifts = pd.read_csv("shifts.csv", parse_dates=["start", "end"])
+shifts["hours"] = (shifts["end"] - shifts["start"]).dt.total_seconds() / 3600
+
+# Tip allocation by hours worked
+total_tips = tips_pool["amount"].sum()
+shifts["tip_share"] = (shifts["hours"] / shifts["hours"].sum()) * total_tips
+shifts["payout"] = shifts["hours"] * shifts["rate"] + shifts["tip_share"]`;
+
+// ---------- Code block component (matching Intrepid) ----------
+function CodeBlock({ title, code }: { title?: string; code: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+      {title && (
+        <div className="px-5 pt-4 pb-2 text-sm font-semibold text-slate-800 flex items-center gap-2">
+          <span className="inline-block w-2.5 h-2.5 rounded-full bg-slate-400" />
+          {title}
+        </div>
+      )}
+      <pre
+        className="px-5 pb-5 pt-3 text-[15px] leading-7 bg-white rounded-b-2xl overflow-auto"
+        style={{ tabSize: 2, WebkitOverflowScrolling: "touch" }}
+      >
+        <code className="whitespace-pre">{code}</code>
+      </pre>
+    </div>
   );
-  return { tab, setTab, TabButton };
 }
 
 // ---------- Page ----------
 export default function E2SPage() {
-  const { tab, TabButton } = useTabs("overview");
-
   // Live data from /public/e2s/*.json
   const {
     data: staffingPlan,
@@ -127,525 +138,540 @@ export default function E2SPage() {
     error: fiError,
   } = useJSON<FeatureImportance[]>("/e2s/feature_importance.json");
 
-  // Optional: if you export a trend JSON
   const {
     data: noShowTrend,
     loading: trendLoading,
     error: trendError,
   } = useJSON<TrendPoint[]>("/e2s/no_show_trend.json");
 
-  const KPIS: KPI[] = [
-    { kpi: "+200", label: "Staff at large events managed" },
-    { kpi: "11%", label: "Dropout reduction (23% → 12%)" },
-    { kpi: "~160 hrs", label: "Payroll hours saved / 200-staff event" },
-    {
-      kpi: "$2,880",
-      label: "Cost saved on AVG / 200-staff event (160h * $18/h = $2,880)",
-    },
-  ];
-
   return (
     <PageShell>
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-10"
-      >
-        <div className="page-center">
-          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-            <div className="text-center md:text-left">
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-                EATS2SEATS — Workforce Analytics & Ops Automation
-              </h1>
-              <p className="text-slate-700 mt-3 mx-auto md:mx-0 max-w-2xl md:max-w-3xl leading-relaxed">
+      {/* Nav */}
+      <div className="page-center page-center-tight">
+        <NavBar />
+      </div>
+
+      {/* Hero */}
+      <section className="mt-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="rounded-2xl bg-gradient-to-br from-sky-50 to-white shadow-lg ring-1 ring-slate-200 p-8 md:p-14"
+        >
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight text-center">
+            EATS2SEATS — Workforce Analytics & Ops Automation
+          </h1>
+
+          <div className="mt-10 grid md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-7">
+              <p className="text-slate-700 text-lg md:text-xl leading-8 max-w-prose">
                 Built a staffing intelligence toolkit for large sporting events:
-                predicted no‑show risk, optimized scheduling, and automated
-                payroll. Result: lower last‑minute churn, fewer coverage gaps,
-                and faster back‑office ops.
+                predicted <strong>no-show risk</strong> with a RandomForest
+                model, <strong>optimized scheduling</strong> to close coverage
+                gaps, and <strong>automated payroll ETL</strong> including tip
+                allocation. Result: lower last-minute churn, fewer coverage
+                gaps, and faster back-office ops — saving an estimated{" "}
+                <strong>$2,880 per 200-staff event</strong>.
               </p>
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <a
+                  href="/"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-300 bg-white px-6 py-3 text-base font-medium text-slate-900 shadow-sm hover:bg-slate-100 hover:border-slate-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+                >
+                  <span>🏠</span> Home
+                </a>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-end">
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium bg-slate-900 text-white">
+
+            <div className="md:col-span-5 flex flex-wrap gap-3 justify-center md:justify-end md:pt-4">
+              <span className="inline-flex items-center rounded-full px-4 py-1.5 text-base font-medium bg-slate-900 text-white">
                 Data Science
               </span>
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium bg-slate-300 text-slate-700">
+              <span className="inline-flex items-center rounded-full px-4 py-1.5 text-base font-medium bg-slate-300 text-slate-700">
                 Ops Automation
               </span>
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium border border-slate-500 text-slate-700">
+              <span className="inline-flex items-center rounded-full px-4 py-1.5 text-base font-medium border border-slate-500 text-slate-700">
                 Business Analysis
               </span>
             </div>
           </div>
 
           {/* KPIs */}
-          <div className="mt-7 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {KPIS.map((x, i) => (
-              <Card key={i}>
-                <CardBody>
-                  <div className="text-2xl font-semibold text-center md:text-left">
-                    {x.kpi}
-                  </div>
-                  <div className="text-[13px] text-slate-600 mt-0.5 text-center md:text-left">
-                    {x.label}
-                  </div>
-                </CardBody>
-              </Card>
+          <div className="mt-14 grid grid-cols-1 sm:grid-cols-4 gap-8">
+            {kpi.map((k) => (
+              <div
+                key={k.label}
+                className="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+              >
+                <div className="text-3xl">{k.icon}</div>
+                <div className="mt-2 text-4xl font-extrabold text-slate-900">
+                  {k.value}
+                </div>
+                <div className="text-sm uppercase tracking-wide text-slate-500 mt-1">
+                  {k.label}
+                </div>
+                <div className="text-base text-slate-600">{k.sub}</div>
+              </div>
             ))}
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </section>
 
-      {/* Tabs */}
-      <div className="page-center">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-3 justify-items-center md:justify-items-stretch">
-          <TabButton value="overview">Overview</TabButton>
-          <TabButton value="model">Model</TabButton>
-          <TabButton value="ops">Ops & Automation</TabButton>
-          <TabButton value="impact">Impact</TabButton>
-          <TabButton value="skills">Skills</TabButton>
-          <TabButton value="artifacts">Artifacts</TabButton>
-        </div>
-      </div>
-
-      {/* OVERVIEW */}
-      {tab === "overview" && (
-        <div className="page-center mt-8 grid md:grid-cols-2 gap-8">
-          <Card>
-            <CardHeader
-              title="Challenge"
-              icon={<Users className="h-5 w-5" />}
-            />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
-                <li>High no‑show variability by shift, role, and venue.</li>
-                <li>Manual scheduling created last‑minute coverage gaps.</li>
-                <li>
-                  Payroll reconciliation was time‑consuming and error‑prone.
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader title="Role" icon={<Brain className="h-5 w-5" />} />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
-                <li>
-                  Built a RandomForest model to predict no‑show probability.
-                </li>
-                <li>
-                  Automated payroll ETL (shift → hours → payouts) with Python.
-                </li>
-                <li>Designed dashboards for staffing vs. demand planning.</li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          <Card className="md:col-span-2">
-            <CardHeader
-              title="No‑Show Rate — Before vs. After"
-              icon={<GitCompare className="h-5 w-5" />}
-            />
-            <CardBody>
-              {trendError && (
-                <div className="text-sm text-red-600">
-                  Failed to load /e2s/no_show_trend.json
-                </div>
-              )}
-              {trendLoading && (
-                <div className="text-sm text-slate-500">Loading trend…</div>
-              )}
-              {noShowTrend && noShowTrend.length > 0 ? (
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={noShowTrend}>
-                      <XAxis dataKey="label" tick={{ fontSize: 12 }} />
-                      <YAxis
-                        tickFormatter={(v) =>
-                          `${Math.round((v as number) * 100)}%`
-                        }
-                        tick={{ fontSize: 12 }}
-                      />
-                      <Tooltip
-                        formatter={(v: number) => `${Math.round(v * 100)}%`}
-                      />
-                      <Bar dataKey="rate">
-                        {noShowTrend.map((_, i) => (
-                          <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              ) : (
-                <div className="text-sm text-slate-500">
-                  Provide <code>/public/e2s/no_show_trend.json</code> as
-                  <pre className="mt-1 bg-slate-50 p-2 rounded border overflow-x-auto">
-                    {`[
-  { "label": "Before ML (Q2)", "rate": 0.23 },
-  { "label": "After ML (Q3)", "rate": 0.18 },
-  { "label": "After Ops (Q4)", "rate": 0.12 }
-]`}
-                  </pre>
-                </div>
-              )}
-            </CardBody>
-          </Card>
-        </div>
-      )}
-
-      {/* MODEL */}
-      {tab === "model" && (
-        <div className="page-center mt-8 grid md:grid-cols-2 gap-8">
-          <Card>
-            <CardHeader
-              title="Top Predictors (Feature Importance)"
-              icon={<ChartBarBig className="h-5 w-5" />}
-            />
-            <CardBody>
-              {fiError && (
-                <div className="text-sm text-red-600">
-                  Failed to load /e2s/feature_importance.json
-                </div>
-              )}
-              {fiLoading && (
-                <div className="text-sm text-slate-500">
-                  Loading feature importances…
-                </div>
-              )}
-              {featureImportances && featureImportances.length > 0 ? (
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={featureImportances}>
-                      <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                      <YAxis
-                        tickFormatter={(v) =>
-                          `${Math.round((v as number) * 100)}%`
-                        }
-                        tick={{ fontSize: 12 }}
-                      />
-                      <Tooltip
-                        formatter={(v: number) => `${Math.round(v * 100)}%`}
-                      />
-                      <Bar dataKey="value">
-                        {featureImportances.map((_, i) => (
-                          <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              ) : (
-                <div className="text-sm text-slate-500">
-                  Put <code>feature_importance.json</code> into{" "}
-                  <code>public/e2s/</code>.
-                </div>
-              )}
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader
-              title="Staffing vs Demand (Example)"
-              icon={<Cpu className="h-5 w-5" />}
-            />
-            <CardBody>
-              {planError && (
-                <div className="text-sm text-red-600">
-                  Failed to load /e2s/staffing_plan.json
-                </div>
-              )}
-              {planLoading && (
-                <div className="text-sm text-slate-500">
-                  Loading staffing plan…
-                </div>
-              )}
-              {staffingPlan && staffingPlan.length > 0 ? (
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={staffingPlan}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="week" tick={{ fontSize: 12 }} />
-                      <YAxis tick={{ fontSize: 12 }} />
-                      <Tooltip />
-                      <Line
-                        type="monotone"
-                        dataKey="demand"
-                        stroke="#0ea5e9"
-                        strokeWidth={2}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="scheduled"
-                        stroke="#22c55e"
-                        strokeWidth={2}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              ) : (
-                <div className="text-sm text-slate-500">
-                  Put <code>staffing_plan.json</code> into{" "}
-                  <code>public/e2s/</code>.
-                </div>
-              )}
-            </CardBody>
-          </Card>
-
-          <Card className="md:col-span-2">
-            <CardHeader
-              title="Validation & Quality"
-              icon={<CheckCircle2 className="h-5 w-5" />}
-            />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
-                <li>
-                  Train/test split by event; cross‑validated on historical
-                  events.
-                </li>
-                <li>
-                  Monitored precision/recall at top‑risk deciles (alert
-                  thresholds).
-                </li>
-                <li>
-                  Back‑tested overstaffing vs. standby pools cost/benefit.
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-        </div>
-      )}
-
-      {/* OPS & AUTOMATION */}
-      {tab === "ops" && (
-        <div className="page-center mt-8 grid md:grid-cols-2 gap-8">
-          <Card>
-            <CardHeader
-              title="Pipeline"
-              icon={<Settings className="h-5 w-5" />}
-            />
-            <CardBody>
-              <ol className="list-decimal pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
-                <li>
-                  Ingest shift & roster data (CSV/API) → validate schemas.
-                </li>
-                <li>
-                  Feature engineering (lagged no‑shows, role, venue, weather).
-                </li>
-                <li>Model scoring to flag high‑risk shifts & staff.</li>
-                <li>Scheduling assist: suggest swaps/standby staffing.</li>
-                <li>
-                  Timesheet → payroll ETL, tip allocation, exceptions report.
-                </li>
-              </ol>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader
-              title="Dashboards & Alerts"
-              icon={<Rocket className="h-5 w-5" />}
-            />
-            <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
-                <li>Event command center: live staffing vs. demand status.</li>
-                <li>Risk heatmap by venue/time; SMS/Slack alerts for gaps.</li>
-                <li>Finance view: payouts, tips, anomalies for approval.</li>
-              </ul>
-            </CardBody>
-          </Card>
-        </div>
-      )}
-
-      {/* IMPACT */}
-      {tab === "impact" && (
-        <div className="page-center">
-          <div className="mt-8 grid md:grid-cols-3 gap-8">
-            <Card>
-              <CardHeader
-                title="Operational"
-                icon={<Settings className="h-5 w-5" />}
-              />
-              <CardBody>
-                <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
-                  <li>
-                    11% drop in no‑show rate (≈23% → ≈12%) across pilot events.
-                  </li>
-                  <li>
-                    Coverage gaps cut on 10% (≈15% unfilled shifts → ≈5%).
-                  </li>
-                  <li>Check‑in wait down ~30% via better role assignment.</li>
-                </ul>
-              </CardBody>
-            </Card>
-
-            <Card>
-              <CardHeader
-                title="Financial"
-                icon={<ChartBarBig className="h-5 w-5" />}
-              />
-              <CardBody>
-                <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
-                  <li>
-                    ~160 payroll hours saved per 200‑staff event (200st * 10% =
-                    20 staff covarage gap cut; 20st * 8h = 160h saved)
-                  </li>
-                  <li>
-                    ~20% lower overtime/emergency staffing, driven by earlier
-                    risk flags.
-                  </li>
-                  <li>
-                    ~30% fewer payout corrections after ETL + tip allocation
-                    automation.
-                  </li>
-                </ul>
-              </CardBody>
-            </Card>
-
-            <Card>
-              <CardHeader
-                title="Experience"
-                icon={<Users className="h-5 w-5" />}
-              />
-              <CardBody>
-                <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
-                  <li>
-                    ~15% lift in staff retention across repeat events (fewer
-                    dropouts).
-                  </li>
-                  <li>
-                    Higher staff satisfaction (e.g., post‑event surveys trending
-                    up).
-                  </li>
-                  <li>
-                    Fewer service bottlenecks → smoother peak‑time attendee
-                    experience.
-                  </li>
-                </ul>
-              </CardBody>
-            </Card>
+      {/* Challenge & Role */}
+      <section className="page-center mt-16 grid gap-12">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              The Challenge
+            </h2>
+            <ul className="mt-3 text-slate-700 text-lg space-y-3 list-disc pl-5">
+              <li>High no-show variability by shift, role, and venue.</li>
+              <li>Manual scheduling created last-minute coverage gaps.</li>
+              <li>Payroll reconciliation was time-consuming and error-prone.</li>
+            </ul>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">My Role</h2>
+            <ul className="mt-3 text-slate-700 text-lg space-y-3 list-disc pl-5">
+              <li>
+                Built a RandomForest model to predict no-show probability.
+              </li>
+              <li>
+                Automated payroll ETL (shift → hours → payouts) with Python.
+              </li>
+              <li>Designed dashboards for staffing vs. demand planning.</li>
+            </ul>
           </div>
         </div>
-      )}
+      </section>
 
-      {/* SKILLS */}
-      {tab === "skills" && (
-        <div className="page-center">
-          <div className="mt-8 grid md:grid-cols-3 gap-8">
-            {[
-              [
-                "Data Science",
-                [
-                  "RandomForest classification",
-                  "Cross‑validation, threshold tuning",
-                  "Feature importance & drift checks",
-                ],
-              ],
-              [
-                "Analytics & Engineering",
-                [
-                  "Python (pandas, numpy, scikit‑learn)",
-                  "ETL for payroll & tip allocation",
-                  "API design & performance tuning",
-                ],
-              ],
-              [
-                "Business & Ops",
-                [
-                  "Capacity planning & staffing optimization",
-                  "Stakeholder interviews at venues",
-                  "KPI definition & dashboard design",
-                ],
-              ],
-            ].map(([title, items], idx) => (
-              <Card key={idx}>
-                <CardHeader title={title as string} />
-                <CardBody className="text-[15px] leading-relaxed text-slate-800">
-                  <ul className="list-disc pl-5 space-y-1.5">
-                    {(items as string[]).map((t, i) => (
-                      <li key={i}>{t}</li>
+      {/* No-Show Rate — Before vs. After */}
+      <section className="page-center mt-16 grid gap-12">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="h-80">
+            <h3 className="text-center font-semibold mb-2">
+              No-Show Rate — Before vs. After
+            </h3>
+            {trendError && (
+              <div className="text-sm text-red-600">
+                Failed to load /e2s/no_show_trend.json
+              </div>
+            )}
+            {trendLoading && (
+              <div className="text-sm text-slate-500">Loading trend…</div>
+            )}
+            {noShowTrend && noShowTrend.length > 0 && (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={noShowTrend} margin={chartMargin}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="label" tick={axisTick} />
+                  <YAxis
+                    tickFormatter={(v) => `${Math.round((v as number) * 100)}%`}
+                    tick={axisTick}
+                  />
+                  <Tooltip
+                    formatter={(v: number) => `${Math.round(v * 100)}%`}
+                  />
+                  <Legend wrapperStyle={legendStyle} />
+                  <Bar dataKey="rate" radius={[6, 6, 0, 0]}>
+                    {noShowTrend.map((_, i) => (
+                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
-                  </ul>
-                </CardBody>
-              </Card>
-            ))}
+                    <LabelList
+                      dataKey="rate"
+                      position="top"
+                      formatter={(label: React.ReactNode) =>
+                        `${Math.round(Number(label) * 100)}%`
+                      }
+                    />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Cutting No-Shows in Half
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              Before the ML model, no-show rates hovered around{" "}
+              <strong>23%</strong>. After deploying the RandomForest predictor
+              and risk-based scheduling adjustments, the rate dropped to{" "}
+              <strong>18%</strong> — and after full ops automation it fell to{" "}
+              <strong>12%</strong>. That <strong>11-point improvement</strong>{" "}
+              translated directly into fewer last-minute scrambles and more
+              reliable event coverage.
+            </p>
           </div>
         </div>
-      )}
+      </section>
 
-      {tab === "artifacts" && (
-        <div className="page-center mt-8 grid md:grid-cols-2 gap-8">
-          <Card>
-            <CardHeader
-              title={
-                <span className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" /> Notebooks
-                </span>
-              }
-            />
-            <CardBody className="text-[15px] leading-relaxed text-slate-800">
-              <ul className="list-disc pl-5 space-y-1.5">
-                <li>
-                  <a
-                    href="/e2s/no-show_rate_model.ipynb"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    no-show_rate_model.ipynb
-                  </a>{" "}
-                  — modeling &amp; validation.
-                </li>
-                <li>
-                  <a
-                    href="/e2s/TipAllocation.ipynb"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    TipAllocation.ipynb
-                  </a>{" "}
-                  — payroll &amp; tips ETL.
-                </li>
-                <li>
-                  <a
-                    href="/e2s/Account_Finance_Model.ipynb"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    Account Finance Model
-                  </a>{" "}
-                  — finance logic.
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader title="Model Artifacts" />
-            <CardBody className="grid md:grid-cols-2 gap-4">
-              <img
-                src="/e2s/confusion.png"
-                alt="Confusion Matrix"
-                className="rounded-xl border "
-              />
-              <img
-                src="/e2s/roc.png"
-                alt="ROC Curve"
-                className="rounded-xl border"
-              />
-              <img
-                src="/e2s/payroll_funnel.png"
-                alt="Payroll Funnel"
-                className="rounded-xl border md:col-span-2"
-              />
-            </CardBody>
-          </Card>
+      {/* Feature Importance */}
+      <section className="page-center mt-16 grid gap-12">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="h-80">
+            <h3 className="text-center font-semibold mb-2">
+              Top Predictors (Feature Importance)
+            </h3>
+            {fiError && (
+              <div className="text-sm text-red-600">
+                Failed to load /e2s/feature_importance.json
+              </div>
+            )}
+            {fiLoading && (
+              <div className="text-sm text-slate-500">
+                Loading feature importances…
+              </div>
+            )}
+            {featureImportances && featureImportances.length > 0 && (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={featureImportances} margin={chartMargin}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" tick={axisTick} />
+                  <YAxis
+                    tickFormatter={(v) => `${Math.round((v as number) * 100)}%`}
+                    tick={axisTick}
+                  />
+                  <Tooltip
+                    formatter={(v: number) => `${Math.round(v * 100)}%`}
+                  />
+                  <Legend wrapperStyle={legendStyle} />
+                  <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                    {featureImportances.map((_, i) => (
+                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                    ))}
+                    <LabelList
+                      dataKey="value"
+                      position="top"
+                      formatter={(label: React.ReactNode) =>
+                        `${Math.round(Number(label) * 100)}%`
+                      }
+                    />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              What Drives No-Shows
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              Feature importance analysis revealed the strongest predictors of
+              no-show risk. Factors like <strong>lagged no-show history</strong>,{" "}
+              <strong>shift timing</strong>, <strong>role type</strong>, and{" "}
+              <strong>venue</strong> dominated. These insights let operations
+              teams target interventions — confirmation calls, standby pools,
+              swap suggestions — where they mattered most.
+            </p>
+          </div>
         </div>
-      )}
+
+        {/* Staffing vs Demand */}
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="h-80">
+            <h3 className="text-center font-semibold mb-2">
+              Staffing vs. Demand (Example)
+            </h3>
+            {planError && (
+              <div className="text-sm text-red-600">
+                Failed to load /e2s/staffing_plan.json
+              </div>
+            )}
+            {planLoading && (
+              <div className="text-sm text-slate-500">
+                Loading staffing plan…
+              </div>
+            )}
+            {staffingPlan && staffingPlan.length > 0 && (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={staffingPlan} margin={chartMargin}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="week" tick={axisTick} />
+                  <YAxis tick={axisTick} />
+                  <Tooltip />
+                  <Legend wrapperStyle={legendStyle} />
+                  <Line
+                    type="monotone"
+                    dataKey="demand"
+                    name="Demand"
+                    stroke="#0ea5e9"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 5 }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="scheduled"
+                    name="Scheduled"
+                    stroke="#22c55e"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 5 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Closing Coverage Gaps
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              The staffing dashboard tracked demand vs. scheduled staff in real
+              time. Before the model, <strong>~15% of shifts</strong> went
+              unfilled. After risk-based overstaffing and standby pools, that
+              dropped to <strong>~5%</strong>. The line chart shows how closely
+              scheduled staffing tracked actual demand after optimization.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Pipeline & Validation */}
+      <section className="page-center mt-16 grid gap-12">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              End-to-End Pipeline
+            </h2>
+            <ol className="mt-3 text-slate-700 text-lg space-y-3 list-decimal pl-5">
+              <li>Ingest shift & roster data (CSV/API) → validate schemas.</li>
+              <li>
+                Feature engineering (lagged no-shows, role, venue, weather).
+              </li>
+              <li>Model scoring to flag high-risk shifts & staff.</li>
+              <li>Scheduling assist: suggest swaps/standby staffing.</li>
+              <li>
+                Timesheet → payroll ETL, tip allocation, exceptions report.
+              </li>
+            </ol>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Validation & Quality
+            </h2>
+            <ul className="mt-3 text-slate-700 text-lg space-y-3 list-disc pl-5">
+              <li>
+                Train/test split by event; cross-validated on historical events.
+              </li>
+              <li>
+                Monitored precision/recall at top-risk deciles (alert
+                thresholds).
+              </li>
+              <li>
+                Back-tested overstaffing vs. standby pools cost/benefit.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Dashboards & Alerts
+            </h2>
+            <ul className="mt-3 text-slate-700 text-lg space-y-3 list-disc pl-5">
+              <li>Event command center: live staffing vs. demand status.</li>
+              <li>Risk heatmap by venue/time; SMS/Slack alerts for gaps.</li>
+              <li>Finance view: payouts, tips, anomalies for approval.</li>
+            </ul>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Skills Applied
+            </h2>
+            <ul className="mt-3 text-slate-700 text-lg space-y-3 list-disc pl-5">
+              <li>RandomForest classification, cross-validation, threshold tuning.</li>
+              <li>Python (pandas, numpy, scikit-learn), ETL for payroll & tips.</li>
+              <li>Capacity planning, stakeholder interviews, KPI design.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Code Snippets */}
+      <section className="page-center mt-16 grid gap-16">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <CodeBlock
+              title="No-Show Model — Python snippet"
+              code={noShowModelSnippet}
+            />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Predicting No-Shows
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              A <strong>RandomForest</strong> classifier trained on historical
+              shift data — lagged no-shows, role, venue, weather, and timing
+              features. Cross-validated AUC guided threshold selection for
+              alerting operations teams to high-risk shifts before they became
+              coverage gaps.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <CodeBlock
+              title="Payroll ETL — Python snippet"
+              code={payrollETLSnippet}
+            />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Automating Payroll
+            </h2>
+            <p className="mt-3 text-slate-700 text-lg">
+              The ETL pipeline ingests raw shift data, computes hours worked,
+              allocates tips proportionally by hours, and produces final payouts.
+              This replaced a manual spreadsheet process, cutting payout
+              corrections by <strong>~30%</strong> and saving hours of
+              back-office work per event.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Artifacts — Notebooks */}
+      <section className="page-center mt-16">
+        <div className="flex items-center gap-2 mb-3">
+          <h2 className="text-xl font-semibold text-slate-900">
+            Project Notebooks
+          </h2>
+        </div>
+
+        <div className="mb-3 flex flex-wrap items-center gap-3 text-sm">
+          <a
+            href="/e2s/no-show_rate_model.ipynb"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 text-sky-700 hover:underline"
+          >
+            No-Show Model
+          </a>
+          <span className="text-slate-400">•</span>
+          <a
+            href="/e2s/TipAllocation.ipynb"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 text-sky-700 hover:underline"
+          >
+            Tip Allocation
+          </a>
+          <span className="text-slate-400">•</span>
+          <a
+            href="/e2s/Account_Finance_Model.ipynb"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 text-sky-700 hover:underline"
+          >
+            Account Finance Model
+          </a>
+          <span className="text-slate-400">•</span>
+          <a
+            href="/"
+            className="inline-flex items-center gap-1 text-sky-700 hover:underline"
+          >
+            Home
+          </a>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6">
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="rounded-xl border border-slate-200 p-5">
+              <h3 className="font-semibold text-slate-900 mb-2">
+                No-Show Rate Model
+              </h3>
+              <p className="text-slate-600 text-sm">
+                RandomForest modeling, cross-validation, and threshold tuning
+                for no-show prediction.
+              </p>
+              <a
+                href="/e2s/no-show_rate_model.ipynb"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-block text-sky-700 text-sm hover:underline"
+              >
+                Open notebook →
+              </a>
+            </div>
+            <div className="rounded-xl border border-slate-200 p-5">
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Tip Allocation
+              </h3>
+              <p className="text-slate-600 text-sm">
+                Payroll ETL pipeline — shift hours to payouts with proportional
+                tip allocation.
+              </p>
+              <a
+                href="/e2s/TipAllocation.ipynb"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-block text-sky-700 text-sm hover:underline"
+              >
+                Open notebook →
+              </a>
+            </div>
+            <div className="rounded-xl border border-slate-200 p-5">
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Account Finance Model
+              </h3>
+              <p className="text-slate-600 text-sm">
+                Financial modeling and accounting logic for event operations.
+              </p>
+              <a
+                href="/e2s/Account_Finance_Model.ipynb"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-block text-sky-700 text-sm hover:underline"
+              >
+                Open notebook →
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Result */}
+      <section className="page-center mt-20 mb-24">
+        <div className="rounded-2xl bg-gradient-to-br from-green-50 to-white border border-green-100 p-8 shadow-sm text-center">
+          <h2 className="text-3xl font-bold text-slate-900">The Result</h2>
+          <p className="mt-4 text-lg text-slate-700 max-w-3xl mx-auto">
+            With a data-driven approach to workforce management, EATS2SEATS
+            achieved an <strong>11-point reduction in no-show rates</strong>{" "}
+            (23% → 12%), cut coverage gaps from{" "}
+            <strong>15% → 5% unfilled shifts</strong>, and saved an estimated{" "}
+            <strong>$2,880 per 200-staff event</strong> through payroll
+            automation. This wasn't just about building a model — it was about
+            connecting prediction to action, turning risk scores into staffing
+            decisions, and automating the back-office ops that drained hours
+            from every event.
+          </p>
+          <div className="mt-6 flex justify-center gap-4">
+            <a
+              href="/e2s/no-show_rate_model.ipynb"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-700 hover:bg-sky-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+            >
+              View Model Notebook
+            </a>
+            <a
+              href="/e2s/TipAllocation.ipynb"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-700 hover:bg-sky-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+            >
+              View Payroll ETL
+            </a>
+          </div>
+        </div>
+      </section>
     </PageShell>
   );
 }

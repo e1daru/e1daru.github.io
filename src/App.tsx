@@ -27,8 +27,17 @@ const projects: Project[] = [
     title: "Newshi: Bloomberg Terminal for Prediction Markets",
     desc: "A real-time analytics platform for Kalshi prediction markets featuring live pricing, volume tracking, and AI-matched news powered by semantic embeddings.",
     path: "/projects/newshi",
+    img: "/newshi.jpeg",
     featured: true,
-    tags: ["Next.js", "React", "TypeScript", "FastAPI", "Python", "PostgreSQL", "pgvector"],
+    tags: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "FastAPI",
+      "Python",
+      "PostgreSQL",
+      "pgvector",
+    ],
     liveUrl: "https://newshi.live",
     githubUrl: "https://github.com/e1daru/KalshiAnalytics",
   },
@@ -41,20 +50,20 @@ const projects: Project[] = [
     tags: ["Python", "K-Means", "Pandas", "Financial Modeling"],
   },
   {
-    img: "/e2s.jpg",
-    alt: "EATS2SEATS",
-    title: "US Open 2024 Operations Data Analytics",
-    desc: "Built a smart tool that predicts staff cancellations and automates scheduling for large sport events. It cut last-minute no-shows by 11% and saved over 160 hours per event.",
-    path: "/projects/e2s",
-    tags: ["Python", "Random Forest", "Pandas", "Scheduling"],
-  },
-  {
     img: "/airpol.jpg",
     alt: "Bishkek Air Pollution Analysis",
     title: "Bishkek Under the Dome: Data Behind the Smog",
     desc: "Deep-dive analysis of air quality in Bishkek, Kyrgyzstan. Using PurpleAir sensors and time-series forecasting, revealed pollution patterns 15x WHO limits.",
     path: "/projects/airpol",
     tags: ["Python", "Time Series", "PurpleAir API", "Forecasting"],
+  },
+  {
+    img: "/e2s.jpg",
+    alt: "EATS2SEATS",
+    title: "US Open 2024 Operations Data Analytics",
+    desc: "Built a smart tool that predicts staff cancellations and automates scheduling for large sport events. It cut last-minute no-shows by 11% and saved over 160 hours per event.",
+    path: "/projects/e2s",
+    tags: ["Python", "Random Forest", "Pandas", "Scheduling"],
   },
   {
     img: "/busi488.jpg",
@@ -87,6 +96,8 @@ const projects: Project[] = [
     desc: "Spearheaded multiple teams to victory in high-stakes case competitions for Deloitte and P&G with data-driven strategies under intense pressure.",
     path: "/projects/CCC",
     tags: ["Strategy", "Data Analysis", "Presentation"],
+    liveUrl:
+      "https://www.linkedin.com/posts/eldaru_i-am-happy-to-announce-that-my-team-and-i-activity-7111505631823486976-1Ytr?utm_source=share&utm_medium=member_desktop&rcm=ACoAADaP6vMBZTmyCqC9NKAmUHgCu2I54TmKXmk",
   },
 ];
 

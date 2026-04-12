@@ -834,7 +834,7 @@ export default function IntrepidBuildPage() {
 
       {/* Result */}
       <section className="page-center mt-20 mb-24">
-        <div className="rounded-2xl bg-gradient-to-br from-green-50 to-white border border-green-100 p-8 shadow-sm text-center">
+        <div className="rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-zinc-900 via-cyan-950/25 to-zinc-950 p-8 shadow-sm text-center">
           <h2 className="text-3xl font-bold text-zinc-100">📊 The Result</h2>
           <p className="mt-4 text-lg text-zinc-300 max-w-3xl mx-auto">
             With disciplined design choices backed by data, Intrepid Build is

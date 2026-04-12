@@ -639,25 +639,25 @@ export default function AirPolPage() {
               Lancet Commission on Pollution and Health (2020)
             </p>
           </div>
-          <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-red-50 to-white p-8 shadow-sm">
+          <div className="rounded-xl border border-red-500/20 bg-gradient-to-br from-zinc-900 via-red-950/25 to-zinc-950 p-8 shadow-sm">
             <h3 className="text-xl font-bold text-zinc-100 mb-6">
               By the Numbers
             </h3>
             <div className="space-y-5">
               <div>
-                <div className="text-3xl font-bold text-red-600">1,500+</div>
+                <div className="text-3xl font-bold text-red-400">1,500+</div>
                 <div className="text-sm text-zinc-400">
                   Premature deaths annually
                 </div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-red-600">$200-300M</div>
+                <div className="text-3xl font-bold text-red-400">$200-300M</div>
                 <div className="text-sm text-zinc-400">
                   Annual economic cost
                 </div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-red-600">3-5×</div>
+                <div className="text-3xl font-bold text-red-400">3-5×</div>
                 <div className="text-sm text-zinc-400">
                   Higher respiratory illness rates in winter
                 </div>
@@ -669,7 +669,7 @@ export default function AirPolPage() {
 
       {/* Hope in the Haze */}
       <section className="page-center mt-16 grid gap-12">
-        <div className="rounded-2xl bg-gradient-to-br from-green-50 to-white border border-green-100 p-8 md:p-12 shadow-sm">
+        <div className="rounded-2xl border border-emerald-400/20 bg-gradient-to-br from-zinc-900 via-emerald-950/25 to-zinc-950 p-8 md:p-12 shadow-sm">
           <h2 className="text-3xl font-bold text-zinc-100 text-center mb-8">
             Hope in the Haze
           </h2>
@@ -681,7 +681,7 @@ export default function AirPolPage() {
               </h3>
               <ul className="space-y-3 text-zinc-300">
                 <li className="flex items-start gap-3">
-                  <span className="text-green-600 font-bold">•</span>
+                  <span className="text-emerald-400 font-bold">•</span>
                   <span>
                     <strong>Transition to clean heating:</strong> Subsidize
                     electric heating, natural gas expansion, and modern district
@@ -689,21 +689,21 @@ export default function AirPolPage() {
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-green-600 font-bold">•</span>
+                  <span className="text-emerald-400 font-bold">•</span>
                   <span>
                     <strong>Vehicle emission standards:</strong> Enforce Euro
                     5/6 standards and promote electric public transport
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-green-600 font-bold">•</span>
+                  <span className="text-emerald-400 font-bold">•</span>
                   <span>
                     <strong>Building insulation programs:</strong> Reduce
                     heating demand through retrofits
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-green-600 font-bold">•</span>
+                  <span className="text-emerald-400 font-bold">•</span>
                   <span>
                     <strong>Real-time monitoring network:</strong> Expand air
                     quality sensors and public alerts
@@ -718,28 +718,28 @@ export default function AirPolPage() {
               </h3>
               <ul className="space-y-3 text-zinc-300">
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-600 font-bold">•</span>
+                  <span className="text-sky-400 font-bold">•</span>
                   <span>
                     <strong>Indoor air filtration:</strong> Use HEPA filters at
                     home, especially in children's bedrooms
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-600 font-bold">•</span>
+                  <span className="text-sky-400 font-bold">•</span>
                   <span>
                     <strong>Time outdoor activities:</strong> Avoid early
                     morning and evening peaks; check air quality forecasts
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-600 font-bold">•</span>
+                  <span className="text-sky-400 font-bold">•</span>
                   <span>
                     <strong>N95 masks during high pollution:</strong> Protect
                     vulnerable family members
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-600 font-bold">•</span>
+                  <span className="text-sky-400 font-bold">•</span>
                   <span>
                     <strong>Support clean energy:</strong> Advocate for policy
                     change and choose cleaner alternatives when possible

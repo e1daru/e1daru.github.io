@@ -640,7 +640,7 @@ export default function E2SPage() {
 
       {/* Result */}
       <section className="page-center mt-20 mb-24">
-        <div className="rounded-2xl bg-gradient-to-br from-green-50 to-white border border-green-100 p-8 shadow-sm text-center">
+        <div className="rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-zinc-900 via-cyan-950/25 to-zinc-950 p-8 shadow-sm text-center">
           <h2 className="text-3xl font-bold text-zinc-100">The Result</h2>
           <p className="mt-4 text-lg text-zinc-300 max-w-3xl mx-auto">
             With a data-driven approach to workforce management, EATS2SEATS
@@ -658,7 +658,7 @@ export default function E2SPage() {
               href="/e2s/no-show_rate_model.ipynb"
               target="_blank"
               rel="noreferrer"
-              className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-700 hover:bg-sky-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+              className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-300 hover:bg-sky-400/10 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
             >
               View Model Notebook
             </a>
@@ -666,7 +666,7 @@ export default function E2SPage() {
               href="/e2s/TipAllocation.ipynb"
               target="_blank"
               rel="noreferrer"
-              className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-700 hover:bg-sky-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+              className="rounded-xl border-2 border-sky-400 px-5 py-2 text-sky-300 hover:bg-sky-400/10 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
             >
               View Payroll ETL
             </a>

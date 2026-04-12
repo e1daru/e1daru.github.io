@@ -13,13 +13,13 @@ export default function Hero() {
 
         <FadeIn delay={0.1}>
           <h1 className="font-mono text-4xl md:text-5xl lg:text-6xl font-bold text-zinc-100 tracking-tight leading-tight mb-4">
-            Eldar Utiushev.
+            Eldar Utiushev
           </h1>
         </FadeIn>
 
         <FadeIn delay={0.2}>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-400 leading-tight mb-8">
-            Data Scientist & Full-Stack Developer.
+            Full-Stack Developer & Business Analyst
           </h2>
         </FadeIn>
 

@@ -47,7 +47,7 @@ export default function Home({ projects }: { projects: Project[] }) {
                 </p>
                 <p>
                   By combining analytics, software engineering, and leadership,
-                  I bridge the gap between ideas and execution — building
+                  I bridge the gap between ideas and execution. Building
                   data-driven solutions, crafting software products, leading
                   teams at national events, advising on multi-million-dollar
                   projects, and co-founding initiatives that bring people

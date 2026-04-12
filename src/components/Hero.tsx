@@ -3,10 +3,7 @@ import FadeIn from "./FadeIn";
 
 export default function Hero() {
   return (
-    <section
-      id="hero"
-      className="min-h-[85vh] flex items-center pt-20"
-    >
+    <section id="hero" className="min-h-[85vh] flex items-center pt-20">
       <div className="page-center">
         <FadeIn>
           <p className="font-mono text-cyan-400 text-base mb-4">
@@ -30,8 +27,8 @@ export default function Hero() {
           <p className="text-base md:text-lg text-zinc-400 max-w-2xl leading-relaxed mb-10">
             I build data-driven solutions and software products that solve
             meaningful problems. Dual degree in Business Administration and
-            Computer Science at UNC Chapel Hill — bridging analytics, engineering,
-            and strategy to create lasting impact.
+            Computer Science at UNC Chapel Hill with consulting and analytics
+            experiences.
           </p>
         </FadeIn>
 

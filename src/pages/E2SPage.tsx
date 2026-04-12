@@ -50,7 +50,7 @@ type TrendPoint = { label: string; rate: number };
 
 // ---------- Chart helpers (matching Intrepid) ----------
 const chartMargin = { top: 24, right: 28, bottom: 44, left: 28 };
-const axisTick = { fontSize: 12, fill: '#a1a1aa' } as const;
+const axisTick = { fontSize: 12, fill: "#a1a1aa" } as const;
 const legendStyle = { fontSize: 12 } as const;
 const COLORS = ["#0ea5e9", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6"];
 
@@ -160,7 +160,7 @@ export default function E2SPage() {
         >
           <div className="relative overflow-hidden rounded-2xl ring-1 ring-zinc-800 shadow-md">
             <img
-              src="/e2s.jpg"
+              src="/e2s_photo.jpg"
               alt="EATS2SEATS workforce analytics"
               className="w-full h-[240px] md:h-[660px] object-cover"
             />
@@ -240,13 +240,13 @@ export default function E2SPage() {
       <section className="page-center mt-16 grid gap-12">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h2 className="text-2xl font-bold text-zinc-100">
-              The Challenge
-            </h2>
+            <h2 className="text-2xl font-bold text-zinc-100">The Challenge</h2>
             <ul className="mt-3 text-zinc-300 text-lg space-y-3 list-disc pl-5">
               <li>High no-show variability by shift, role, and venue.</li>
               <li>Manual scheduling created last-minute coverage gaps.</li>
-              <li>Payroll reconciliation was time-consuming and error-prone.</li>
+              <li>
+                Payroll reconciliation was time-consuming and error-prone.
+              </li>
             </ul>
           </div>
           <div>
@@ -290,7 +290,11 @@ export default function E2SPage() {
                   />
                   <Tooltip
                     formatter={(v: number) => `${Math.round(v * 100)}%`}
-                    contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }}
+                    contentStyle={{
+                      background: "#111118",
+                      border: "1px solid #27272a",
+                      color: "#e4e4e7",
+                    }}
                   />
                   <Legend wrapperStyle={legendStyle} />
                   <Bar dataKey="rate" radius={[6, 6, 0, 0]}>
@@ -354,7 +358,11 @@ export default function E2SPage() {
                   />
                   <Tooltip
                     formatter={(v: number) => `${Math.round(v * 100)}%`}
-                    contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }}
+                    contentStyle={{
+                      background: "#111118",
+                      border: "1px solid #27272a",
+                      color: "#e4e4e7",
+                    }}
                   />
                   <Legend wrapperStyle={legendStyle} />
                   <Bar dataKey="value" radius={[6, 6, 0, 0]}>
@@ -379,8 +387,8 @@ export default function E2SPage() {
             </h2>
             <p className="mt-3 text-zinc-300 text-lg">
               Feature importance analysis revealed the strongest predictors of
-              no-show risk. Factors like <strong>lagged no-show history</strong>,{" "}
-              <strong>shift timing</strong>, <strong>role type</strong>, and{" "}
+              no-show risk. Factors like <strong>lagged no-show history</strong>
+              , <strong>shift timing</strong>, <strong>role type</strong>, and{" "}
               <strong>venue</strong> dominated. These insights let operations
               teams target interventions — confirmation calls, standby pools,
               swap suggestions — where they mattered most.
@@ -410,7 +418,13 @@ export default function E2SPage() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis dataKey="week" tick={axisTick} />
                   <YAxis tick={axisTick} />
-                  <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
+                  <Tooltip
+                    contentStyle={{
+                      background: "#111118",
+                      border: "1px solid #27272a",
+                      color: "#e4e4e7",
+                    }}
+                  />
                   <Legend wrapperStyle={legendStyle} />
                   <Line
                     type="monotone"
@@ -480,9 +494,7 @@ export default function E2SPage() {
                 Monitored precision/recall at top-risk deciles (alert
                 thresholds).
               </li>
-              <li>
-                Back-tested overstaffing vs. standby pools cost/benefit.
-              </li>
+              <li>Back-tested overstaffing vs. standby pools cost/benefit.</li>
             </ul>
           </div>
         </div>
@@ -499,12 +511,14 @@ export default function E2SPage() {
             </ul>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-zinc-100">
-              Skills Applied
-            </h2>
+            <h2 className="text-2xl font-bold text-zinc-100">Skills Applied</h2>
             <ul className="mt-3 text-zinc-300 text-lg space-y-3 list-disc pl-5">
-              <li>RandomForest classification, cross-validation, threshold tuning.</li>
-              <li>Python (pandas, numpy, scikit-learn), ETL for payroll & tips.</li>
+              <li>
+                RandomForest classification, cross-validation, threshold tuning.
+              </li>
+              <li>
+                Python (pandas, numpy, scikit-learn), ETL for payroll & tips.
+              </li>
               <li>Capacity planning, stakeholder interviews, KPI design.</li>
             </ul>
           </div>
@@ -547,9 +561,9 @@ export default function E2SPage() {
             </h2>
             <p className="mt-3 text-zinc-300 text-lg">
               The ETL pipeline ingests raw shift data, computes hours worked,
-              allocates tips proportionally by hours, and produces final payouts.
-              This replaced a manual spreadsheet process, cutting payout
-              corrections by <strong>~30%</strong> and saving hours of
+              allocates tips proportionally by hours, and produces final
+              payouts. This replaced a manual spreadsheet process, cutting
+              payout corrections by <strong>~30%</strong> and saving hours of
               back-office work per event.
             </p>
           </div>

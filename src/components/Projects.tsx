@@ -1,17 +1,28 @@
-import ProjectCard from "./ProjectCard";
+import SectionHeading from "./SectionHeading";
+import { FeaturedCard, GridCard } from "./ProjectCard";
 import type { Project } from "@/types";
 
-type Props = { projects?: Project[] };
+export default function Projects({ projects }: { projects: Project[] }) {
+  const featured = projects.filter((p) => p.featured);
+  const rest = projects.filter((p) => !p.featured);
 
-export default function Projects({ projects = [] }: Props) {
   return (
-    <>
-      <h2>Featured Projects</h2>
-      <div className="project-grid">
-        {projects.map((p, idx) => (
-          <ProjectCard key={idx} {...p} />
+    <section id="projects" className="py-20 md:py-28">
+      <div className="page-center">
+        <SectionHeading number="02." title="Projects" />
+
+        {featured.map((p) => (
+          <div key={p.title} className="mb-12">
+            <FeaturedCard project={p} />
+          </div>
         ))}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {rest.map((p, i) => (
+            <GridCard key={p.title} project={p} delay={i * 0.08} />
+          ))}
+        </div>
       </div>
-    </>
+    </section>
   );
 }

@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import PageShell from "@/components/PageShell";
+import Layout from "@/components/Layout";
 import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 import {
   ResponsiveContainer,
   LineChart,
@@ -43,7 +44,7 @@ const kpi = [
 
 // Chart helpers
 const chartMargin = { top: 24, right: 28, bottom: 44, left: 28 };
-const axisTick = { fontSize: 12 } as const;
+const axisTick = { fontSize: 12, fill: '#a1a1aa' } as const;
 const legendStyle = { fontSize: 12 } as const;
 
 // Use actual data from analysis
@@ -152,11 +153,9 @@ const pollutionSources = [
 
 export default function AirPolPage() {
   return (
-    <PageShell>
-      {/* Nav */}
-      <div className="page-center page-center-tight">
-        <NavBar />
-      </div>
+    <Layout>
+      <NavBar />
+      <div className="pt-20"></div>
 
       {/* Hero Image */}
       <section className="mt-8">
@@ -166,7 +165,7 @@ export default function AirPolPage() {
           transition={{ duration: 0.5 }}
           className="page-center "
         >
-          <div className="relative overflow-hidden rounded-2xl ring-1 ring-slate-200 shadow-md">
+          <div className="relative overflow-hidden rounded-2xl ring-1 ring-zinc-800 shadow-md">
             {/* If the photo isn't present at /airpol-hero.jpg, fall back to the SVG */}
             <img
               src="/airpol-hero.jpg"
@@ -188,17 +187,17 @@ export default function AirPolPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="rounded-2xl bg-gradient-to-br from-slate-50 to-white shadow-lg ring-1 ring-slate-200 p-8 md:p-14"
+          className="rounded-2xl bg-gradient-to-br from-zinc-900 to-zinc-950 shadow-lg ring-1 ring-zinc-800 p-8 md:p-14"
         >
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-zinc-100 tracking-tight text-center">
             Bishkek Under the Dome: Data Behind the Smog
           </h1>
 
           {/* Intro text */}
           <div className="mt-10">
             <div className="max-w-4xl mx-auto">
-              <p className="text-slate-700 text-lg md:text-xl leading-8">
+              <p className="text-zinc-300 text-lg md:text-xl leading-8">
                 Every winter morning in Bishkek, residents wake up to a gray
                 blanket of smog that obscures the Tian Shan mountains. Analyzing
                 nearly 40,000 hours of air quality data from PurpleAir sensors
@@ -213,7 +212,7 @@ export default function AirPolPage() {
               </p>
 
               {/* Smoking equivalence */}
-              <p className="mt-4 text-slate-700 text-lg md:text-xl leading-8">
+              <p className="mt-4 text-zinc-300 text-lg md:text-xl leading-8">
                 To put the numbers in human terms, the citywide mean of about
                 <strong> 21 µg/m³</strong> PM2.5 is roughly equivalent to
                 smoking
@@ -230,10 +229,10 @@ export default function AirPolPage() {
               </p>
 
               {/* Quote */}
-              <blockquote className="mt-8 pl-6 border-l-4 border-sky-500 italic text-slate-600 text-lg">
+              <blockquote className="mt-8 pl-6 border-l-4 border-sky-500 italic text-zinc-400 text-lg">
                 "In winter, you can taste the coal in the air. We keep windows
                 shut all day, but the smog still seeps in."
-                <footer className="mt-2 text-sm text-slate-500 not-italic">
+                <footer className="mt-2 text-sm text-zinc-500 not-italic">
                   — Bishkek resident, winter 2024
                 </footer>
               </blockquote>
@@ -244,13 +243,13 @@ export default function AirPolPage() {
                   href="https://github.com/e1daru/e1daru.github.io"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-300 bg-white px-6 py-3 text-base font-medium text-slate-900 shadow-sm hover:bg-slate-100 hover:border-slate-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-zinc-700 bg-zinc-900 px-6 py-3 text-base font-medium text-zinc-100 shadow-sm hover:bg-zinc-800 hover:border-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
                 >
                   <span>🌐</span> GitHub Project
                 </a>
                 <a
                   href="/"
-                  className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-300 bg-white px-6 py-3 text-base font-medium text-slate-900 shadow-sm hover:bg-slate-100 hover:border-slate-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-zinc-700 bg-zinc-900 px-6 py-3 text-base font-medium text-zinc-100 shadow-sm hover:bg-zinc-800 hover:border-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
                 >
                   <span>🏠</span> Home
                 </a>
@@ -263,16 +262,16 @@ export default function AirPolPage() {
             {kpi.map((k) => (
               <div
                 key={k.label}
-                className="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+                className="flex flex-col items-center rounded-xl border border-zinc-800 bg-zinc-900 p-6 shadow-sm"
               >
                 <div className="text-3xl">{k.icon}</div>
-                <div className="mt-2 text-4xl font-extrabold text-slate-900">
+                <div className="mt-2 text-4xl font-extrabold text-zinc-100">
                   {k.value}
                 </div>
-                <div className="text-sm uppercase tracking-wide text-slate-500 mt-1">
+                <div className="text-sm uppercase tracking-wide text-zinc-500 mt-1">
                   {k.label}
                 </div>
-                <div className="text-base text-slate-600">{k.sub}</div>
+                <div className="text-base text-zinc-400">{k.sub}</div>
               </div>
             ))}
           </div>
@@ -288,7 +287,7 @@ export default function AirPolPage() {
             </h3>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={dailyPM25Data} margin={chartMargin}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis dataKey="month" tick={axisTick} />
                 <YAxis
                   tick={axisTick}
@@ -298,7 +297,7 @@ export default function AirPolPage() {
                     position: "insideLeft",
                   }}
                 />
-                <Tooltip />
+                <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                 <Legend wrapperStyle={legendStyle} />
                 <ReferenceLine
                   y={10}
@@ -324,10 +323,10 @@ export default function AirPolPage() {
             </ResponsiveContainer>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               The Data Speaks
             </h2>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               Using PurpleAir sensors and local monitoring stations, I tracked
               PM2.5 concentrations across Bishkek from 2020-2025. The data
               reveals a clear pattern:{" "}
@@ -338,14 +337,14 @@ export default function AirPolPage() {
               , with January peaking at 51.1 µg/m³, while summer drops to a
               healthy 9.2 µg/m³.
             </p>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               This seasonal swing isn't random—it's driven by coal heating in
               poorly-ventilated homes, temperature inversions that trap
               pollution near ground level, and stagnant winter air. The red line
               shows WHO's safe limit of 10 µg/m³; during peak winter months,
               Bishkek consistently exceeds this by 4-5 times.
             </p>
-            <p className="mt-3 text-slate-600 text-sm">
+            <p className="mt-3 text-zinc-400 text-sm">
               Note: Hours and dates are shown in{" "}
               <strong>local time (Asia/Bishkek, UTC+6)</strong>.
             </p>
@@ -357,10 +356,10 @@ export default function AirPolPage() {
       <section className="page-center mt-16 grid gap-12">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               When the Air Turns Dangerous
             </h2>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               The all-year average shows a clear diurnal cycle: pollution is
               <strong>
                 {" "}
@@ -373,7 +372,7 @@ export default function AirPolPage() {
               . This reflects a combination of evening heating, traffic, and
               weak dispersion.
             </p>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               Unlike many cities where <em>morning rush hour</em> dominates PM
               peaks, Bishkek’s worst hours arrive late in the day. Planning
               exercise and school commutes in the cleaner{" "}
@@ -387,7 +386,7 @@ export default function AirPolPage() {
             </h3>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={hourlyVariation} margin={chartMargin}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis dataKey="hour" tick={axisTick} />
                 <YAxis
                   tick={axisTick}
@@ -397,7 +396,7 @@ export default function AirPolPage() {
                     position: "insideLeft",
                   }}
                 />
-                <Tooltip />
+                <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                 <Legend wrapperStyle={legendStyle} />
                 <Line
                   type="monotone"
@@ -420,7 +419,7 @@ export default function AirPolPage() {
             </h3>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={seasonalData} margin={chartMargin}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis dataKey="season" tick={axisTick} />
                 <YAxis
                   tick={axisTick}
@@ -430,7 +429,7 @@ export default function AirPolPage() {
                     position: "insideLeft",
                   }}
                 />
-                <Tooltip />
+                <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                 <Legend wrapperStyle={legendStyle} />
                 <Bar dataKey="pm25" fill="#8b5cf6" radius={[6, 6, 0, 0]}>
                   <LabelList
@@ -443,10 +442,10 @@ export default function AirPolPage() {
             </ResponsiveContainer>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               The Seasonal Crisis
             </h2>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               The data shows a dramatic 5× seasonal variation: winter pollution
               averages
               <strong>43.5 µg/m³ (Unhealthy for Sensitive Groups)</strong>,
@@ -455,7 +454,7 @@ export default function AirPolPage() {
               temperatures drop, thousands of homes and businesses burn coal and
               wood, releasing massive amounts of particulate matter.
             </p>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               Fall (19.2 µg/m³) and Spring (13.2 µg/m³) serve as transition
               periods, with fall showing pollution climbing as heating season
               begins, and spring bringing relief as heating tapers off. This
@@ -470,10 +469,10 @@ export default function AirPolPage() {
       <section className="page-center mt-16 grid gap-12">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               Sources of the Smog
             </h2>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               According to research from the World Bank and local environmental
               agencies,
               <strong>
@@ -485,7 +484,7 @@ export default function AirPolPage() {
               particularly from older diesel vehicles and poorly maintained
               engines.
             </p>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               Industrial sources (18%) include the city's aging thermal power
               plants and manufacturing facilities. The remaining 12% comes from
               construction dust, agricultural burning, and other sources.
@@ -493,7 +492,7 @@ export default function AirPolPage() {
               building insulation, and district heating modernization—offers the
               biggest potential impact.
             </p>
-            <p className="mt-4 text-sm text-slate-600">
+            <p className="mt-4 text-sm text-zinc-400">
               <strong>Sources:</strong> World Bank Kyrgyzstan Air Quality Report
               (2021), UNEP Bishkek Pollution Study (2019)
             </p>
@@ -504,7 +503,7 @@ export default function AirPolPage() {
             </h3>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={pollutionSources} margin={chartMargin}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis dataKey="source" tick={axisTick} />
                 <YAxis
                   tick={axisTick}
@@ -514,7 +513,7 @@ export default function AirPolPage() {
                     position: "insideLeft",
                   }}
                 />
-                <Tooltip />
+                <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                 <Legend wrapperStyle={legendStyle} />
                 <Bar dataKey="pct" fill="#22c55e" radius={[6, 6, 0, 0]}>
                   <LabelList
@@ -538,7 +537,7 @@ export default function AirPolPage() {
             </h3>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={forecastData} margin={chartMargin}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis dataKey="label" tick={axisTick} />
                 <YAxis
                   tick={axisTick}
@@ -548,7 +547,7 @@ export default function AirPolPage() {
                     position: "insideLeft",
                   }}
                 />
-                <Tooltip />
+                <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                 <Legend wrapperStyle={legendStyle} />
                 <ReferenceLine
                   y={10}
@@ -582,10 +581,10 @@ export default function AirPolPage() {
             </ResponsiveContainer>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               Predicting the Next Smog Event
             </h2>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               The chart reveals the severity of Bishkek's worst winter week on
               record (January 16–22, 2023), when PM2.5 levels averaged{" "}
               <strong>
@@ -597,7 +596,7 @@ export default function AirPolPage() {
               <strong>~12 cigarettes in a single day</strong>. This is not a
               dystopian future scenario—this actually happened.
             </p>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               Using historical patterns, weather data, and time-series analysis,
               predictive models can forecast such pollution spikes several days
               ahead. An early warning system powered by these predictions could
@@ -615,10 +614,10 @@ export default function AirPolPage() {
       <section className="page-center mt-16 grid gap-12">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               Health & Economic Impact
             </h2>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               Research links elevated PM2.5 to increased respiratory infections,
               cardiovascular disease, and premature mortality. A 2019 study
               estimated that{" "}
@@ -628,38 +627,38 @@ export default function AirPolPage() {
               </strong>
               , with Bishkek bearing a disproportionate burden.
             </p>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               Children and elderly are most vulnerable. Hospital admissions for
               respiratory issues spike in winter months, straining the
               healthcare system. The economic cost—including lost productivity,
               healthcare expenses, and reduced quality of life—is estimated at{" "}
               <strong>$200-300 million annually</strong> for Kyrgyzstan.
             </p>
-            <p className="mt-4 text-sm text-slate-600">
+            <p className="mt-4 text-sm text-zinc-400">
               <strong>Sources:</strong> WHO Ambient Air Pollution Database,
               Lancet Commission on Pollution and Health (2020)
             </p>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-gradient-to-br from-red-50 to-white p-8 shadow-sm">
-            <h3 className="text-xl font-bold text-slate-900 mb-6">
+          <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-red-50 to-white p-8 shadow-sm">
+            <h3 className="text-xl font-bold text-zinc-100 mb-6">
               By the Numbers
             </h3>
             <div className="space-y-5">
               <div>
                 <div className="text-3xl font-bold text-red-600">1,500+</div>
-                <div className="text-sm text-slate-600">
+                <div className="text-sm text-zinc-400">
                   Premature deaths annually
                 </div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-red-600">$200-300M</div>
-                <div className="text-sm text-slate-600">
+                <div className="text-sm text-zinc-400">
                   Annual economic cost
                 </div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-red-600">3-5×</div>
-                <div className="text-sm text-slate-600">
+                <div className="text-sm text-zinc-400">
                   Higher respiratory illness rates in winter
                 </div>
               </div>
@@ -671,16 +670,16 @@ export default function AirPolPage() {
       {/* Hope in the Haze */}
       <section className="page-center mt-16 grid gap-12">
         <div className="rounded-2xl bg-gradient-to-br from-green-50 to-white border border-green-100 p-8 md:p-12 shadow-sm">
-          <h2 className="text-3xl font-bold text-slate-900 text-center mb-8">
+          <h2 className="text-3xl font-bold text-zinc-100 text-center mb-8">
             Hope in the Haze
           </h2>
 
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-4">
+              <h3 className="text-xl font-semibold text-zinc-100 mb-4">
                 Policy-Level Solutions
               </h3>
-              <ul className="space-y-3 text-slate-700">
+              <ul className="space-y-3 text-zinc-300">
                 <li className="flex items-start gap-3">
                   <span className="text-green-600 font-bold">•</span>
                   <span>
@@ -714,10 +713,10 @@ export default function AirPolPage() {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-4">
+              <h3 className="text-xl font-semibold text-zinc-100 mb-4">
                 Individual Actions
               </h3>
-              <ul className="space-y-3 text-slate-700">
+              <ul className="space-y-3 text-zinc-300">
                 <li className="flex items-start gap-3">
                   <span className="text-sky-600 font-bold">•</span>
                   <span>
@@ -751,10 +750,10 @@ export default function AirPolPage() {
           </div>
 
           <div className="mt-10 text-center">
-            <p className="text-lg italic text-slate-700 max-w-2xl mx-auto">
+            <p className="text-lg italic text-zinc-300 max-w-2xl mx-auto">
               "Data can't clean the air—but it can clear our minds."
             </p>
-            <p className="mt-4 text-slate-600">
+            <p className="mt-4 text-zinc-400">
               Armed with insights, communities can demand action, families can
               protect themselves, and policymakers can prioritize evidence-based
               interventions.
@@ -765,11 +764,11 @@ export default function AirPolPage() {
 
       {/* Call to Action */}
       <section className="page-center mt-20 mb-24">
-        <div className="rounded-2xl bg-gradient-to-br from-sky-50 to-white border border-sky-100 p-8 shadow-sm text-center">
-          <h2 className="text-3xl font-bold text-slate-900">
+        <div className="rounded-2xl bg-gradient-to-br from-zinc-900 to-zinc-950 border border-sky-100 p-8 shadow-sm text-center">
+          <h2 className="text-3xl font-bold text-zinc-100">
             📊 Explore the Analysis
           </h2>
-          <p className="mt-4 text-lg text-slate-700 max-w-3xl mx-auto">
+          <p className="mt-4 text-lg text-zinc-300 max-w-3xl mx-auto">
             This project combines environmental science, time-series
             forecasting, and public health analytics to shine a light on
             Bishkek's air crisis. Dive into the full analysis to see the data
@@ -786,13 +785,14 @@ export default function AirPolPage() {
             </a>
             <a
               href="/"
-              className="rounded-xl border-2 border-slate-300 px-5 py-2 text-slate-700 hover:bg-slate-50 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
+              className="rounded-xl border-2 border-zinc-700 px-5 py-2 text-zinc-300 hover:bg-zinc-800 font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-600 transition"
             >
               Back to Portfolio
             </a>
           </div>
         </div>
       </section>
-    </PageShell>
+      <Footer />
+    </Layout>
   );
 }

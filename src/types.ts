@@ -5,4 +5,8 @@ export type Project = {
   desc: string;
   path: string;
   external?: boolean;
+  tags?: string[];
+  featured?: boolean;
+  liveUrl?: string;
+  githubUrl?: string;
 };

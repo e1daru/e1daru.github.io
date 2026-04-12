@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import PageShell from "@/components/PageShell";
+import Layout from "@/components/Layout";
 import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 import {
   ResponsiveContainer,
   BarChart,
@@ -49,7 +50,7 @@ type TrendPoint = { label: string; rate: number };
 
 // ---------- Chart helpers (matching Intrepid) ----------
 const chartMargin = { top: 24, right: 28, bottom: 44, left: 28 };
-const axisTick = { fontSize: 12 } as const;
+const axisTick = { fontSize: 12, fill: '#a1a1aa' } as const;
 const legendStyle = { fontSize: 12 } as const;
 const COLORS = ["#0ea5e9", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6"];
 
@@ -106,15 +107,15 @@ shifts["payout"] = shifts["hours"] * shifts["rate"] + shifts["tip_share"]`;
 // ---------- Code block component (matching Intrepid) ----------
 function CodeBlock({ title, code }: { title?: string; code: string }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="rounded-2xl border border-zinc-800 bg-zinc-900 shadow-sm">
       {title && (
-        <div className="px-5 pt-4 pb-2 text-sm font-semibold text-slate-800 flex items-center gap-2">
-          <span className="inline-block w-2.5 h-2.5 rounded-full bg-slate-400" />
+        <div className="px-5 pt-4 pb-2 text-sm font-semibold text-zinc-200 flex items-center gap-2">
+          <span className="inline-block w-2.5 h-2.5 rounded-full bg-zinc-500" />
           {title}
         </div>
       )}
       <pre
-        className="px-5 pb-5 pt-3 text-[15px] leading-7 bg-white rounded-b-2xl overflow-auto"
+        className="px-5 pb-5 pt-3 text-[15px] leading-7 bg-zinc-900 rounded-b-2xl overflow-auto"
         style={{ tabSize: 2, WebkitOverflowScrolling: "touch" }}
       >
         <code className="whitespace-pre">{code}</code>
@@ -145,11 +146,9 @@ export default function E2SPage() {
   } = useJSON<TrendPoint[]>("/e2s/no_show_trend.json");
 
   return (
-    <PageShell>
-      {/* Nav */}
-      <div className="page-center page-center-tight">
-        <NavBar />
-      </div>
+    <Layout>
+      <NavBar />
+      <div className="pt-20"></div>
 
       {/* Hero */}
       <section className="mt-12">
@@ -157,15 +156,15 @@ export default function E2SPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="rounded-2xl bg-gradient-to-br from-sky-50 to-white shadow-lg ring-1 ring-slate-200 p-8 md:p-14"
+          className="rounded-2xl bg-gradient-to-br from-zinc-900 to-zinc-950 shadow-lg ring-1 ring-zinc-800 p-8 md:p-14"
         >
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-zinc-100 tracking-tight text-center">
             EATS2SEATS — Workforce Analytics & Ops Automation
           </h1>
 
           <div className="mt-10 grid md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-7">
-              <p className="text-slate-700 text-lg md:text-xl leading-8 max-w-prose">
+              <p className="text-zinc-300 text-lg md:text-xl leading-8 max-w-prose">
                 Built a staffing intelligence toolkit for large sporting events:
                 predicted <strong>no-show risk</strong> with a RandomForest
                 model, <strong>optimized scheduling</strong> to close coverage
@@ -178,7 +177,7 @@ export default function E2SPage() {
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
                   href="/"
-                  className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-300 bg-white px-6 py-3 text-base font-medium text-slate-900 shadow-sm hover:bg-slate-100 hover:border-slate-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-zinc-700 bg-zinc-900 px-6 py-3 text-base font-medium text-zinc-100 shadow-sm hover:bg-zinc-800 hover:border-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition"
                 >
                   <span>🏠</span> Home
                 </a>
@@ -186,13 +185,13 @@ export default function E2SPage() {
             </div>
 
             <div className="md:col-span-5 flex flex-wrap gap-3 justify-center md:justify-end md:pt-4">
-              <span className="inline-flex items-center rounded-full px-4 py-1.5 text-base font-medium bg-slate-900 text-white">
+              <span className="inline-flex items-center rounded-full px-4 py-1.5 text-base font-medium bg-cyan-400/20 text-white">
                 Data Science
               </span>
-              <span className="inline-flex items-center rounded-full px-4 py-1.5 text-base font-medium bg-slate-300 text-slate-700">
+              <span className="inline-flex items-center rounded-full px-4 py-1.5 text-base font-medium bg-zinc-700 text-zinc-300">
                 Ops Automation
               </span>
-              <span className="inline-flex items-center rounded-full px-4 py-1.5 text-base font-medium border border-slate-500 text-slate-700">
+              <span className="inline-flex items-center rounded-full px-4 py-1.5 text-base font-medium border border-zinc-600 text-zinc-300">
                 Business Analysis
               </span>
             </div>
@@ -203,16 +202,16 @@ export default function E2SPage() {
             {kpi.map((k) => (
               <div
                 key={k.label}
-                className="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+                className="flex flex-col items-center rounded-xl border border-zinc-800 bg-zinc-900 p-6 shadow-sm"
               >
                 <div className="text-3xl">{k.icon}</div>
-                <div className="mt-2 text-4xl font-extrabold text-slate-900">
+                <div className="mt-2 text-4xl font-extrabold text-zinc-100">
                   {k.value}
                 </div>
-                <div className="text-sm uppercase tracking-wide text-slate-500 mt-1">
+                <div className="text-sm uppercase tracking-wide text-zinc-500 mt-1">
                   {k.label}
                 </div>
-                <div className="text-base text-slate-600">{k.sub}</div>
+                <div className="text-base text-zinc-400">{k.sub}</div>
               </div>
             ))}
           </div>
@@ -223,18 +222,18 @@ export default function E2SPage() {
       <section className="page-center mt-16 grid gap-12">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               The Challenge
             </h2>
-            <ul className="mt-3 text-slate-700 text-lg space-y-3 list-disc pl-5">
+            <ul className="mt-3 text-zinc-300 text-lg space-y-3 list-disc pl-5">
               <li>High no-show variability by shift, role, and venue.</li>
               <li>Manual scheduling created last-minute coverage gaps.</li>
               <li>Payroll reconciliation was time-consuming and error-prone.</li>
             </ul>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">My Role</h2>
-            <ul className="mt-3 text-slate-700 text-lg space-y-3 list-disc pl-5">
+            <h2 className="text-2xl font-bold text-zinc-100">My Role</h2>
+            <ul className="mt-3 text-zinc-300 text-lg space-y-3 list-disc pl-5">
               <li>
                 Built a RandomForest model to predict no-show probability.
               </li>
@@ -260,12 +259,12 @@ export default function E2SPage() {
               </div>
             )}
             {trendLoading && (
-              <div className="text-sm text-slate-500">Loading trend…</div>
+              <div className="text-sm text-zinc-500">Loading trend…</div>
             )}
             {noShowTrend && noShowTrend.length > 0 && (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={noShowTrend} margin={chartMargin}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis dataKey="label" tick={axisTick} />
                   <YAxis
                     tickFormatter={(v) => `${Math.round((v as number) * 100)}%`}
@@ -273,6 +272,7 @@ export default function E2SPage() {
                   />
                   <Tooltip
                     formatter={(v: number) => `${Math.round(v * 100)}%`}
+                    contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }}
                   />
                   <Legend wrapperStyle={legendStyle} />
                   <Bar dataKey="rate" radius={[6, 6, 0, 0]}>
@@ -292,10 +292,10 @@ export default function E2SPage() {
             )}
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               Cutting No-Shows in Half
             </h2>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               Before the ML model, no-show rates hovered around{" "}
               <strong>23%</strong>. After deploying the RandomForest predictor
               and risk-based scheduling adjustments, the rate dropped to{" "}
@@ -321,14 +321,14 @@ export default function E2SPage() {
               </div>
             )}
             {fiLoading && (
-              <div className="text-sm text-slate-500">
+              <div className="text-sm text-zinc-500">
                 Loading feature importances…
               </div>
             )}
             {featureImportances && featureImportances.length > 0 && (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={featureImportances} margin={chartMargin}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis dataKey="name" tick={axisTick} />
                   <YAxis
                     tickFormatter={(v) => `${Math.round((v as number) * 100)}%`}
@@ -336,6 +336,7 @@ export default function E2SPage() {
                   />
                   <Tooltip
                     formatter={(v: number) => `${Math.round(v * 100)}%`}
+                    contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }}
                   />
                   <Legend wrapperStyle={legendStyle} />
                   <Bar dataKey="value" radius={[6, 6, 0, 0]}>
@@ -355,10 +356,10 @@ export default function E2SPage() {
             )}
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               What Drives No-Shows
             </h2>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               Feature importance analysis revealed the strongest predictors of
               no-show risk. Factors like <strong>lagged no-show history</strong>,{" "}
               <strong>shift timing</strong>, <strong>role type</strong>, and{" "}
@@ -381,17 +382,17 @@ export default function E2SPage() {
               </div>
             )}
             {planLoading && (
-              <div className="text-sm text-slate-500">
+              <div className="text-sm text-zinc-500">
                 Loading staffing plan…
               </div>
             )}
             {staffingPlan && staffingPlan.length > 0 && (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={staffingPlan} margin={chartMargin}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis dataKey="week" tick={axisTick} />
                   <YAxis tick={axisTick} />
-                  <Tooltip />
+                  <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                   <Legend wrapperStyle={legendStyle} />
                   <Line
                     type="monotone"
@@ -416,10 +417,10 @@ export default function E2SPage() {
             )}
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               Closing Coverage Gaps
             </h2>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               The staffing dashboard tracked demand vs. scheduled staff in real
               time. Before the model, <strong>~15% of shifts</strong> went
               unfilled. After risk-based overstaffing and standby pools, that
@@ -434,10 +435,10 @@ export default function E2SPage() {
       <section className="page-center mt-16 grid gap-12">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               End-to-End Pipeline
             </h2>
-            <ol className="mt-3 text-slate-700 text-lg space-y-3 list-decimal pl-5">
+            <ol className="mt-3 text-zinc-300 text-lg space-y-3 list-decimal pl-5">
               <li>Ingest shift & roster data (CSV/API) → validate schemas.</li>
               <li>
                 Feature engineering (lagged no-shows, role, venue, weather).
@@ -450,10 +451,10 @@ export default function E2SPage() {
             </ol>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               Validation & Quality
             </h2>
-            <ul className="mt-3 text-slate-700 text-lg space-y-3 list-disc pl-5">
+            <ul className="mt-3 text-zinc-300 text-lg space-y-3 list-disc pl-5">
               <li>
                 Train/test split by event; cross-validated on historical events.
               </li>
@@ -470,20 +471,20 @@ export default function E2SPage() {
 
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               Dashboards & Alerts
             </h2>
-            <ul className="mt-3 text-slate-700 text-lg space-y-3 list-disc pl-5">
+            <ul className="mt-3 text-zinc-300 text-lg space-y-3 list-disc pl-5">
               <li>Event command center: live staffing vs. demand status.</li>
               <li>Risk heatmap by venue/time; SMS/Slack alerts for gaps.</li>
               <li>Finance view: payouts, tips, anomalies for approval.</li>
             </ul>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               Skills Applied
             </h2>
-            <ul className="mt-3 text-slate-700 text-lg space-y-3 list-disc pl-5">
+            <ul className="mt-3 text-zinc-300 text-lg space-y-3 list-disc pl-5">
               <li>RandomForest classification, cross-validation, threshold tuning.</li>
               <li>Python (pandas, numpy, scikit-learn), ETL for payroll & tips.</li>
               <li>Capacity planning, stakeholder interviews, KPI design.</li>
@@ -502,10 +503,10 @@ export default function E2SPage() {
             />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               Predicting No-Shows
             </h2>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               A <strong>RandomForest</strong> classifier trained on historical
               shift data — lagged no-shows, role, venue, weather, and timing
               features. Cross-validated AUC guided threshold selection for
@@ -523,10 +524,10 @@ export default function E2SPage() {
             />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-zinc-100">
               Automating Payroll
             </h2>
-            <p className="mt-3 text-slate-700 text-lg">
+            <p className="mt-3 text-zinc-300 text-lg">
               The ETL pipeline ingests raw shift data, computes hours worked,
               allocates tips proportionally by hours, and produces final payouts.
               This replaced a manual spreadsheet process, cutting payout
@@ -540,7 +541,7 @@ export default function E2SPage() {
       {/* Artifacts — Notebooks */}
       <section className="page-center mt-16">
         <div className="flex items-center gap-2 mb-3">
-          <h2 className="text-xl font-semibold text-slate-900">
+          <h2 className="text-xl font-semibold text-zinc-100">
             Project Notebooks
           </h2>
         </div>
@@ -554,7 +555,7 @@ export default function E2SPage() {
           >
             No-Show Model
           </a>
-          <span className="text-slate-400">•</span>
+          <span className="text-zinc-500">•</span>
           <a
             href="/e2s/TipAllocation.ipynb"
             target="_blank"
@@ -563,7 +564,7 @@ export default function E2SPage() {
           >
             Tip Allocation
           </a>
-          <span className="text-slate-400">•</span>
+          <span className="text-zinc-500">•</span>
           <a
             href="/e2s/Account_Finance_Model.ipynb"
             target="_blank"
@@ -572,7 +573,7 @@ export default function E2SPage() {
           >
             Account Finance Model
           </a>
-          <span className="text-slate-400">•</span>
+          <span className="text-zinc-500">•</span>
           <a
             href="/"
             className="inline-flex items-center gap-1 text-sky-700 hover:underline"
@@ -581,13 +582,13 @@ export default function E2SPage() {
           </a>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6">
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 shadow-sm p-6">
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="rounded-xl border border-slate-200 p-5">
-              <h3 className="font-semibold text-slate-900 mb-2">
+            <div className="rounded-xl border border-zinc-800 p-5">
+              <h3 className="font-semibold text-zinc-100 mb-2">
                 No-Show Rate Model
               </h3>
-              <p className="text-slate-600 text-sm">
+              <p className="text-zinc-400 text-sm">
                 RandomForest modeling, cross-validation, and threshold tuning
                 for no-show prediction.
               </p>
@@ -600,11 +601,11 @@ export default function E2SPage() {
                 Open notebook →
               </a>
             </div>
-            <div className="rounded-xl border border-slate-200 p-5">
-              <h3 className="font-semibold text-slate-900 mb-2">
+            <div className="rounded-xl border border-zinc-800 p-5">
+              <h3 className="font-semibold text-zinc-100 mb-2">
                 Tip Allocation
               </h3>
-              <p className="text-slate-600 text-sm">
+              <p className="text-zinc-400 text-sm">
                 Payroll ETL pipeline — shift hours to payouts with proportional
                 tip allocation.
               </p>
@@ -617,11 +618,11 @@ export default function E2SPage() {
                 Open notebook →
               </a>
             </div>
-            <div className="rounded-xl border border-slate-200 p-5">
-              <h3 className="font-semibold text-slate-900 mb-2">
+            <div className="rounded-xl border border-zinc-800 p-5">
+              <h3 className="font-semibold text-zinc-100 mb-2">
                 Account Finance Model
               </h3>
-              <p className="text-slate-600 text-sm">
+              <p className="text-zinc-400 text-sm">
                 Financial modeling and accounting logic for event operations.
               </p>
               <a
@@ -640,8 +641,8 @@ export default function E2SPage() {
       {/* Result */}
       <section className="page-center mt-20 mb-24">
         <div className="rounded-2xl bg-gradient-to-br from-green-50 to-white border border-green-100 p-8 shadow-sm text-center">
-          <h2 className="text-3xl font-bold text-slate-900">The Result</h2>
-          <p className="mt-4 text-lg text-slate-700 max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold text-zinc-100">The Result</h2>
+          <p className="mt-4 text-lg text-zinc-300 max-w-3xl mx-auto">
             With a data-driven approach to workforce management, EATS2SEATS
             achieved an <strong>11-point reduction in no-show rates</strong>{" "}
             (23% → 12%), cut coverage gaps from{" "}
@@ -672,6 +673,7 @@ export default function E2SPage() {
           </div>
         </div>
       </section>
-    </PageShell>
+      <Footer />
+    </Layout>
   );
 }

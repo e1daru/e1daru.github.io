@@ -1,6 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import PageShell from "@/components/PageShell";
+import Layout from "@/components/Layout";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 import { ArrowUpRight, ArrowDownRight, Info } from "lucide-react";
 import {
   BarChart as BarChartIcon,
@@ -150,14 +152,14 @@ function KpiTile({
   footnote?: string | null;
 }) {
   return (
-    <div className="h-full rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="h-full rounded-2xl border border-zinc-800 bg-zinc-900 shadow-sm">
       <div className="px-6 pb-5 pt-4">
         <div className="flex items-center justify-between gap-2">
-          <div className="text-[13px] text-slate-600 flex items-center gap-1">
+          <div className="text-[13px] text-zinc-400 flex items-center gap-1">
             <span>{label}</span>
             {help && (
               <span className="inline-flex" title={help}>
-                <Info className="h-3.5 w-3.5 text-slate-400" />
+                <Info className="h-3.5 w-3.5 text-zinc-500" />
               </span>
             )}
           </div>
@@ -176,11 +178,11 @@ function KpiTile({
             </div>
           )}
         </div>
-        <div className="mt-1 text-2xl font-semibold text-slate-900">
+        <div className="mt-1 text-2xl font-semibold text-zinc-100">
           {value}
         </div>
         {footnote && (
-          <div className="text-[12px] text-slate-500 mt-1">{footnote}</div>
+          <div className="text-[12px] text-zinc-500 mt-1">{footnote}</div>
         )}
       </div>
     </div>
@@ -193,7 +195,7 @@ const Card: React.FC<React.PropsWithChildren<{ className?: string }>> = ({
   className,
 }) => (
   <div
-    className={`rounded-2xl border border-slate-200 bg-white shadow-sm ${
+    className={`rounded-2xl border border-zinc-800 bg-zinc-900 shadow-sm ${
       className || ""
     }`}
   >
@@ -205,7 +207,7 @@ const CardHeader: React.FC<
 > = ({ children, title, icon }) => (
   <div className="px-6 pt-6">
     {title && (
-      <div className="mb-2 flex items-center gap-2 text-slate-900 font-semibold">
+      <div className="mb-2 flex items-center gap-2 text-zinc-100 font-semibold">
         {icon}
         {title}
       </div>
@@ -225,8 +227,8 @@ function useTabs(initial: string) {
       aria-pressed={tab === value}
       className={`rounded-xl border px-4 py-2.5 text-sm md:text-[15px] transition ${
         tab === value
-          ? "bg-slate-900 text-white border-slate-900"
-          : "bg-white text-slate-700 hover:bg-slate-50"
+          ? "bg-cyan-400/20 text-white border-cyan-400/30"
+          : "bg-zinc-900 text-zinc-300 hover:bg-zinc-800"
       }`}
     >
       {children}
@@ -333,7 +335,9 @@ export default function ECommerceAnalyticsPage() {
   }, [channels]);
 
   return (
-    <PageShell>
+    <Layout>
+      <NavBar />
+      <div className="pt-20"></div>
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
@@ -347,19 +351,19 @@ export default function ECommerceAnalyticsPage() {
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
                 E‑Commerce Analytics — Behavioral + Promo Insights
               </h1>
-              <p className="text-slate-700 mt-3 mx-auto md:mx-0 max-w-2xl md:max-w-3xl leading-relaxed">
+              <p className="text-zinc-300 mt-3 mx-auto md:mx-0 max-w-2xl md:max-w-3xl leading-relaxed">
                 Turn clickstreams, pricing levers, and delivery speed into
                 measurable lift—boosting conversion and cutting promo waste.
               </p>
             </div>
             <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-end">
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium bg-slate-900 text-white">
+              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium bg-cyan-400/20 text-white">
                 Data Analytics
               </span>
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium bg-slate-300 text-slate-700">
+              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium bg-zinc-700 text-zinc-300">
                 Experimentation
               </span>
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium border border-slate-500 text-slate-700">
+              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-md font-medium border border-zinc-600 text-zinc-300">
                 Business Analysis
               </span>
             </div>
@@ -430,7 +434,7 @@ export default function ECommerceAnalyticsPage() {
               icon={<TrendingUp className="h-5 w-5" />}
             />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-zinc-200">
                 <li>
                   Diagnose drop-offs along the browse → cart → order funnel.
                 </li>
@@ -445,7 +449,7 @@ export default function ECommerceAnalyticsPage() {
           <Card>
             <CardHeader title="My Role" icon={<Users className="h-5 w-5" />} />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-zinc-200">
                 <li>Built sessionization & attribution logic in Python.</li>
                 <li>Designed promo-effect measurement and baselines.</li>
                 <li>Partnered with ops to align insights to levers.</li>
@@ -473,11 +477,11 @@ export default function ECommerceAnalyticsPage() {
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="text-[13px] text-slate-600 mt-2">
+              <div className="text-[13px] text-zinc-400 mt-2">
                 Share of sessions by channel (placeholder).
               </div>
             </CardBody>
@@ -492,9 +496,9 @@ export default function ECommerceAnalyticsPage() {
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={promoEffect}>
-                    <XAxis dataKey="promo" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip />
+                    <XAxis dataKey="promo" tick={{ fontSize: 12, fill: '#a1a1aa' }} />
+                    <YAxis tick={{ fontSize: 12, fill: '#a1a1aa' }} />
+                    <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                     <Bar dataKey="uplift">
                       {promoEffect.map((_, i) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
@@ -503,7 +507,7 @@ export default function ECommerceAnalyticsPage() {
                   </BarChart>
                 </ResponsiveContainer>
               </div>
-              <div className="text-[13px] text-slate-600 mt-2">
+              <div className="text-[13px] text-zinc-400 mt-2">
                 Relative order-rate uplift by promo type (placeholder).
               </div>
             </CardBody>
@@ -519,7 +523,7 @@ export default function ECommerceAnalyticsPage() {
               title="Tables & Keys"
               icon={<FileText className="h-5 w-5" />}
             />
-            <CardBody className="text-[15px] leading-relaxed text-slate-800">
+            <CardBody className="text-[15px] leading-relaxed text-zinc-200">
               <ul className="list-disc pl-5 space-y-1.5">
                 <li>
                   <strong>skus</strong> (SKU attributes, 1P/3P, brand)
@@ -543,7 +547,7 @@ export default function ECommerceAnalyticsPage() {
                   <strong>network</strong> (DC ↔ region mapping)
                 </li>
               </ul>
-              <div className="mt-3 p-3 rounded-xl bg-slate-100 text-[13px]">
+              <div className="mt-3 p-3 rounded-xl bg-zinc-800/50 text-[13px]">
                 Primary joins: users.user_ID ↔ clicks.user_ID ↔ orders.user_ID;
                 skus.sku_ID ↔ clicks.sku_ID ↔ orders.sku_ID. DC joins for
                 logistics analyses.
@@ -557,7 +561,7 @@ export default function ECommerceAnalyticsPage() {
               icon={<Clock className="h-5 w-5" />}
             />
             <CardBody>
-              <ol className="list-decimal pl-5 space-y-1.5 text-[15px] leading-relaxed text-slate-800">
+              <ol className="list-decimal pl-5 space-y-1.5 text-[15px] leading-relaxed text-zinc-200">
                 <li>Sort clicks by user and timestamp.</li>
                 <li>
                   Start a new session when the gap ≥ <strong>1 hour</strong>{" "}
@@ -568,7 +572,7 @@ export default function ECommerceAnalyticsPage() {
                   switches).
                 </li>
               </ol>
-              <div className="mt-3 p-3 rounded-xl bg-slate-100 text-[13px]">
+              <div className="mt-3 p-3 rounded-xl bg-zinc-800/50 text-[13px]">
                 Export results to <code>/public/ecom/</code> JSONs to feed this
                 page.
               </div>
@@ -584,9 +588,9 @@ export default function ECommerceAnalyticsPage() {
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={sessionFunnel}>
-                    <XAxis dataKey="step" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip />
+                    <XAxis dataKey="step" tick={{ fontSize: 12, fill: '#a1a1aa' }} />
+                    <YAxis tick={{ fontSize: 12, fill: '#a1a1aa' }} />
+                    <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                     <Line
                       type="monotone"
                       dataKey="value"
@@ -597,7 +601,7 @@ export default function ECommerceAnalyticsPage() {
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-              <div className="text-[13px] text-slate-600 mt-2">
+              <div className="text-[13px] text-zinc-400 mt-2">
                 High-level conversion funnel (placeholder). Static PNG version
                 available in Artifacts.
               </div>
@@ -620,15 +624,15 @@ export default function ECommerceAnalyticsPage() {
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={interclickBars}>
-                        <XAxis dataKey="bin" tick={{ fontSize: 12 }} />
-                        <YAxis tick={{ fontSize: 12 }} />
-                        <Tooltip />
+                        <XAxis dataKey="bin" tick={{ fontSize: 12, fill: '#a1a1aa' }} />
+                        <YAxis tick={{ fontSize: 12, fill: '#a1a1aa' }} />
+                        <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                         <Bar dataKey="ordered" stackId="a" fill="#0ea5e9" />
-                        <Bar dataKey="nonordered" stackId="a" fill="#94a3b8" />
+                        <Bar dataKey="nonordered" stackId="a" fill="#3f3f46" />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
-                  <div className="text-[13px] text-slate-600 mt-2">
+                  <div className="text-[13px] text-zinc-400 mt-2">
                     Ordered sessions have median{" "}
                     {interclickSummary.o_median ?? "—"}s vs{" "}
                     {interclickSummary.n_median ?? "—"}s; p90{" "}
@@ -637,7 +641,7 @@ export default function ECommerceAnalyticsPage() {
                   </div>
                 </>
               ) : (
-                <div className="p-3 rounded-xl bg-slate-100 text-[13px]">
+                <div className="p-3 rounded-xl bg-zinc-800/50 text-[13px]">
                   Hooked to <code>/ecom/interclick_stats.json</code>. Add the
                   file to <code>public/ecom/</code> if you see no data.
                 </div>
@@ -660,7 +664,7 @@ export default function ECommerceAnalyticsPage() {
                           <XAxis
                             dataKey="pair"
                             interval={0}
-                            tick={{ fontSize: 11 }}
+                            tick={{ fontSize: 11, fill: '#a1a1aa' }}
                             angle={-90} // rotate labels
                             textAnchor="end" // align after rotation
                             height={110} // give space for tall labels
@@ -668,9 +672,9 @@ export default function ECommerceAnalyticsPage() {
                           />
                           <YAxis
                             tickFormatter={(v) => `${v}%`}
-                            tick={{ fontSize: 12 }}
+                            tick={{ fontSize: 12, fill: '#a1a1aa' }}
                           />
-                          <Tooltip formatter={(v) => `${v}%`} />
+                          <Tooltip formatter={(v) => `${v}%`} contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                           <Bar dataKey="session_share_pct" fill="#0ea5e9" />
                         </BarChart>
                       </ResponsiveContainer>
@@ -681,7 +685,7 @@ export default function ECommerceAnalyticsPage() {
                           <XAxis
                             dataKey="pair"
                             interval={0}
-                            tick={{ fontSize: 11 }}
+                            tick={{ fontSize: 11, fill: '#a1a1aa' }}
                             angle={-90} // rotate labels
                             textAnchor="end" // align after rotation
                             height={110} // give space for tall labels
@@ -689,15 +693,15 @@ export default function ECommerceAnalyticsPage() {
                           />
                           <YAxis
                             tickFormatter={(v) => `${v}%`}
-                            tick={{ fontSize: 12 }}
+                            tick={{ fontSize: 12, fill: '#a1a1aa' }}
                           />
-                          <Tooltip formatter={(v) => `${v}%`} />
+                          <Tooltip formatter={(v) => `${v}%`} contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
                           <Bar dataKey="cr_pct" fill="#22c55e" />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
                   </div>
-                  <div className="text-[13px] text-slate-600 mt-2">
+                  <div className="text-[13px] text-zinc-400 mt-2">
                     Overall switch rate {pct(channels.overall.switch_rate)}; CR
                     switchers {pct(channels.overall.conversion_rate_switchers)}{" "}
                     vs no‑switch{" "}
@@ -706,7 +710,7 @@ export default function ECommerceAnalyticsPage() {
                   </div>
                 </>
               ) : (
-                <div className="p-3 rounded-xl bg-slate-100 text-[13px]">
+                <div className="p-3 rounded-xl bg-zinc-800/50 text-[13px]">
                   Hooked to <code>/ecom/channel_switching.json</code>. Add the
                   file to <code>public/ecom/</code> if you see no data.
                 </div>
@@ -722,7 +726,7 @@ export default function ECommerceAnalyticsPage() {
           <Card className="md:col-span-2">
             <CardHeader title="Promo Uplift & Price Elasticity" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-1.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-1.5 text-[15px] leading-relaxed text-zinc-200">
                 <li>
                   Baseline model: historical, channel, and user‑level controls.
                 </li>
@@ -736,7 +740,7 @@ export default function ECommerceAnalyticsPage() {
           <Card>
             <CardHeader title="Assortment & 1P/3P Mix" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-1.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-1.5 text-[15px] leading-relaxed text-zinc-200">
                 <li>Compare conversion and delivery SLAs by ownership.</li>
                 <li>Identify fast movers with stock‑outs by DC.</li>
               </ul>
@@ -745,7 +749,7 @@ export default function ECommerceAnalyticsPage() {
           <Card>
             <CardHeader title="Fulfillment Timeline" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-1.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-1.5 text-[15px] leading-relaxed text-zinc-200">
                 <li>ship_out → station → delivered latency distributions.</li>
                 <li>Impact on repeat purchase / returns.</li>
               </ul>
@@ -760,7 +764,7 @@ export default function ECommerceAnalyticsPage() {
           <Card>
             <CardHeader title="Business Outcomes" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-zinc-200">
                 <li>Reduced promo spend with negative ROI SKUs.</li>
                 <li>
                   Improved session → order conversion via channel insights.
@@ -772,7 +776,7 @@ export default function ECommerceAnalyticsPage() {
           <Card>
             <CardHeader title="Quantified Impact" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2 text-[15px] leading-relaxed text-zinc-200">
                 <li>
                   Promo waste:{" "}
                   <strong>
@@ -780,7 +784,7 @@ export default function ECommerceAnalyticsPage() {
                       ? `${impactWaste.overall.waste_pct_est}%`
                       : "—"}
                   </strong>
-                  <div className="text-[12px] text-slate-500">
+                  <div className="text-[12px] text-zinc-500">
                     $
                     {impactWaste
                       ? num(impactWaste.overall.waste_spend_est)
@@ -821,7 +825,7 @@ export default function ECommerceAnalyticsPage() {
           <Card>
             <CardHeader title="Metrics to Watch" />
             <CardBody>
-              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-slate-800">
+              <ul className="list-disc pl-5 space-y-2.5 text-[15px] leading-relaxed text-zinc-200">
                 <li>Cost per incremental order by promo type.</li>
                 <li>Stock-out rate by DC; delivery promise hit-rate.</li>
                 <li>Repurchase rate by days‑to‑deliver band.</li>
@@ -862,7 +866,7 @@ export default function ECommerceAnalyticsPage() {
           ].map(({ k, v }) => (
             <Card key={k}>
               <CardHeader title={k} />
-              <CardBody className="text-[15px] leading-relaxed text-slate-800">
+              <CardBody className="text-[15px] leading-relaxed text-zinc-200">
                 <ul className="list-disc pl-5 space-y-1.5">
                   {v.map((item, i) => (
                     <li key={i}>{item}</li>
@@ -885,15 +889,15 @@ export default function ECommerceAnalyticsPage() {
                 </span>
               }
             />
-            <CardBody className="grid gap-3 text-[15px] leading-relaxed text-slate-800">
+            <CardBody className="grid gap-3 text-[15px] leading-relaxed text-zinc-200">
               <a
-                className="p-3 rounded-xl border hover:bg-slate-50"
+                className="p-3 rounded-xl border hover:bg-zinc-800"
                 href="/ecom/notebooks/MSOM Research Challenge Draft_20190829.docx"
               >
                 Research Paper
               </a>
               <a
-                className="p-3 rounded-xl border hover:bg-slate-50"
+                className="p-3 rounded-xl border hover:bg-zinc-800"
                 href="/ecom/notebooks/Notebook_Search_Patterns.ipynb"
               >
                 Main Notebook
@@ -911,7 +915,7 @@ export default function ECommerceAnalyticsPage() {
                     alt="Conversion funnel chart"
                     className="w-full h-auto"
                   />
-                  <figcaption className="text-[12px] text-slate-600 p-2">
+                  <figcaption className="text-[12px] text-zinc-400 p-2">
                     Funnel (Sessions → Views → Cart → Orders)
                   </figcaption>
                 </figure>
@@ -921,7 +925,7 @@ export default function ECommerceAnalyticsPage() {
                     alt="Promo uplift bar chart"
                     className="w-full h-auto"
                   />
-                  <figcaption className="text-[12px] text-slate-600 p-2">
+                  <figcaption className="text-[12px] text-zinc-400 p-2">
                     Promo Effect (Index)
                   </figcaption>
                 </figure>
@@ -931,7 +935,7 @@ export default function ECommerceAnalyticsPage() {
                     alt="Delivery latency distribution"
                     className="w-full h-auto"
                   />
-                  <figcaption className="text-[12px] text-slate-600 p-2">
+                  <figcaption className="text-[12px] text-zinc-400 p-2">
                     Delivery Latency Distribution
                   </figcaption>
                 </figure>
@@ -943,25 +947,26 @@ export default function ECommerceAnalyticsPage() {
 
       {/* CTA */}
       <div className="page-center mt-12 flex flex-wrap items-center justify-between gap-3">
-        <div className="text-[15px] text-slate-700 leading-relaxed">
+        <div className="text-[15px] text-zinc-300 leading-relaxed">
           Want the full analysis or anonymized code snippets? I can share
           cleaned tables and helper functions on request.
         </div>
         <div className="flex gap-2">
           <a
             href="/profile"
-            className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-medium bg-slate-900 text-white hover:bg-slate-800"
+            className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-medium bg-cyan-400/20 text-white hover:bg-zinc-700"
           >
             Get in touch
           </a>
           <a
             href="/projects"
-            className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-medium border border-slate-300 text-slate-800 hover:bg-slate-50"
+            className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-medium border border-zinc-700 text-zinc-200 hover:bg-zinc-800"
           >
             See more projects
           </a>
         </div>
       </div>
-    </PageShell>
+      <Footer />
+    </Layout>
   );
 }

@@ -44,7 +44,7 @@ const kpi = [
 
 // Chart helpers
 const chartMargin = { top: 24, right: 28, bottom: 44, left: 28 };
-const axisTick = { fontSize: 12, fill: '#a1a1aa' } as const;
+const axisTick = { fontSize: 12, fill: "#a1a1aa" } as const;
 const legendStyle = { fontSize: 12 } as const;
 
 // Use actual data from analysis
@@ -88,7 +88,7 @@ function formatLabel(isoDate: string): string {
   ];
   return `${monthNames[dt.getUTCMonth()]} ${String(dt.getUTCDate()).padStart(
     2,
-    "0"
+    "0",
   )}`;
 }
 
@@ -112,7 +112,7 @@ try {
   if (metaStart && Array.isArray(forecastData) && forecastData.length === 7) {
     const firstDayName = (forecastData[0]?.day || "").slice(
       0,
-      3
+      3,
     ) as (typeof dayNames)[number];
     // Compute offset from metaStart to firstDayName (0..6)
     let offset = 0;
@@ -173,8 +173,7 @@ export default function AirPolPage() {
               className="w-full h-[240px] md:h-[660px] object-cover"
               onError={(e) => {
                 const img = e.currentTarget as HTMLImageElement;
-                if (img.src.endsWith("/airpol-hero.jpg"))
-                  img.src = "/airpol.svg";
+                if (img.src.endsWith("/airpol.jpg")) img.src = "/airpol.svg";
               }}
             />
           </div>
@@ -297,7 +296,13 @@ export default function AirPolPage() {
                     position: "insideLeft",
                   }}
                 />
-                <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
+                <Tooltip
+                  contentStyle={{
+                    background: "#111118",
+                    border: "1px solid #27272a",
+                    color: "#e4e4e7",
+                  }}
+                />
                 <Legend wrapperStyle={legendStyle} />
                 <ReferenceLine
                   y={10}
@@ -396,7 +401,13 @@ export default function AirPolPage() {
                     position: "insideLeft",
                   }}
                 />
-                <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
+                <Tooltip
+                  contentStyle={{
+                    background: "#111118",
+                    border: "1px solid #27272a",
+                    color: "#e4e4e7",
+                  }}
+                />
                 <Legend wrapperStyle={legendStyle} />
                 <Line
                   type="monotone"
@@ -429,7 +440,13 @@ export default function AirPolPage() {
                     position: "insideLeft",
                   }}
                 />
-                <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
+                <Tooltip
+                  contentStyle={{
+                    background: "#111118",
+                    border: "1px solid #27272a",
+                    color: "#e4e4e7",
+                  }}
+                />
                 <Legend wrapperStyle={legendStyle} />
                 <Bar dataKey="pm25" fill="#8b5cf6" radius={[6, 6, 0, 0]}>
                   <LabelList
@@ -513,7 +530,13 @@ export default function AirPolPage() {
                     position: "insideLeft",
                   }}
                 />
-                <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
+                <Tooltip
+                  contentStyle={{
+                    background: "#111118",
+                    border: "1px solid #27272a",
+                    color: "#e4e4e7",
+                  }}
+                />
                 <Legend wrapperStyle={legendStyle} />
                 <Bar dataKey="pct" fill="#22c55e" radius={[6, 6, 0, 0]}>
                   <LabelList
@@ -547,7 +570,13 @@ export default function AirPolPage() {
                     position: "insideLeft",
                   }}
                 />
-                <Tooltip contentStyle={{ background: '#111118', border: '1px solid #27272a', color: '#e4e4e7' }} />
+                <Tooltip
+                  contentStyle={{
+                    background: "#111118",
+                    border: "1px solid #27272a",
+                    color: "#e4e4e7",
+                  }}
+                />
                 <Legend wrapperStyle={legendStyle} />
                 <ReferenceLine
                   y={10}

@@ -150,6 +150,24 @@ export default function E2SPage() {
       <NavBar />
       <div className="pt-20"></div>
 
+      {/* Hero Image */}
+      <section className="mt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="page-center "
+        >
+          <div className="relative overflow-hidden rounded-2xl ring-1 ring-zinc-800 shadow-md">
+            <img
+              src="/e2s.jpg"
+              alt="EATS2SEATS workforce analytics"
+              className="w-full h-[240px] md:h-[660px] object-cover"
+            />
+          </div>
+        </motion.div>
+      </section>
+
       {/* Hero */}
       <section className="mt-12">
         <motion.div

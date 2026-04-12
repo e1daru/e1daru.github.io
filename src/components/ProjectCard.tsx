@@ -5,18 +5,39 @@ import FadeIn from "./FadeIn";
 import type { Project } from "@/types";
 
 function FeaturedCard({ project }: { project: Project }) {
+  const image = project.img ? (
+    <img
+      src={project.img}
+      alt={project.alt ?? project.title}
+      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+      loading="lazy"
+    />
+  ) : null;
+
   return (
     <FadeIn>
       <div className="group relative bg-zinc-900/50 border border-zinc-800 rounded-xl overflow-hidden hover:border-cyan-400/30 transition-all duration-300">
         <div className="aspect-video overflow-hidden bg-gradient-to-br from-cyan-900/30 to-zinc-900">
-          {project.img && (
-            <img
-              src={project.img}
-              alt={project.alt ?? project.title}
-              className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-              loading="lazy"
-            />
-          )}
+          {image &&
+            (project.external ? (
+              <a
+                href={project.path}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Open ${project.title}`}
+                className="block h-full"
+              >
+                {image}
+              </a>
+            ) : (
+              <Link
+                to={project.path}
+                aria-label={`Open ${project.title}`}
+                className="block h-full"
+              >
+                {image}
+              </Link>
+            ))}
         </div>
         <div className="p-6 md:p-8">
           <p className="font-mono text-cyan-400 text-sm mb-2">Featured Project</p>

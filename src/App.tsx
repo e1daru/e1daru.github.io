@@ -8,6 +8,7 @@ import AirPolPage from "@/pages/AirPolPage";
 import NewshiPage from "@/pages/NewshiPage";
 import Layout from "@/components/Layout";
 import NavBar from "@/components/NavBar";
+import ScrollToTop from "@/components/ScrollToTop";
 import type { Project } from "@/types";
 
 function ComingSoon({ title }: { title: string }) {
@@ -103,33 +104,36 @@ const projects: Project[] = [
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home projects={projects} />} />
-      <Route path="/projects/newshi" element={<NewshiPage />} />
-      <Route path="/projects/intrepid" element={<IntrepidBuildPage />} />
-      <Route path="/projects/e2s" element={<E2SPage />} />
-      <Route path="/projects/airpol" element={<AirPolPage />} />
-      <Route path="/projects/luxury" element={<LuxuryPage />} />
-      <Route path="/projects/ecom" element={<ECommerceAnalyticsPage />} />
-      <Route
-        path="/projects/CSportal"
-        element={<ComingSoon title="Office Hours Portal" />}
-      />
-      <Route
-        path="/projects/CCC"
-        element={<ComingSoon title="Consulting Competitions" />}
-      />
-      <Route
-        path="*"
-        element={
-          <Layout>
-            <NavBar />
-            <div className="p-8 pt-24 text-center text-zinc-400">
-              Page not found
-            </div>
-          </Layout>
-        }
-      />
-    </Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<Home projects={projects} />} />
+        <Route path="/projects/newshi" element={<NewshiPage />} />
+        <Route path="/projects/intrepid" element={<IntrepidBuildPage />} />
+        <Route path="/projects/e2s" element={<E2SPage />} />
+        <Route path="/projects/airpol" element={<AirPolPage />} />
+        <Route path="/projects/luxury" element={<LuxuryPage />} />
+        <Route path="/projects/ecom" element={<ECommerceAnalyticsPage />} />
+        <Route
+          path="/projects/CSportal"
+          element={<ComingSoon title="Office Hours Portal" />}
+        />
+        <Route
+          path="/projects/CCC"
+          element={<ComingSoon title="Consulting Competitions" />}
+        />
+        <Route
+          path="*"
+          element={
+            <Layout>
+              <NavBar />
+              <div className="p-8 pt-24 text-center text-zinc-400">
+                Page not found
+              </div>
+            </Layout>
+          }
+        />
+      </Routes>
+    </>
   );
 }

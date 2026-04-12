@@ -233,7 +233,7 @@ export default function IntrepidBuildPage() {
             {/* Right: image with breathing room */}
             <div className="md:col-span-5">
               <img
-                src="/intrepid%20build.jpg" /* consider renaming to /intrepid-build.jpg */
+                src="/intrepid%20build.jpg"
                 alt="Intrepid Build Project"
                 className="w-full rounded-2xl shadow-md ring-1 ring-zinc-800 object-cover aspect-[16/10] md:h-[340px]"
               />

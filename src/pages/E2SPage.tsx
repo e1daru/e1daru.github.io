@@ -54,7 +54,7 @@ const axisTick = { fontSize: 12, fill: "#a1a1aa" } as const;
 const legendStyle = { fontSize: 12 } as const;
 const COLORS = ["#0ea5e9", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6"];
 
-// ---------- KPI data ----------
+// ---------- KPI data here ----------
 const kpi = [
   { label: "Staff Managed", value: "200+", sub: "at large events", icon: "👥" },
   {
